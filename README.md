@@ -3,6 +3,8 @@ What-cmd is a command line tool written in Golang that gives you an easy way to 
 
 Current version: v0.1 released 20.08.2024
 
+Future releases: In future releases the command list will be expanded. In addition common flags for commands may be added so you can find the right flags and a description for them. The GUI may also be improved upon further.
+
 To use this tool:
 
 1. Enter your terminal
