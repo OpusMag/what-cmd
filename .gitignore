@@ -1,0 +1,19 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Ignore binary files
+what-cmd
+
+# Output of the go coverage tool when used with LiteIDE
+*.out
+
+# Dependency directories (remove the comment below if you use vendoring)
+# vendor/
+
+# Go workspace file
+go.work
+go.work.sum
