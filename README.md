@@ -5,7 +5,7 @@ Current version: v0.2 released 21.08.2024
 
 v0.2 improvements: Improved search algorithm to only search for exact matches for commands and otherwise prioritize matches with the description. Also added -flags option (read usage info below) and expanded command list.
 
-Future releases: In future releases the command list may be expanded further. In addition improvements to the aesthetic may be considered as well as further functionality.
+Future releases: In future releases the command list may be expanded further. This may also include commands for more things than just basic linux terminal commands. In addition improvements to the visual representation of the CLI may be considered as well as further functionality.
 
 To use this tool:
 
