@@ -45,7 +45,6 @@ var Words = []Git{
     {"git rev-parse", "Pick out and massage parameters"},
     {"git ls-tree", "List the contents of a tree object"},
     {"git update-index", "Register file contents in the working directory to the index"},
-    {"git commit-tree", "Create a new commit object"},
     {"git symbolic-ref", "Read, modify and delete symbolic refs"},
     {"git worktree", "Manage multiple working trees"},
     {"git notes", "Add or inspect object notes"},

@@ -142,7 +142,6 @@ func main() {
     }
 
     // Defining flags
-    input := flag.String("input", "", "input word to search for")
     useFlags := flag.Bool("flags", false, "search in flags instead of commands")
     useGit := flag.Bool("git", false, "search in git commands instead of commands")
     useHotkeys := flag.Bool("hotkeys", false, "search in hotkeys instead of commands")
@@ -157,12 +156,6 @@ func main() {
         words = convertHotkeysToKeyValuePairs(hotkeys.Words)
     } else {
         words = convertCommandsToKeyValuePairs(commands.Words)
-    }
-
-    if *input != "" {
-        closest := findClosestMatch(*input, words)
-        fmt.Printf("Closest match: %s - %s\n", closest.Name, closest.Description)
-        return
     }
 
     // Initializing tcell
