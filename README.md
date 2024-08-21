@@ -1,10 +1,6 @@
 # what-cmd
 What-cmd is a command line tool written in Golang that gives you an easy way to find the linux terminal command you're looking for when you've forgotten it or if you're new.
 
-Current version: v0.2 released 21.08.2024
-
-v0.2 improvements: Improved search algorithm to only search for exact matches for commands and otherwise prioritize matches with the description. Also added -flags, -git and -hotkeys option (read usage info below) and expanded command list.
-
 Future releases: In future releases the command list may be expanded further. In addition, improvements to the aesthetic may be considered as well as further functionality.
 
 To use this tool:
