@@ -1,6 +1,6 @@
 module what-cmd
 
-go 1.23.0
+go 1.18
 
 require (
 	github.com/gdamore/encoding v1.0.0 // indirect
