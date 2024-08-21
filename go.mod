@@ -1,6 +1,7 @@
 module what-cmd
 
-go 1.23
+// switch this to 1.23 to work with Ubuntu's outdated package (or update Go)
+go 1.18
 
 require (
 	github.com/gdamore/encoding v1.0.0 // indirect
