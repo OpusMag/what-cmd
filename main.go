@@ -8,6 +8,8 @@ import (
     "github.com/gdamore/tcell/v2"
     "what-cmd/commands"
     "what-cmd/flags"
+    "what-cmd/git"
+    "what-cmd/hotkeys"
 )
 
 // KeyValuePair structure
@@ -27,6 +29,24 @@ func convertFlagsToKeyValuePairs(flags []flags.Flag) []KeyValuePair {
 
 // Convert commands.Command to KeyValuePair
 func convertCommandsToKeyValuePairs(cmds []commands.Command) []KeyValuePair {
+    var keyValuePairs []KeyValuePair
+    for _, c := range cmds {
+        keyValuePairs = append(keyValuePairs, KeyValuePair{Name: c.Name, Description: c.Description})
+    }
+    return keyValuePairs
+}
+
+// Convert git.Git to KeyValuePair
+func convertGitCommandsToKeyValuePairs(cmds []git.Git) []KeyValuePair {
+    var keyValuePairs []KeyValuePair
+    for _, c := range cmds {
+        keyValuePairs = append(keyValuePairs, KeyValuePair{Name: c.Name, Description: c.Description})
+    }
+    return keyValuePairs
+}
+
+// Convert hotkeys.Hotkey to KeyValuePair
+func convertHotkeysToKeyValuePairs(cmds []hotkeys.Hotkey) []KeyValuePair {
     var keyValuePairs []KeyValuePair
     for _, c := range cmds {
         keyValuePairs = append(keyValuePairs, KeyValuePair{Name: c.Name, Description: c.Description})
@@ -124,11 +144,17 @@ func main() {
     // Defining flags
     input := flag.String("input", "", "input word to search for")
     useFlags := flag.Bool("flags", false, "search in flags instead of commands")
+    useGit := flag.Bool("git", false, "search in git commands instead of commands")
+    useHotkeys := flag.Bool("hotkeys", false, "search in hotkeys instead of commands")
     flag.Parse()
 
     var words []KeyValuePair
     if *useFlags {
         words = convertFlagsToKeyValuePairs(flags.Words)
+    } else if *useGit {
+        words = convertGitCommandsToKeyValuePairs(git.Words)
+    } else if *useHotkeys {
+        words = convertHotkeysToKeyValuePairs(hotkeys.Words)
     } else {
         words = convertCommandsToKeyValuePairs(commands.Words)
     }
