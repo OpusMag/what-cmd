@@ -21,6 +21,13 @@ To use this tool:
    go build -o what-cmd main.go
    ./what-cmd
 
+   If you want to use it without the ./ prefix you can do the following:
+   while in the what-cmd directory and after building the binary:
+   sudo mv what-cmd /usr/local/bin/
+
+   Confirm it has worked:
+   what-cmd --help
+
 5. You can now type in a description of the command or if you remember part of the command name, you can try that and see if the description matches.
 
 6. When you've found the command, hit enter and you'll be sent back to your terminal prompt and the command you found along with its description will be printed to your terminal.
