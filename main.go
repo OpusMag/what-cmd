@@ -10,6 +10,7 @@ import (
     "what-cmd/flags"
     "what-cmd/git"
     "what-cmd/hotkeys"
+    "what-cmd/network"
 )
 
 // KeyValuePair structure
@@ -47,6 +48,15 @@ func convertGitCommandsToKeyValuePairs(cmds []git.Git) []KeyValuePair {
 
 // Convert hotkeys.Hotkey to KeyValuePair
 func convertHotkeysToKeyValuePairs(cmds []hotkeys.Hotkey) []KeyValuePair {
+    var keyValuePairs []KeyValuePair
+    for _, c := range cmds {
+        keyValuePairs = append(keyValuePairs, KeyValuePair{Name: c.Name, Description: c.Description})
+    }
+    return keyValuePairs
+}
+
+// Convert network.Network to KeyValuePair
+func convertNetworkToKeyValuePairs(cmds []network.Network) []KeyValuePair {
     var keyValuePairs []KeyValuePair
     for _, c := range cmds {
         keyValuePairs = append(keyValuePairs, KeyValuePair{Name: c.Name, Description: c.Description})
@@ -166,6 +176,7 @@ func main() {
     useFlags := flag.Bool("flags", false, "search in flags instead of commands")
     useGit := flag.Bool("git", false, "search in git commands instead of commands")
     useHotkeys := flag.Bool("hotkeys", false, "search in hotkeys instead of commands")
+    useNetwork := flag.Bool("network", false, "search in network commands instead of regular commands")
     flag.Parse()
 
     var words []KeyValuePair
@@ -175,6 +186,8 @@ func main() {
         words = convertGitCommandsToKeyValuePairs(git.Words)
     } else if *useHotkeys {
         words = convertHotkeysToKeyValuePairs(hotkeys.Words)
+    } else if *useNetwork {
+        words = convertNetworkToKeyValuePairs(network.Words)
     } else {
         words = convertCommandsToKeyValuePairs(commands.Words)
     }
@@ -229,41 +242,16 @@ func main() {
         inputStr := string(userInput)
         closest := findClosestMatch(inputStr, words)
 
-        // Displaying the commands and descriptions in the windows
-        var filteredWords []KeyValuePair
-        for _, word := range words {
-            if strings.Contains(strings.ToLower(word.Name), strings.ToLower(inputStr)) || strings.Contains(strings.ToLower(word.Description), strings.ToLower(inputStr)) {
-                filteredWords = append(filteredWords, word)
-            }
-        }
-
-        for i, word := range filteredWords {
-            if i < cmdWindowHeight-1 {
-                // Set content for word.Name with reduced width
-                for j, r := range word.Name {
-                    if j < cmdWindowWidth-1 {
-                        screen.SetContent(j+1, i+1, r, nil, tcell.StyleDefault) // Move commands inside the border
-                    }
-                }
-                // Set content for word.Description with increased width
-                for j, r := range word.Description {
-                    if j < descWindowWidth-1 {
-                        screen.SetContent(cmdWindowWidth+2+j, i+1, r, nil, tcell.StyleDefault)
-                    }
-                }
-            }
-        }
-
         // Define the ASCII art
         asciiArt := `
-        __          ___    _       _______      _____ __  __ _____  
-        \ \        / / |  | |   /\|__   __|    / ____|  \/  |  __ \ 
-         \ \  /\  / /| |__| |  /  \  | |______| |    | \  / | |  | |
-          \ \/  \/ / |  __  | / /\ \ | |______| |    | |\/| | |  | |
-           \  /\  /  | |  | |/ ____ \| |      | |____| |  | | |__| |
-            \/  \/   |_|  |_/_/    \_\_|       \_____|_|  |_|_____/ 
-                                                               
-`
+    __          ___    _       _______      _____ __  __ _____  
+    \ \        / / |  | |   /\|__   __|    / ____|  \/  |  __ \ 
+     \ \  /\  / /| |__| |  /  \  | |______| |    | \  / | |  | |
+      \ \/  \/ / |  __  | / /\ \ | |______| |    | |\/| | |  | |
+       \  /\  /  | |  | |/ ____ \| |      | |____| |  | | |__| |
+        \/  \/   |_|  |_/_/    \_\_|       \_____|_|  |_|_____/ 
+                                                                    
+        `
 
         // Calculate the starting position for the ASCII art
         asciiArtLines := strings.Split(asciiArt, "\n")
@@ -275,14 +263,40 @@ func main() {
         }
         }
 
-        asciiArtX := cmdWindowWidth + (descWindowWidth-asciiArtWidth)/2
+        // Move the ASCII art 20% to the right
+        asciiArtX := cmdWindowWidth + (descWindowWidth-asciiArtWidth)/2 + int(0.2*float64(descWindowWidth))
         asciiArtY := (cmdWindowHeight - asciiArtHeight) / 2
 
-        // Render the ASCII art
+        // Render the ASCII art in the background
         for y, line := range asciiArtLines {
         for x, r := range line {
             screen.SetContent(asciiArtX+x, asciiArtY+y, r, nil, tealStyle)
+        }
+        }
+
+        // Displaying the commands and descriptions in the windows
+        var filteredWords []KeyValuePair
+        for _, word := range words {
+        if strings.Contains(strings.ToLower(word.Name), strings.ToLower(inputStr)) || strings.Contains(strings.ToLower(word.Description), strings.ToLower(inputStr)) {
+            filteredWords = append(filteredWords, word)
+        }
+        }
+
+        for i, word := range filteredWords {
+        if i < cmdWindowHeight-1 {
+            // Set content for word.Name with reduced width
+            for j, r := range word.Name {
+                if j < cmdWindowWidth-1 {
+                    screen.SetContent(j+1, i+1, r, nil, tcell.StyleDefault) // Move commands inside the border
+                }
             }
+            // Set content for word.Description with increased width
+            for j, r := range word.Description {
+                if j < descWindowWidth-1 {
+                    screen.SetContent(cmdWindowWidth+2+j, i+1, r, nil, tcell.StyleDefault)
+                }
+            }
+        }
         }
 
         // Flushing the changes to the screen
