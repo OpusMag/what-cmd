@@ -75,6 +75,12 @@ func findClosestMatch(input string, words []KeyValuePair) KeyValuePair {
             if strings.Contains(strings.ToLower(word.Name), strings.ToLower(input)) {
                 score += 5 // Lower weight for matches in the Name
             }
+
+            // Calculate Levenshtein distance for partial matches
+            nameDistance := distanceAtoB(strings.ToLower(word.Name), strings.ToLower(input))
+            descDistance := distanceAtoB(strings.ToLower(word.Description), strings.ToLower(input))
+            score += max(0, 10-nameDistance) // Higher score for closer matches
+            score += max(0, 5-descDistance)   // Higher score for closer matches
         }
 
         // Update the best match if the current score is higher
@@ -126,12 +132,27 @@ func findMin(a, b, c int) int {
     return c
 }
 
-// Finds the minimum of two integers
-func min(a, b int) int {
-    if a < b {
+// Finds the maximum of two integers
+func max(a, b int) int {
+    if a > b {
         return a
     }
     return b
+}
+
+func drawBorder(screen tcell.Screen, x1, y1, x2, y2 int, style tcell.Style) {
+    for x := x1; x <= x2; x++ {
+        screen.SetContent(x, y1, tcell.RuneHLine, nil, style)
+        screen.SetContent(x, y2, tcell.RuneHLine, nil, style)
+    }
+    for y := y1; y <= y2; y++ {
+        screen.SetContent(x1, y, tcell.RuneVLine, nil, style)
+        screen.SetContent(x2, y, tcell.RuneVLine, nil, style)
+    }
+    screen.SetContent(x1, y1, tcell.RuneULCorner, nil, style)
+    screen.SetContent(x2, y1, tcell.RuneURCorner, nil, style)
+    screen.SetContent(x1, y2, tcell.RuneLLCorner, nil, style)
+    screen.SetContent(x2, y2, tcell.RuneLRCorner, nil, style)
 }
 
 func main() {
@@ -178,27 +199,90 @@ func main() {
         // Clearing the screen
         screen.Clear()
 
-        // Displaying the prompt
+        // Get terminal dimensions
+        width, height := screen.Size()
+
+        // Adjusting window dimensions
+        cmdWindowHeight := height - 5
+        cmdWindowWidth := width * 2 / 10 // 20% of the terminal width (reduced by 50%)
+        descWindowWidth := width - cmdWindowWidth - 2
+
+        // Define teal color style
+        tealStyle := tcell.StyleDefault.Foreground(tcell.ColorTeal)
+
+        // Draw borders for the command and description windows
+        drawBorder(screen, 0, 0, cmdWindowWidth, cmdWindowHeight, tealStyle)
+        drawBorder(screen, cmdWindowWidth+1, 0, width-1, cmdWindowHeight, tealStyle)
+
+        // Displaying the prompt at the bottom left
         prompt := "Enter a command to search for (type 'exit' to quit): "
         for i, r := range prompt {
-            screen.SetContent(i, 0, r, nil, tcell.StyleDefault)
+            screen.SetContent(i, height-3, r, nil, tcell.StyleDefault)
         }
 
-        // Displaying the user input
+        // Displaying the user input at the bottom left
         for i, r := range userInput {
-            screen.SetContent(i, 1, r, nil, tcell.StyleDefault)
+            screen.SetContent(i, height-2, r, nil, tcell.StyleDefault)
         }
 
         // Finding and displaying the closest match
         inputStr := string(userInput)
         closest := findClosestMatch(inputStr, words)
-        matchStr := fmt.Sprintf(
-            "Closest match: %s - %s",
-            closest.Name,
-            closest.Description,
-        )
-        for i, r := range matchStr {
-            screen.SetContent(i, 2, r, nil, tcell.StyleDefault)
+
+        // Displaying the commands and descriptions in the windows
+        var filteredWords []KeyValuePair
+        for _, word := range words {
+            if strings.Contains(strings.ToLower(word.Name), strings.ToLower(inputStr)) || strings.Contains(strings.ToLower(word.Description), strings.ToLower(inputStr)) {
+                filteredWords = append(filteredWords, word)
+            }
+        }
+
+        for i, word := range filteredWords {
+            if i < cmdWindowHeight-1 {
+                // Set content for word.Name with reduced width
+                for j, r := range word.Name {
+                    if j < cmdWindowWidth-1 {
+                        screen.SetContent(j+1, i+1, r, nil, tcell.StyleDefault) // Move commands inside the border
+                    }
+                }
+                // Set content for word.Description with increased width
+                for j, r := range word.Description {
+                    if j < descWindowWidth-1 {
+                        screen.SetContent(cmdWindowWidth+2+j, i+1, r, nil, tcell.StyleDefault)
+                    }
+                }
+            }
+        }
+
+        // Define the ASCII art
+        asciiArt := `
+        __          ___    _       _______      _____ __  __ _____  
+        \ \        / / |  | |   /\|__   __|    / ____|  \/  |  __ \ 
+         \ \  /\  / /| |__| |  /  \  | |______| |    | \  / | |  | |
+          \ \/  \/ / |  __  | / /\ \ | |______| |    | |\/| | |  | |
+           \  /\  /  | |  | |/ ____ \| |      | |____| |  | | |__| |
+            \/  \/   |_|  |_/_/    \_\_|       \_____|_|  |_|_____/ 
+                                                               
+`
+
+        // Calculate the starting position for the ASCII art
+        asciiArtLines := strings.Split(asciiArt, "\n")
+        asciiArtHeight := len(asciiArtLines)
+        asciiArtWidth := 0
+        for _, line := range asciiArtLines {
+        if len(line) > asciiArtWidth {
+            asciiArtWidth = len(line)
+        }
+        }
+
+        asciiArtX := cmdWindowWidth + (descWindowWidth-asciiArtWidth)/2
+        asciiArtY := (cmdWindowHeight - asciiArtHeight) / 2
+
+        // Render the ASCII art
+        for y, line := range asciiArtLines {
+        for x, r := range line {
+            screen.SetContent(asciiArtX+x, asciiArtY+y, r, nil, tealStyle)
+            }
         }
 
         // Flushing the changes to the screen
@@ -214,7 +298,7 @@ func main() {
             if ev.Key() == tcell.KeyEnter {
                 // Exit the CLI and write the command name and description to the user's command prompt
                 screen.Fini()
-                fmt.Printf("\n%s - %s\n%s ", closest.Name, closest.Description, closest.Name)
+                fmt.Printf("\n%s - %s\n%s\r", closest.Name, closest.Description, closest.Name)
                 return
             }
             if ev.Key() == tcell.KeyBackspace || ev.Key() == tcell.KeyBackspace2 {
@@ -230,3 +314,4 @@ func main() {
         }
     }
 }
+
