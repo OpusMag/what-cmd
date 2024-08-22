@@ -24,9 +24,10 @@ To use this tool:
    Confirm it has worked:
    what-cmd --help (this also shows the available flags)
 
-   -flags (flags for common linux terminal commands)
+   -flags (flags for common linux terminal commands, git commands and networking commands)
    -git (common git commands)
    -hotkeys (linux terminal hotkeys)
+   -network (networking commands)
 
 5. By running ./what-cmd (or what-cmd) you'll now be able to search for commands either by name or description. If you append a flag (e.g. what-cmd -flags) you'll be able to search for the flags that are valid for each command.
 
