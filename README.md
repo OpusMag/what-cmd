@@ -5,7 +5,7 @@ Future releases: In future releases the command list may be expanded further. In
 
 To use this tool:
 
-Option A: Go to the latest release, download the binary and move it to /usr/local/bin/
+Option A: Go to the latest release, download the binary, run chmod +x ~/Downloads/what-cmd (or whatever dir you downloaded it to) and then move it to /usr/local/bin/ by running sudo mv what-cmd /usr/local/bin/
 
 Option B:
 
