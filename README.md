@@ -5,6 +5,10 @@ Future releases: In future releases the command list may be expanded further. In
 
 To use this tool:
 
+Option A: Go to the latest release, download the binary and move it to /usr/local/bin/
+
+Option B:
+
 1. Enter your terminal
 
 2. Git clone this repository either by using the URL or SSH (you can find this by clicking the green button in the upper right that says '<>Code').
@@ -24,11 +28,13 @@ To use this tool:
    Confirm it has worked:
    what-cmd --help (this also shows the available flags)
 
+5. Options for the command (run "what-cmd -flags" for example to search flags for commands)
+
    -flags (flags for common linux terminal commands, git commands and networking commands)
    -git (common git commands)
    -hotkeys (linux terminal hotkeys)
    -network (networking commands)
 
-5. By running ./what-cmd (or what-cmd) you'll now be able to search for commands either by name or description. If you append a flag (e.g. what-cmd -flags) you'll be able to search for the flags that are valid for each command.
+6. By running ./what-cmd (or what-cmd) you'll now be able to search for commands either by name or description. If you append a flag (e.g. what-cmd -flags) you'll be able to search for the flags that are valid for each command.
 
-6. When you've found the command (or flag or hotkey), hit enter and you'll be sent back to your terminal prompt and the command you found along with its description will be printed to your terminal.
+7. When you've found the command (or flag or hotkey), hit enter and you'll be sent back to your terminal prompt and the command you found along with its description will be printed to your terminal.
