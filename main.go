@@ -4,7 +4,6 @@ import (
     "flag"
     "fmt"
     "os"
-    "sort" // Import the sort package
     "strings"
     "github.com/gdamore/tcell/v2"
     "what-cmd/commands"
@@ -241,50 +240,50 @@ func main() {
 
     // Main loop
     for {
-    // Clearing the screen
-    screen.Clear()
+        // Clearing the screen
+        screen.Clear()
 
-    // Get terminal dimensions
-    width, height := screen.Size()
+        // Get terminal dimensions
+        width, height := screen.Size()
 
-    // Adjusting window dimensions
-    cmdWindowHeight := height - 5
-    cmdWindowWidth := width * 2 / 10 // 20% of the terminal width (reduced by 50%)
-    descWindowWidth := width - cmdWindowWidth - 2
+        // Adjusting window dimensions
+        cmdWindowHeight := height - 5
+        cmdWindowWidth := width * 2 / 10 // 20% of the terminal width (reduced by 50%)
+        descWindowWidth := width - cmdWindowWidth - 2
 
         // Define teal color style
         tealStyle := tcell.StyleDefault.Foreground(tcell.ColorTeal)
         highlightStyle := tcell.StyleDefault.Foreground(tcell.ColorTeal).Bold(true)
 
-    // Draw borders for the command and description windows
-    drawBorder(screen, 0, 0, cmdWindowWidth, cmdWindowHeight, tealStyle)
-    drawBorder(screen, cmdWindowWidth+1, 0, width-1, cmdWindowHeight, tealStyle)
+        // Draw borders for the command and description windows
+        drawBorder(screen, 0, 0, cmdWindowWidth, cmdWindowHeight, tealStyle)
+        drawBorder(screen, cmdWindowWidth+1, 0, width-1, cmdWindowHeight, tealStyle)
 
-    // Displaying the prompt at the bottom left
-    prompt := "Enter a command to search for (type 'exit' to quit): "
-    for i, r := range prompt {
-        screen.SetContent(i, height-3, r, nil, tcell.StyleDefault)
-    }
+        // Displaying the prompt at the bottom left
+        prompt := "Enter a command to search for (type 'exit' to quit): "
+        for i, r := range prompt {
+            screen.SetContent(i, height-3, r, nil, tcell.StyleDefault)
+        }
 
-    // Displaying the user input at the bottom left
-    for i, r := range userInput {
-        screen.SetContent(i, height-2, r, nil, tcell.StyleDefault)
-    }
+        // Displaying the user input at the bottom left
+        for i, r := range userInput {
+            screen.SetContent(i, height-2, r, nil, tcell.StyleDefault)
+        }
 
-    // Finding and displaying the closest match
-    inputStr := string(userInput)
-    closest := findClosestMatch(inputStr, words)
+        // Finding and displaying the closest match
+        inputStr := string(userInput)
+        closest := findClosestMatch(inputStr, words)
 
-    // Define the ASCII art
-    asciiArt := `
-    __          ___    _       _______      _____ __  __ _____  
-    \ \        / / |  | |   /\|__   __|    / ____|  \/  |  __ \ 
-     \ \  /\  / /| |__| |  /  \  | |______| |    | \  / | |  | |
-      \ \/  \/ / |  __  | / /\ \ | |______| |    | |\/| | |  | |
-       \  /\  /  | |  | |/ ____ \| |      | |____| |  | | |__| |
-        \/  \/   |_|  |_/_/    \_\_|       \_____|_|  |_|_____/ 
-                                                                    
-    `
+        // Define the ASCII art
+        asciiArt := `
+        __          ___    _       _______      _____ __  __ _____  
+        \ \        / / |  | |   /\|__   __|    / ____|  \/  |  __ \ 
+         \ \  /\  / /| |__| |  /  \  | |______| |    | \  / | |  | |
+          \ \/  \/ / |  __  | / /\ \ | |______| |    | |\/| | |  | |
+           \  /\  /  | |  | |/ ____ \| |      | |____| |  | | |__| |
+            \/  \/   |_|  |_/_/    \_\_|       \_____|_|  |_|_____/ 
+                                                                        
+        `
 
         // Calculate the starting position for the ASCII art
         asciiArtLines := strings.Split(asciiArt, "\n")
@@ -296,9 +295,9 @@ func main() {
             }
         }
 
-    // Move the ASCII art 20% to the right
-    asciiArtX := cmdWindowWidth + (descWindowWidth-asciiArtWidth)/2 + int(0.2*float64(descWindowWidth))
-    asciiArtY := (cmdWindowHeight - asciiArtHeight) / 2
+        // Move the ASCII art 20% to the right
+        asciiArtX := cmdWindowWidth + (descWindowWidth-asciiArtWidth)/2 + int(0.2*float64(descWindowWidth))
+        asciiArtY := (cmdWindowHeight - asciiArtHeight) / 2
 
         // Render the ASCII art in the background
         for y, line := range asciiArtLines {
@@ -329,11 +328,11 @@ func main() {
             }
         }
 
-        // Display the commands and descriptions
+        // Highlight the selected command based on selectedIndex
         for i, word := range filteredWords {
             if i < cmdWindowHeight-1 {
                 style := tcell.StyleDefault
-                if word.Name == closest.Name && word.Description == closest.Description {
+                if i == selectedIndex {
                     style = highlightStyle
                 }
 
@@ -346,7 +345,7 @@ func main() {
                 for _, line := range wrappedName {
                     if currentLine < cmdWindowHeight-1 {
                         for j, r := range line {
-                            screen.SetContent(j+1, currentLine, r, nil, style) // Move commands inside the border
+                            screen.SetContent(j+1, currentLine, r, nil, style)
                         }
                         currentLine++
                     }
@@ -378,27 +377,25 @@ func main() {
             // Draw the box
             drawBorder(screen, boxXStart, boxYStart, boxXEnd, boxYEnd, tealStyle)
 
-            // Display the flags and their descriptions
-            for i, word := range filteredWords {
-                if i < boxYEnd-boxYStart-1 {
-                    flags := getFlagsForCommand(word.Name)
-                    y := boxYStart + 1 + i
-                    for _, flag := range flags {
-                        flagStr := fmt.Sprintf("%s: %s", flag.Name, flag.Description)
-                        wrappedFlagStr := wrapText(flagStr, newWidth-2)
-
-                        // Apply highlight style if the word is the closest match
-                        flagStyle := tcell.StyleDefault
-                        if word.Name == closest.Name && word.Description == closest.Description {
-                            flagStyle = highlightStyle
+            // Display the flags and their descriptions for the selected command
+            if selectedIndex < len(filteredWords) {
+                selectedCommand := filteredWords[selectedIndex]
+                flags := getFlagsForCommand(selectedCommand.Name)
+                for i, flag := range flags {
+                    if i < boxYEnd-boxYStart-1 {
+                        y := boxYStart + 1 + i
+                        screen.SetContent(boxXStart+1, y, rune(flag.Name[0]), nil, tealStyle)
+                        for j, r := range flag.Name[1:] {
+                            screen.SetContent(boxXStart+2+j, y, r, nil, tealStyle)
                         }
 
-                        for _, line := range wrappedFlagStr {
-                            if y < boxYEnd {
-                                for k, r := range line {
-                                    screen.SetContent(boxXStart+1+k, y, r, nil, flagStyle)
+                        // Wrap the flag description
+                        wrappedDescription := wrapText(flag.Description, newWidth-2-len(flag.Name)-1)
+                        for k, line := range wrappedDescription {
+                            if y+k < boxYEnd {
+                                for j, r := range line {
+                                    screen.SetContent(boxXStart+2+len(flag.Name)+1+j, y+k, r, nil, tealStyle)
                                 }
-                                y++
                             }
                         }
                     }
@@ -406,10 +403,10 @@ func main() {
             }
         }
 
-    // Flushing the changes to the screen
-    screen.Show()
+        // Flushing the changes to the screen
+        screen.Show()
 
-       // Waiting for an event
+        // Waiting for an event
         ev := screen.PollEvent()
         switch ev := ev.(type) {
         case *tcell.EventKey:
@@ -418,7 +415,7 @@ func main() {
             }
             if ev.Key() == tcell.KeyEnter {
                 // Exit the CLI and write the command name and description to the user's command prompt
-                selectedCommand := filteredWords[0]
+                selectedCommand := filteredWords[selectedIndex]
                 screen.Fini() // Finalize the screen before printing
                 fmt.Printf("%s: %s\n", selectedCommand.Name, selectedCommand.Description)
                 flags := getFlagsForCommand(selectedCommand.Name)
@@ -427,11 +424,21 @@ func main() {
                 }
                 return
             }
+            if ev.Key() == tcell.KeyUp {
+                if selectedIndex > 0 {
+                    selectedIndex--
+                }
+            }
+            if ev.Key() == tcell.KeyDown {
+                if selectedIndex < len(filteredWords)-1 {
+                    selectedIndex++
+                }
+            }
             if ev.Key() == tcell.KeyBackspace || ev.Key() == tcell.KeyBackspace2 {
                 if len(userInput) > 0 {
                     userInput = userInput[:len(userInput)-1]
                 }
-            } else {
+            } else if ev.Rune() != 0 {
                 userInput = append(userInput, ev.Rune())
             }
         case *tcell.EventError:
