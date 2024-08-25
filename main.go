@@ -4,6 +4,7 @@ import (
     "flag"
     "fmt"
     "os"
+    "sort" // Import the sort package
     "strings"
     "github.com/gdamore/tcell/v2"
     "what-cmd/commands"
@@ -235,44 +236,47 @@ func main() {
     // Creating buffer for user input
     var userInput []rune
 
+    // Add a variable to track the selected index
+    selectedIndex := 0
+
     // Main loop
     for {
-        // Clearing the screen
-        screen.Clear()
+    // Clearing the screen
+    screen.Clear()
 
-        // Get terminal dimensions
-        width, height := screen.Size()
+    // Get terminal dimensions
+    width, height := screen.Size()
 
-        // Adjusting window dimensions
-        cmdWindowHeight := height - 5
-        cmdWindowWidth := width * 2 / 10 // 20% of the terminal width (reduced by 50%)
-        descWindowWidth := width - cmdWindowWidth - 2
+    // Adjusting window dimensions
+    cmdWindowHeight := height - 5
+    cmdWindowWidth := width * 2 / 10 // 20% of the terminal width (reduced by 50%)
+    descWindowWidth := width - cmdWindowWidth - 2
 
         // Define teal color style
         tealStyle := tcell.StyleDefault.Foreground(tcell.ColorTeal)
         highlightStyle := tcell.StyleDefault.Foreground(tcell.ColorTeal).Bold(true)
 
-        // Draw borders for the command and description windows
-        drawBorder(screen, 0, 0, cmdWindowWidth, cmdWindowHeight, tealStyle)
-        drawBorder(screen, cmdWindowWidth+1, 0, width-1, cmdWindowHeight, tealStyle)
+    // Draw borders for the command and description windows
+    drawBorder(screen, 0, 0, cmdWindowWidth, cmdWindowHeight, tealStyle)
+    drawBorder(screen, cmdWindowWidth+1, 0, width-1, cmdWindowHeight, tealStyle)
 
-        // Displaying the prompt at the bottom left
-        prompt := "Enter a command to search for (type 'exit' to quit): "
-        for i, r := range prompt {
-            screen.SetContent(i, height-3, r, nil, tcell.StyleDefault)
-        }
+    // Displaying the prompt at the bottom left
+    prompt := "Enter a command to search for (type 'exit' to quit): "
+    for i, r := range prompt {
+        screen.SetContent(i, height-3, r, nil, tcell.StyleDefault)
+    }
 
-        // Displaying the user input at the bottom left
-        for i, r := range userInput {
-            screen.SetContent(i, height-2, r, nil, tcell.StyleDefault)
-        }
+    // Displaying the user input at the bottom left
+    for i, r := range userInput {
+        screen.SetContent(i, height-2, r, nil, tcell.StyleDefault)
+    }
 
-        // Finding and displaying the closest match
-        inputStr := string(userInput)
-        closest := findClosestMatch(inputStr, words)
+    // Finding and displaying the closest match
+    inputStr := string(userInput)
+    closest := findClosestMatch(inputStr, words)
 
-        // Define the ASCII art
-        asciiArt := `
+    // Define the ASCII art
+    asciiArt := `
     __          ___    _       _______      _____ __  __ _____  
     \ \        / / |  | |   /\|__   __|    / ____|  \/  |  __ \ 
      \ \  /\  / /| |__| |  /  \  | |______| |    | \  / | |  | |
@@ -280,7 +284,7 @@ func main() {
        \  /\  /  | |  | |/ ____ \| |      | |____| |  | | |__| |
         \/  \/   |_|  |_/_/    \_\_|       \_____|_|  |_|_____/ 
                                                                     
-        `
+    `
 
         // Calculate the starting position for the ASCII art
         asciiArtLines := strings.Split(asciiArt, "\n")
@@ -292,9 +296,9 @@ func main() {
             }
         }
 
-        // Move the ASCII art 20% to the right
-        asciiArtX := cmdWindowWidth + (descWindowWidth-asciiArtWidth)/2 + int(0.2*float64(descWindowWidth))
-        asciiArtY := (cmdWindowHeight - asciiArtHeight) / 2
+    // Move the ASCII art 20% to the right
+    asciiArtX := cmdWindowWidth + (descWindowWidth-asciiArtWidth)/2 + int(0.2*float64(descWindowWidth))
+    asciiArtY := (cmdWindowHeight - asciiArtHeight) / 2
 
         // Render the ASCII art in the background
         for y, line := range asciiArtLines {
@@ -402,8 +406,8 @@ func main() {
             }
         }
 
-        // Flushing the changes to the screen
-        screen.Show()
+    // Flushing the changes to the screen
+    screen.Show()
 
        // Waiting for an event
         ev := screen.PollEvent()
