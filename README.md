@@ -31,9 +31,7 @@ Option B:
 5. Options for the command (run "what-cmd -hotkeys" for example to search hotkeys for the terminal)
 
    -flags (flags for the commands. NB! Flags will now appear when you search for commands just by running what-cmd without flags)
-   -git (common git commands)
    -hotkeys (linux terminal hotkeys)
-   -network (networking commands)
 
 6. By running ./what-cmd (or what-cmd) you'll now be able to search for commands either by name or description. If you append a flag (e.g. what-cmd -flags) you'll be able to search for the flags that are valid for each command.
 
