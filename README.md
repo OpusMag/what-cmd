@@ -1,7 +1,7 @@
 # what-cmd
-What-cmd is a command line tool written in Golang that gives you an easy way to find the linux terminal command you're looking for when you've forgotten it or if you're new.
+What-cmd is a command line tool written in Go that gives you an easy way to find the linux terminal command (and its flags) you're looking for when you've forgotten it or if you're new to the linux terminal.
 
-Future releases: In future releases the command list may be expanded further. In addition, improvements to the aesthetic may be considered as well as further functionality.
+Future releases: In future releases the command list may be expanded further. In addition, improvements to the UX/UI may be considered as well as further functionality.
 
 To use this tool:
 
@@ -28,9 +28,9 @@ Option B:
    Confirm it has worked:
    what-cmd --help (this also shows the available flags)
 
-5. Options for the command (run "what-cmd -flags" for example to search flags for commands)
+5. Options for the command (run "what-cmd -hotkeys" for example to search hotkeys for the terminal)
 
-   -flags (flags for common linux terminal commands, git commands and networking commands)
+   -flags (flags for the commands. NB! Flags will now appear when you search for commands just by running what-cmd without flags)
    -git (common git commands)
    -hotkeys (linux terminal hotkeys)
    -network (networking commands)
