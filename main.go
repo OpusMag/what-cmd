@@ -227,7 +227,7 @@ func main() {
 
         // Define teal color style
         tealStyle := tcell.StyleDefault.Foreground(tcell.ColorTeal)
-        highlightStyle := tcell.StyleDefault.Foreground(tcell.ColorTeal).Bold(true)
+        highlightStyle := tcell.StyleDefault.Foreground(tcell.ColorLightSkyBlue).Bold(true)
 
         // Draw borders for the command and description windows
         drawBorder(screen, 0, 0, cmdWindowWidth, cmdWindowHeight, tealStyle)
@@ -358,9 +358,9 @@ func main() {
                 for i, flag := range flags {
                     if i < boxYEnd-boxYStart-1 {
                         y := boxYStart + 1 + i
-                        screen.SetContent(boxXStart+1, y, rune(flag.Name[0]), nil, tealStyle)
+                        screen.SetContent(boxXStart+1, y, rune(flag.Name[0]), nil, highlightStyle)
                         for j, r := range flag.Name[1:] {
-                            screen.SetContent(boxXStart+2+j, y, r, nil, tealStyle)
+                            screen.SetContent(boxXStart+2+j, y, r, nil, highlightStyle)
                         }
 
                         // Wrap the flag description
@@ -368,7 +368,7 @@ func main() {
                         for k, line := range wrappedDescription {
                             if y+k < boxYEnd {
                                 for j, r := range line {
-                                    screen.SetContent(boxXStart+2+len(flag.Name)+1+j, y+k, r, nil, tealStyle)
+                                    screen.SetContent(boxXStart+2+len(flag.Name)+1+j, y+k, r, nil, highlightStyle)
                                 }
                             }
                         }
