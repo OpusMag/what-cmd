@@ -341,10 +341,10 @@ func main() {
         // If the number of filtered search results is less than 10, draw a box and display flags
         if len(filteredWords) < 10 {
             // Calculate new dimensions
-            newWidth := cmdWindowWidth + 78
-            newHeight := cmdWindowHeight - 20
+            newWidth := width - cmdWindowWidth - 2 // Adjusted width to match the border
+            newHeight := cmdWindowHeight - 25 // Reduced height by an additional 5 rows
             boxXStart := cmdWindowWidth + 1
-            boxXEnd := boxXStart + newWidth + 1
+            boxXEnd := width - 1 // Adjusted end position to match the border
             boxYEnd := cmdWindowHeight
             boxYStart := boxYEnd - newHeight
 
