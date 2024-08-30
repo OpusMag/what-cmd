@@ -173,6 +173,26 @@ func wrapText(text string, maxWidth int) []string {
     return lines
 }
 
+// Function to handle user input for scrolling
+func handleScrollInput(event *tcell.EventKey, scrollPosition *int, selectedIndex *int, filteredWords []KeyValuePair, cmdWindowHeight int) {
+    switch event.Key() {
+    case tcell.KeyUp:
+        if *selectedIndex > 0 {
+            *selectedIndex--
+            if *selectedIndex < *scrollPosition {
+                *scrollPosition--
+            }
+        }
+    case tcell.KeyDown:
+        if *selectedIndex < len(filteredWords)-1 {
+            *selectedIndex++
+            if *selectedIndex >= *scrollPosition+cmdWindowHeight-2 {
+                *scrollPosition++
+            }
+        }
+    }
+}
+
 func main() {
     // Setting the CLI name
     flag.CommandLine.Usage = func() {
@@ -215,6 +235,9 @@ func main() {
     // Add a flag to track if the user input has changed
     inputChanged := false
 
+    // Variables to track the current scroll position
+    scrollPosition := 0
+
     // Main loop
     for {
         // Clearing the screen
@@ -224,27 +247,62 @@ func main() {
         width, height := screen.Size()
 
         // Adjusting window dimensions
-        cmdWindowHeight := height - 5
-        cmdWindowWidth := width * 2 / 10 // 20% of the terminal width (reduced by 50%)
+        cmdWindowHeight := height - 10
+        cmdWindowWidth := width * 2 / 10
         descWindowWidth := width - cmdWindowWidth - 2
 
         // Define teal color style
+        whiteStyle := tcell.StyleDefault.Foreground(tcell.ColorWhite)
         tealStyle := tcell.StyleDefault.Foreground(tcell.ColorTeal)
         highlightStyle := tcell.StyleDefault.Foreground(tcell.ColorLightSkyBlue).Bold(true)
+        promptStyle := tcell.StyleDefault.Foreground(tcell.ColorRed).Bold(true)
 
         // Draw borders for the command and description windows
         drawBorder(screen, 0, 0, cmdWindowWidth, cmdWindowHeight, tealStyle)
         drawBorder(screen, cmdWindowWidth+1, 0, width-1, cmdWindowHeight, tealStyle)
 
-        // Displaying the prompt at the bottom left
-        prompt := "Enter a command to search for (type 'exit' to quit): "
-        for i, r := range prompt {
-            screen.SetContent(i, height-3, r, nil, tcell.StyleDefault)
+        // Writes the word "Commands" at the top left line of the command window border
+        commandWord := "Commands"
+        for i, r := range commandWord {
+            screen.SetContent(1+i, 0, r, nil, whiteStyle)
         }
 
-        // Displaying the user input at the bottom left
+        // Writes the word "Description" at the top left line of the description window border
+        descriptionWord := "Descriptions"
+        for i, r := range descriptionWord {
+            screen.SetContent(cmdWindowWidth+2+i, 0, r, nil, whiteStyle)
+        }
+
+        // Calculate dimensions for the prompt box
+        promptBoxHeight := 8 
+        promptBoxWidth := cmdWindowWidth 
+        promptBoxXStart := 0 
+        promptBoxYStart := cmdWindowHeight + 1
+        promptBoxXEnd := promptBoxXStart + promptBoxWidth
+        promptBoxYEnd := promptBoxYStart + promptBoxHeight
+
+        // Draw the border for the prompt box
+        drawBorder(screen, promptBoxXStart, promptBoxYStart, promptBoxXEnd, promptBoxYEnd, tealStyle)
+
+        // Write the word "Search" at the top left line of the prompt box
+        searchWord := "Search"
+        for i, r := range searchWord {
+            screen.SetContent(promptBoxXStart+1+i, promptBoxYStart, r, nil, whiteStyle)
+        }
+
+        // Displaying the prompt within the prompt box
+        prompt := "Enter a command to search for (type 'exit' to quit): "
+        wrappedPrompt := wrapText(prompt, promptBoxWidth-2)
+        for i, line := range wrappedPrompt {
+            for j, r := range line {
+                screen.SetContent(promptBoxXStart+1+j, promptBoxYStart+1+i, r, nil, tcell.StyleDefault)
+            }
+        }
+
+        // Displaying the user input at the bottom left of the prompt box
+        userInputYStart := promptBoxYEnd - 1 // Start position Y for the user input, at the bottom of the prompt box
         for i, r := range userInput {
-            screen.SetContent(i, height-2, r, nil, tcell.StyleDefault)
+            screen.SetContent(promptBoxXStart+1+i, userInputYStart, r, nil, promptStyle)
         }
 
         // Finding and displaying the closest match
@@ -258,9 +316,7 @@ func main() {
          \ \  /\  / /| |__| |  /  \  | |______| |    | \  / | |  | |
           \ \/  \/ / |  __  | / /\ \ | |______| |    | |\/| | |  | |
            \  /\  /  | |  | |/ ____ \| |      | |____| |  | | |__| |
-            \/  \/   |_|  |_/_/    \_\_|       \_____|_|  |_|_____/ 
-                                                                        
-        `
+            \/  \/   |_|  |_/_/    \_\_|       \_____|_|  |_|_____/ `
 
         // Calculate the starting position for the ASCII art
         asciiArtLines := strings.Split(asciiArt, "\n")
@@ -272,9 +328,12 @@ func main() {
             }
         }
 
-        // Move the ASCII art 20% to the right
-        asciiArtX := cmdWindowWidth + (descWindowWidth-asciiArtWidth)/2 + int(0.2*float64(descWindowWidth))
-        asciiArtY := (cmdWindowHeight - asciiArtHeight) / 2
+        // Calculate the position for the ASCII art
+        asciiHeight := 8 // One-fourth of the description window height
+        asciiBoxYEnd := cmdWindowHeight
+        asciiBoxYStart := asciiBoxYEnd - asciiHeight
+        asciiArtX := cmdWindowWidth + descWindowWidth - asciiArtWidth + 1 // Adjusted to place it on the right side
+        asciiArtY := asciiBoxYStart - asciiArtHeight + 8 // Adjusted to move it further down
 
         // Render the ASCII art in the background
         for y, line := range asciiArtLines {
@@ -308,76 +367,83 @@ func main() {
         // Reset selectedIndex if the input has changed
         if inputChanged {
             selectedIndex = 0
+            scrollPosition = 0 // Reset scroll position
             inputChanged = false
         }
 
+
         // Highlight the selected command based on selectedIndex
-        for i, word := range filteredWords {
-            if i < cmdWindowHeight-1 {
-                style := tcell.StyleDefault
-                if i == selectedIndex {
-                    style = highlightStyle
-                }
+        for i := scrollPosition; i < len(filteredWords) && i < scrollPosition+cmdWindowHeight-1; i++ {
+            word := filteredWords[i]
+            style := tcell.StyleDefault
+            if i == selectedIndex {
+                style = highlightStyle
+            }
 
-                // Wrap the command name and description
-                wrappedName := wrapText(word.Name, cmdWindowWidth-2)
-                wrappedDescription := wrapText(word.Description, descWindowWidth-2)
+            // Wrap the command name and description
+            wrappedName := wrapText(word.Name, cmdWindowWidth-2)
+            wrappedDescription := wrapText(word.Description, descWindowWidth-2)
 
-                // Set content for wrapped command name
-                currentLine := i + 1
-                for _, line := range wrappedName {
-                    if currentLine < cmdWindowHeight-1 {
-                        for j, r := range line {
-                            screen.SetContent(j+1, currentLine, r, nil, style)
-                        }
-                        currentLine++
+            // Set content for wrapped command name
+            currentLine := i - scrollPosition + 1
+            for _, line := range wrappedName {
+                if currentLine < cmdWindowHeight-1 {
+                    for j, r := range line {
+                        screen.SetContent(j+1, currentLine, r, nil, style)
                     }
+                    currentLine++
                 }
+            }
 
-                // Set content for wrapped description
-                currentLine = i + 1
-                for _, line := range wrappedDescription {
-                    if currentLine < cmdWindowHeight-1 {
-                        for j, r := range line {
-                            screen.SetContent(cmdWindowWidth+2+j, currentLine, r, nil, style)
-                        }
-                        currentLine++
+            // Set content for wrapped description
+            currentLine = i - scrollPosition + 1
+            for _, line := range wrappedDescription {
+                if currentLine < cmdWindowHeight-1 {
+                    for j, r := range line {
+                        screen.SetContent(cmdWindowWidth+2+j, currentLine, r, nil, style)
                     }
+                    currentLine++
                 }
             }
         }
 
-        // If the number of filtered search results is less than 25, draw a box and display flags
-        if len(filteredWords) < 35 {
-            // Calculate new dimensions
-            newWidth := width - cmdWindowWidth - 2 // Adjusted width to match the border
-            newHeight := cmdWindowHeight - 35 // Reduced height by an additional 5 rows
-            boxXStart := cmdWindowWidth + 1
-            boxXEnd := width - 1 // Adjusted end position to match the border
-            boxYEnd := cmdWindowHeight
-            boxYStart := boxYEnd - newHeight
+        // If the number of filtered search results is less than 10000, draw a box and display flags
+        if len(filteredWords) < 10000 {
+            // Calculate new dimensions for the flags box
+            flagsBoxWidth := descWindowWidth // Adjusted width to match the border
+            flagsBoxHeight := 8 
+            flagsBoxXStart := cmdWindowWidth + 1
+            flagsBoxXEnd := width - 1 // Adjusted end position to match the border
+            flagsBoxYStart := cmdWindowHeight + 1 // Start right below the command and description boxes
+            flagsBoxYEnd := flagsBoxYStart + flagsBoxHeight
 
-            // Draw the box
-            drawBorder(screen, boxXStart, boxYStart, boxXEnd, boxYEnd, tealStyle)
+            // Draw the flags box
+            drawBorder(screen, flagsBoxXStart, flagsBoxYStart, flagsBoxXEnd, flagsBoxYEnd, tealStyle)
+
+            // Write the word "Flags" at the top left line of the border box
+            word := "Flags"
+            for i, r := range word {
+                screen.SetContent(flagsBoxXStart+1+i, flagsBoxYStart, r, nil, whiteStyle)
+            }
 
             // Display the flags and their descriptions for the selected command
             if selectedIndex < len(filteredWords) {
                 selectedCommand := filteredWords[selectedIndex]
                 flags := getFlagsForCommand(selectedCommand.Name)
                 for i, flag := range flags {
-                    if i < boxYEnd-boxYStart-1 {
-                        y := boxYStart + 1 + i
-                        screen.SetContent(boxXStart+1, y, rune(flag.Name[0]), nil, highlightStyle)
+                    if i < flagsBoxYEnd-flagsBoxYStart-1 {
+                        y := flagsBoxYStart + 1 + i
+                        screen.SetContent(flagsBoxXStart+1, y, rune(flag.Name[0]), nil, highlightStyle)
                         for j, r := range flag.Name[1:] {
-                            screen.SetContent(boxXStart+2+j, y, r, nil, highlightStyle)
+                            screen.SetContent(flagsBoxXStart+2+j, y, r, nil, highlightStyle)
                         }
 
                         // Wrap the flag description
-                        wrappedDescription := wrapText(flag.Description, newWidth-2-len(flag.Name)-1)
+                        wrappedDescription := wrapText(flag.Description, flagsBoxWidth-2-len(flag.Name)-1)
                         for k, line := range wrappedDescription {
-                            if y+k < boxYEnd {
+                            if y+k < flagsBoxYEnd {
                                 for j, r := range line {
-                                    screen.SetContent(boxXStart+2+len(flag.Name)+1+j, y+k, r, nil, highlightStyle)
+                                    screen.SetContent(flagsBoxXStart+2+len(flag.Name)+1+j, y+k, r, nil, highlightStyle)
                                 }
                             }
                         }
@@ -390,13 +456,15 @@ func main() {
         screen.Show()
 
         // Waiting for an event
-        ev := screen.PollEvent()
-        switch ev := ev.(type) {
+        event := screen.PollEvent()
+        switch ev := event.(type) {
         case *tcell.EventKey:
-            if ev.Key() == tcell.KeyEscape || ev.Key() == tcell.KeyCtrlC {
+            switch ev.Key() {
+            case tcell.KeyEscape, tcell.KeyCtrlC:
                 return
-            }
-            if ev.Key() == tcell.KeyEnter {
+            case tcell.KeyUp, tcell.KeyDown:
+                handleScrollInput(ev, &scrollPosition, &selectedIndex, filteredWords, cmdWindowHeight)
+            case tcell.KeyEnter:
                 // Exit the CLI and write the command name and description to the user's command prompt
                 selectedCommand := filteredWords[selectedIndex]
                 screen.Fini() // Finalize the screen before printing
@@ -406,26 +474,19 @@ func main() {
                     fmt.Printf("  %s: %s\n", flag.Name, flag.Description)
                 }
                 return
-            }
-            if ev.Key() == tcell.KeyUp {
-                if selectedIndex > 0 {
-                    selectedIndex--
-                }
-            }
-            if ev.Key() == tcell.KeyDown {
-                if selectedIndex < len(filteredWords)-1 {
-                    selectedIndex++
-                }
-            }
-            if ev.Key() == tcell.KeyBackspace || ev.Key() == tcell.KeyBackspace2 {
+            case tcell.KeyBackspace, tcell.KeyBackspace2:
                 if len(userInput) > 0 {
                     userInput = userInput[:len(userInput)-1]
                     inputChanged = true
                 }
-            } else if ev.Rune() != 0 {
-                userInput = append(userInput, ev.Rune())
-                inputChanged = true
+            default:
+                if ev.Rune() != 0 {
+                    userInput = append(userInput, ev.Rune())
+                    inputChanged = true
+                }
             }
+        case *tcell.EventResize:
+            screen.Sync()
         case *tcell.EventError:
             fmt.Println("Error:", ev.Error())
             return
