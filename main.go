@@ -212,6 +212,9 @@ func main() {
     // Add a variable to track the selected index
     selectedIndex := 0
 
+    // Add a flag to track if the user input has changed
+    inputChanged := false
+
     // Main loop
     for {
         // Clearing the screen
@@ -302,6 +305,12 @@ func main() {
             }
         }
 
+        // Reset selectedIndex if the input has changed
+        if inputChanged {
+            selectedIndex = 0
+            inputChanged = false
+        }
+
         // Highlight the selected command based on selectedIndex
         for i, word := range filteredWords {
             if i < cmdWindowHeight-1 {
@@ -338,11 +347,11 @@ func main() {
             }
         }
 
-        // If the number of filtered search results is less than 10, draw a box and display flags
-        if len(filteredWords) < 10 {
+        // If the number of filtered search results is less than 25, draw a box and display flags
+        if len(filteredWords) < 35 {
             // Calculate new dimensions
             newWidth := width - cmdWindowWidth - 2 // Adjusted width to match the border
-            newHeight := cmdWindowHeight - 25 // Reduced height by an additional 5 rows
+            newHeight := cmdWindowHeight - 35 // Reduced height by an additional 5 rows
             boxXStart := cmdWindowWidth + 1
             boxXEnd := width - 1 // Adjusted end position to match the border
             boxYEnd := cmdWindowHeight
@@ -411,9 +420,11 @@ func main() {
             if ev.Key() == tcell.KeyBackspace || ev.Key() == tcell.KeyBackspace2 {
                 if len(userInput) > 0 {
                     userInput = userInput[:len(userInput)-1]
+                    inputChanged = true
                 }
             } else if ev.Rune() != 0 {
                 userInput = append(userInput, ev.Rune())
+                inputChanged = true
             }
         case *tcell.EventError:
             fmt.Println("Error:", ev.Error())

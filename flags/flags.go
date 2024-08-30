@@ -464,9 +464,81 @@ var Words = map[string]Flag{
 		Name:        "iwconfig",
 		Description: "Flags: -a (display all information), -d (enable debug mode), -s (display status)",
 	},
+	"iwconfig essid": {
+		Name:        "iwconfig essid",
+		Description: "Flags: None",
+	},
+	"iwconfig mode": {
+		Name:        "iwconfig mode",
+		Description: "Flags: None",
+	},
+	"iwconfig freq": {
+		Name:        "iwconfig freq",
+		Description: "Flags: None",
+	},
+	"iwconfig ap": {
+		Name:        "iwconfig ap",
+		Description: "Flags: None",
+	},
+	"iwconfig rate": {
+		Name:        "iwconfig rate",
+		Description: "Flags: None",
+	},
+	"iwconfig txpower": {
+		Name:        "iwconfig txpower",
+		Description: "Flags: None",
+	},
+	"iwconfig retry": {
+		Name:        "iwconfig retry",
+		Description: "Flags: None",
+	},
+	"iwconfig rts": {
+		Name:        "iwconfig rts",
+		Description: "Flags: None",
+	},
+	"iwconfig frag": {
+		Name:        "iwconfig frag",
+		Description: "Flags: None",
+	},
+	"iwconfig key": {
+		Name:        "iwconfig key",
+		Description: "Flags: None",
+	},
+	"iwconfig power": {
+		Name:        "iwconfig power",
+		Description: "Flags: None",
+	},
 	"iwlist": {
 		Name:        "iwlist",
 		Description: "Flags: -a (display all information), -d (enable debug mode), -s (display status)",
+	},
+	"iwlist scan": {
+		Name:        "iwlist scan",
+		Description: "Flags: None",
+	},
+	"iwlist frequency": {
+		Name:        "iwlist frequency",
+		Description: "Flags: None",
+	},
+	"iwlist bitrate": {
+		Name:        "iwlist bitrate",
+		Description: "Flags: None",
+	},
+	"iwlist encryption": {
+		Name:        "iwlist encryption",
+		Description: "Flags: None",
+	},
+	"iwlist power": {
+		Name:        "iwlist power",
+		Description: "Flags: None",
+	},
+	"iwlist txpower": {
+		Name:        "iwlist txpower",
+		Description: "Flags: None",
+	},
+	"iwlist retry": {
+		Name:        "iwlist retry",
+		Description: "Flags: None",
 	},
 	"ufw": {
 		Name:        "ufw",
@@ -806,15 +878,15 @@ var Words = map[string]Flag{
 	},
 	"traceroute": {
 		Name:        "traceroute",
-		Description: "Flags: -m (Set the maximum number of hops), -p (Set the destination port to use)",
+		Description: "Flags: -m (Set the maximum number of hops), -p (Set the destination port to use), -4 (Use IPv4), -6 (Use IPv6), -I (Use ICMP ECHO for probes), -T (Use TCP SYN for probes), -U (Use UDP datagrams for probes), -p (Set the base UDP port number used in probes), -q (Set the number of probe queries per hop), -w (Set the time (in seconds) to wait for a response to a probe), -m (Set the max number of hops), -f (Set the first TTL (time-to-live) value)",
 	},
 	"mtr": {
 		Name:        "mtr",
-		Description: "Flags: -r (Generate a report in text format), -c (Set the number of pings to send)",
+		Description: "Flags: --report (Output using report mode), --report-cycles (Set the number of pings sent), --interval (Set the interval between ICMP ECHO requests), --timeout (Set the timeout for each probe), --tcp (Use TCP SYN packets instead of ICMP ECHO), --udp (Use UDP datagrams instead of ICMP ECHO), --port (Set the target port for TCP/UDP), --max-ttl (Set the max number of hops), --first-ttl (Set the first TTL (time-to-live) value), --show-ips (Show IP numbers instead of hostnames)",
 	},
 	"dig": {
 		Name:        "dig",
-		Description: "Flags: +short (Provide a short output), +trace (Trace the path to the name server)",
+		Description: "Flags: +short (Provide a short output), +trace (Trace the path to the name server), @server (Specify the DNS server to query), -b (Set the source IP address of the query), -c (Specify the query class (IN, CH, HS)), -f (Perform batch processing of multiple queries), -k (Specify a TSIG key file), -p (Specify the port number to query on the server), -q (Specify the query name), -t (Specify the query type (A, AAAA, MX, etc.)), -x (Perform a reverse lookup), -y (Specify a TSIG key), +short (Provide a short answer), +trace (Trace the delegation path from the root name servers), +stats (Print query statistics), +noall (Set or clear all display flags), +answer (Display the answer section of a reply), +authority (Display the authority section of a reply), +additional (Display the additional section of a reply), +question (Display the question section of a reply)",
 	},
 	"nslookup": {
 		Name:        "nslookup",
@@ -826,35 +898,227 @@ var Words = map[string]Flag{
 	},
 	"rsync": {
 		Name:        "rsync",
-		Description: "Flags: -a (Enable archive mode (preserves permissions, times, symbolic links, etc.)), -v (Enable verbose output)",
+		Description: "Flags: -a (Archive mode), -v (Verbose mode), -z (Compress file data during the transfer), -r (Recurse into directories), -u (Skip files that are newer on the receiver), -l (Copy symlinks as symlinks), -p (Preserve permissions), -t (Preserve modification times), -g (Preserve group), -o (Preserve owner (super-user only)), -D (Preserve device and special files), -e (Specify the remote shell to use), --delete (Delete extraneous files from destination directories), --exclude (Exclude files matching PATTERN), --include (Include files matching PATTERN), --progress (Show progress during transfer), --stats (Give some file-transfer stats)",
 	},
 	"ftp": {
 		Name:        "ftp",
 		Description: "Flags: -n (Disable auto-login upon initial connection), -v (Enable verbose mode)",
 	},
+	"ftp open": {
+		Name:        "ftp open",
+		Description: "Flags: None",
+	},
+	"ftp close": {
+		Name:        "ftp close",
+		Description: "Flags: None",
+	},
+	"ftp put": {
+		Name:        "ftp put",
+		Description: "Flags: None",
+	},
+	"ftp mput": {
+		Name:        "ftp mput",
+		Description: "Flags: None",
+	},
+	"ftp get": {
+		Name:        "ftp get",
+		Description: "Flags: None",
+	},
+	"ftp mget": {
+		Name:        "ftp mget",
+		Description: "Flags: None",
+	},
+	"ftp delete": {
+		Name:        "ftp delete",
+		Description: "Flags: None",
+	},
+	"ftp mdelete": {
+		Name:        "ftp mdelete",
+		Description: "Flags: None",
+	},
+	"ftp rename": {
+		Name:        "ftp rename",
+		Description: "Flags: None",
+	},
+	"ftp mkdir": {
+		Name:        "ftp mkdir",
+		Description: "Flags: None",
+	},
+	"ftp rmdir": {
+		Name:        "ftp rmdir",
+		Description: "Flags: None",
+	},
+	"ftp ls": {
+		Name:        "ftp ls",
+		Description: "Flags: None",
+	},
+	"ftp lcd": {
+		Name:        "ftp lcd",
+		Description: "Flags: None",
+	},
+	"ftp cd": {
+		Name:        "ftp cd",
+		Description: "Flags: None",
+	},
+	"ftp ascii": {
+		Name:        "ftp ascii",
+		Description: "Flags: None",
+	},
+	"ftp binary": {
+		Name:        "ftp binary",
+		Description: "Flags: None",
+	},
+	"ftp passive": {
+		Name:        "ftp passive",
+		Description: "Flags: None",
+	},
+	"ftp active": {
+		Name:        "ftp active",
+		Description: "Flags: None",
+	},
 	"sftp": {
 		Name:        "sftp",
 		Description: "Flags: -P (Specify the port to connect to on the remote host), -r (Recursively copy entire directories)",
+	},
+	"sftp get": {
+		Name:        "sftp get",
+		Description: "Flags: None",
+	},
+	"sftp put": {
+		Name:        "sftp put",
+		Description: "Flags: None",
+	},
+	"sftp ls": {
+		Name:        "sftp ls",
+		Description: "Flags: None",
+	},
+	"sftp cd": {
+		Name:        "sftp cd",
+		Description: "Flags: None",
+	},
+	"sftp lcd": {
+		Name:        "sftp lcd",
+		Description: "Flags: None",
+	},
+	"sftp mkdir": {
+		Name:        "sftp mkdir",
+		Description: "Flags: None",
+	},
+	"sftp rmdir": {
+		Name:        "sftp rmdir",
+		Description: "Flags: None",
+	},
+	"sftp rm": {
+		Name:        "sftp rm",
+		Description: "Flags: None",
+	},
+	"sftp rename": {
+		Name:        "sftp rename",
+		Description: "Flags: None",
+	},
+	"sftp chmod": {
+		Name:        "sftp chmod",
+		Description: "Flags: None",
+	},
+	"sftp chown": {
+		Name:        "sftp chown",
+		Description: "Flags: None",
+	},
+	"sftp chgrp": {
+		Name:        "sftp chgrp",
+		Description: "Flags: None",
+	},
+	"sftp lls": {
+		Name:        "sftp lls",
+		Description: "Flags: None",
+	},
+	"sftp lmkdir": {
+		Name:        "sftp lmkdir",
+		Description: "Flags: None",
+	},
+	"sftp lrm": {
+		Name:        "sftp lrm",
+		Description: "Flags: None",
+	},
+	"sftp lrename": {
+		Name:        "sftp lrename",
+		Description: "Flags: None",
+	},
+	"sftp lchmod": {
+		Name:        "sftp lchmod",
+		Description: "Flags: None",
+	},
+	"sftp lchown": {
+		Name:        "sftp lchown",
+		Description: "Flags: None",
+	},
+	"sftp lchgrp": {
+		Name:        "sftp lchgrp",
+		Description: "Flags: None",
 	},
 	"telnet": {
 		Name:        "telnet",
 		Description: "Flags: -8 (Use an 8-bit data path), -E (Stop any escape character from being recognized)",
 	},
+	"telnet open": {
+    Name:        "telnet open",
+    Description: "Flags: None",
+	},
+	"telnet close": {
+		Name:        "telnet close",
+		Description: "Flags: None",
+	},
+	"telnet quit": {
+		Name:        "telnet quit",
+		Description: "Flags: None",
+	},
+	"telnet send": {
+		Name:        "telnet send",
+		Description: "Flags: None",
+	},
+	"telnet status": {
+		Name:        "telnet status",
+		Description: "Flags: None",
+	},
+	"telnet set": {
+		Name:        "telnet set",
+		Description: "Flags: None",
+	},
+	"telnet unset": {
+		Name:        "telnet unset",
+		Description: "Flags: None",
+	},
+	"telnet toggle": {
+		Name:        "telnet toggle",
+		Description: "Flags: None",
+	},
+	"telnet mode": {
+		Name:        "telnet mode",
+		Description: "Flags: None",
+	},
+	"telnet display": {
+		Name:        "telnet display",
+		Description: "Flags: None",
+	},
+	"telnet environ": {
+		Name:        "telnet environ",
+		Description: "Flags: None",
+	},
 	"nc": {
 		Name:        "nc",
-		Description: "Flags: -l (Enable listen mode for inbound connections), -u (Use UDP mode instead of the default TCP)",
+		Description: "Flags: -l (Listen mode, for inbound connects), -p (Local port number), -e (Program to execute after connect), -n (Numeric-only IP addresses, no DNS), -u (UDP mode), -v (Verbose mode), -z (Zero-I/O mode (used for scanning)), -w (Timeout for connects and final net reads), -i (Delay interval for lines sent), -k (Keep inbound sockets open for multiple connects), -s (Local source address), -o (Hex dump of traffic), -r (Randomize remote ports), -q (Quit after EOF on stdin and delay of secs)",
 	},
 	"nmap": {
 		Name:        "nmap",
-		Description: "Flags: -sP (Perform a ping scan to determine which hosts are up), -sT (Perform a TCP connect scan)",
+		Description: "Flags: -sP (Perform a ping scan to determine which hosts are up), -sT (Perform a TCP connect scan), -sS (TCP SYN scan), -sU (UDP scan), -sV (Version detection), -O (OS detection), -A (Aggressive scan options), -p (Specify ports to scan), -T (Set timing template), -oN (Normal output to file), -oX (XML output to file), -oG (Grepable output to file), -oA (Output in the three major formats at once), -iL (Input from list of hosts/networks), -iR (Scan random hosts), -Pn (Treat all hosts as online -- skip host discovery), -6 (Enable IPv6 scanning), -sC (Run default scripts), -script (Specify custom scripts to run)",
 	},
 	"tcpdump": {
 		Name:        "tcpdump",
-		Description: "Flags: -i (Specify the network interface to listen on), -w (Write the raw packets to a file)",
+		Description: "Flags: -i (Specify the interface to listen on), -w (Write the raw packets to a file), -r (Read packets from a file), -c (Exit after receiving a specified number of packets), -s (Set the snapshot length), -v (Verbose output), -vv (More verbose output), -vvv (Even more verbose output), -e (Print link-level header on each dump line), -q (Quick (quiet?) output), -X (Print packet data in both hex and ASCII), -XX (Print packet data in hex and ASCII, including link-level header), -A (Print each packet (minus its link level header) in ASCII), -D (Print the list of available interfaces), -l (Make stdout line buffered), -tt (Print an unformatted timestamp on each dump line), -ttt (Print a delta (micro-second resolution) between current and previous line on each dump line), -tttt (Print a timestamp in default format proceeded by date on each dump line), -ttttt (Print a delta (micro-second resolution) between current and first line on each dump line), -C (Before writing a raw packet to a file, check whether the file is larger than file_size and, if so, close the current file and open a new one), -G (Rotate dump files every specified number of seconds), -W (Used in conjunction with the -C or -G options, limits the number of files created to specified number), -Z (Drop privileges to user and group after opening the capture file), -K (Do not attempt to verify IP, TCP, or UDP checksums), -E (Decrypt IPsec ESP packets using provided key), -M (Use the specified secret for IPsec AH authentication)",
 	},
 	"wireshark": {
 		Name:        "wireshark",
-		Description: "Flags: -i (Specify the network interface to capture on), -k (Start capturing packets immediately)",
+		Description: "Flags: -i (Specify the interface to listen on), -k (Start capturing immediately), -w (Write the raw packets to a file), -r (Read packets from a file), -c (Exit after receiving a specified number of packets), -f (Set the capture filter expression), -s (Set the snapshot length), -v (Verbose output), -h (Display help information), -b (Set ring buffer options), -t (Set the time stamp format), -n (Disable network object name resolution), -N (Set name resolution flags), -S (Update packet list in real-time), -T (Set the format of text output), -X (Specify an option to pass to the plugin), -Y (Set the display filter expression), -z (Specify statistics to calculate and display)",
 	},
 	"iptables": {
 		Name:        "iptables",
@@ -862,7 +1126,7 @@ var Words = map[string]Flag{
 	},
 	"firewalld": {
 		Name:        "firewalld",
-		Description: "Flags: --add-service (Add a service to the firewall), --remove-service (Remove a service from the firewall)",
+		Description: "Flags: --add-service (Add a service to the firewall), --remove-service (Remove a service from the firewall)  --state, Check the current state of firewalld, --reload, Reload firewalld configuration, --add-port, Add a port to the firewall, --remove-port, Remove a port from the firewall, --list-all, List all firewall rules, --zone, Manage firewall zones,--permanent, Make changes permanent",
 	},
 	"ethtool": {
 		Name:        "ethtool",
@@ -1023,5 +1287,513 @@ var Words = map[string]Flag{
 	"ip link set xdp": {
 		Name:        "ip link set xdp",
 		Description: "Flags: (Attach or detach an XDP (eXpress Data Path) program to/from the specified device)",
+	},
+	"docker run": {
+		Name:        "docker run",
+		Description: "Flags: -d (Run container in background and print container ID), -p (Publish a container's port to the host), -v (Bind mount a volume)",
+	},
+	"docker start": {
+		Name:        "docker start",
+		Description: "Flags: -a (Attach STDOUT/STDERR and forward signals), -i (Attach container's STDIN)",
+	},
+	"docker stop": {
+		Name:        "docker stop",
+		Description: "Flags: -t (Seconds to wait for stop before killing it)",
+	},
+	"docker restart": {
+		Name:        "docker restart",
+		Description: "Flags: -t (Seconds to wait for stop before killing it)",
+	},
+	"docker rm": {
+		Name:        "docker rm",
+		Description: "Flags: -f (Force the removal of a running container), -v (Remove the volumes associated with the container)",
+	},
+	"docker rmi": {
+		Name:        "docker rmi",
+		Description: "Flags: -f (Force removal of the image)",
+	},
+	"docker images": {
+		Name:        "docker images",
+		Description: "Flags: -a (Show all images), -q (Only show numeric IDs)",
+	},
+	"docker ps": {
+		Name:        "docker ps",
+		Description: "Flags: -a (Show all containers), -q (Only display numeric IDs)",
+	},
+	"docker exec": {
+		Name:        "docker exec",
+		Description: "Flags: -d (Detached mode: run command in the background), -i (Keep STDIN open even if not attached), -t (Allocate a pseudo-TTY)",
+	},
+	"docker build": {
+		Name:        "docker build",
+		Description: "Flags: -t (Name and optionally a tag in the 'name:tag' format), -f (Name of the Dockerfile)",
+	},
+	"docker pull": {
+		Name:        "docker pull",
+		Description: "Flags: -a (Download all tagged images in the repository)",
+	},
+	"docker push": {
+		Name:        "docker push",
+		Description: "Flags: -a (Push all tagged images in the repository)",
+	},
+	"docker login": {
+		Name:        "docker login",
+		Description: "Flags: -u (Username), -p (Password)",
+	},
+	"docker logout": {
+		Name:        "docker logout",
+		Description: "Flags: None",
+	},
+	"docker tag": {
+		Name:        "docker tag",
+		Description: "Flags: None",
+	},
+	"docker inspect": {
+		Name:        "docker inspect",
+		Description: "Flags: -f (Format the output using a Go template)",
+	},
+	"docker logs": {
+		Name:        "docker logs",
+		Description: "Flags: -f (Follow log output), -t (Show timestamps)",
+	},
+	"docker commit": {
+		Name:        "docker commit",
+		Description: "Flags: -m (Commit message), -a (Author)",
+	},
+	"docker network": {
+		Name:        "docker network",
+		Description: "Flags: None",
+	},
+	"docker volume": {
+		Name:        "docker volume",
+		Description: "Flags: None",
+	},
+	"docker info": {
+		Name:        "docker info",
+		Description: "Flags: None",
+	},
+	"docker version": {
+		Name:        "docker version",
+		Description: "Flags: None",
+	},
+	"docker swarm": {
+		Name:        "docker swarm",
+		Description: "Flags: None",
+	},
+	"docker node": {
+		Name:        "docker node",
+		Description: "Flags: None",
+	},
+	"docker service": {
+		Name:        "docker service",
+		Description: "Flags: None",
+	},
+	"docker stack": {
+		Name:        "docker stack",
+		Description: "Flags: None",
+	},
+	"docker secret": {
+		Name:        "docker secret",
+		Description: "Flags: None",
+	},
+	"docker config": {
+		Name:        "docker config",
+		Description: "Flags: None",
+	},
+	"docker plugin": {
+		Name:        "docker plugin",
+		Description: "Flags: None",
+	},
+	"docker container": {
+		Name:        "docker container",
+		Description: "Flags: None",
+	},
+	"docker image": {
+		Name:        "docker image",
+		Description: "Flags: None",
+	},
+	"docker system": {
+		Name:        "docker system",
+		Description: "Flags: None",
+	},
+	"docker context": {
+		Name:        "docker context",
+		Description: "Flags: None",
+	},
+	"docker builder": {
+		Name:        "docker builder",
+		Description: "Flags: None",
+	},
+	"docker checkpoint": {
+		Name:        "docker checkpoint",
+		Description: "Flags: None",
+	},
+	"docker trust": {
+		Name:        "docker trust",
+		Description: "Flags: None",
+	},
+	"systemctl start": {
+		Name:        "systemctl start",
+		Description: "Flags: --no-block (Do not wait until operation finished), --quiet (Suppress output)",
+	},
+	"systemctl stop": {
+		Name:        "systemctl stop",
+		Description: "Flags: --no-block (Do not wait until operation finished), --quiet (Suppress output)",
+	},
+	"systemctl restart": {
+		Name:        "systemctl restart",
+		Description: "Flags: --no-block (Do not wait until operation finished), --quiet (Suppress output)",
+	},
+	"systemctl reload": {
+		Name:        "systemctl reload",
+		Description: "Flags: --no-block (Do not wait until operation finished), --quiet (Suppress output)",
+	},
+	"systemctl enable": {
+		Name:        "systemctl enable",
+		Description: "Flags: --now (Start the unit after enabling it)",
+	},
+	"systemctl disable": {
+		Name:        "systemctl disable",
+		Description: "Flags: --now (Stop the unit after disabling it)",
+	},
+	"systemctl status": {
+		Name:        "systemctl status",
+		Description: "Flags: --no-pager (Do not pipe output into a pager), --full (Do not ellipsize unit names)",
+	},
+	"systemctl is-active": {
+		Name:        "systemctl is-active",
+		Description: "Flags: --quiet (Suppress output)",
+	},
+	"systemctl is-enabled": {
+		Name:        "systemctl is-enabled",
+		Description: "Flags: --quiet (Suppress output)",
+	},
+	"systemctl list-units": {
+		Name:        "systemctl list-units",
+		Description: "Flags: --all (Show all loaded units, regardless of their state), --type (List only units of a particular type)",
+	},
+	"systemctl list-unit-files": {
+		Name:        "systemctl list-unit-files",
+		Description: "Flags: --state (Show only unit files in the specified state)",
+	},
+	"systemctl daemon-reload": {
+		Name:        "systemctl daemon-reload",
+		Description: "Flags: None",
+	},
+	"systemctl mask": {
+		Name:        "systemctl mask",
+		Description: "Flags: --runtime (Mask only temporarily until the next reboot)",
+	},
+	"systemctl unmask": {
+		Name:        "systemctl unmask",
+		Description: "Flags: --runtime (Unmask only temporarily until the next reboot)",
+	},
+	"systemctl isolate": {
+		Name:        "systemctl isolate",
+		Description: "Flags: --no-block (Do not wait until operation finished), --quiet (Suppress output)",
+	},
+	"systemctl kill": {
+		Name:        "systemctl kill",
+		Description: "Flags: --signal (Specify the signal to send)",
+	},
+	"systemctl show": {
+		Name:        "systemctl show",
+		Description: "Flags: --property (Show only properties specified)",
+	},
+	"systemctl cat": {
+		Name:        "systemctl cat",
+		Description: "Flags: None",
+	},
+	"systemctl edit": {
+		Name:        "systemctl edit",
+		Description: "Flags: --full (Edit the full unit file instead of creating a drop-in snippet)",
+	},
+	"systemctl set-property": {
+		Name:        "systemctl set-property",
+		Description: "Flags: None",
+	},
+	"systemctl help": {
+		Name:        "systemctl help",
+		Description: "Flags: None",
+	},
+	"journalctl --boot": {
+		Name:        "journalctl --boot",
+		Description: "Flags: -k (Show only kernel messages), -p (Show messages with the specified priority)",
+	},
+	"journalctl --list-boots": {
+		Name:        "journalctl --list-boots",
+		Description: "Flags: None",
+	},
+	"journalctl --unit": {
+		Name:        "journalctl --unit",
+		Description: "Flags: -f (Follow new messages), -n (Show the specified number of most recent messages)",
+	},
+	"journalctl --since": {
+		Name:        "journalctl --since",
+		Description: "Flags: None",
+	},
+	"journalctl --until": {
+		Name:        "journalctl --until",
+		Description: "Flags: None",
+	},
+	"journalctl --follow": {
+		Name:        "journalctl --follow",
+		Description: "Flags: None",
+	},
+	"journalctl --output": {
+		Name:        "journalctl --output",
+		Description: "Flags: -o (Specify the output format)",
+	},
+	"journalctl --priority": {
+		Name:        "journalctl --priority",
+		Description: "Flags: None",
+	},
+	"journalctl --grep": {
+		Name:        "journalctl --grep",
+		Description: "Flags: None",
+	},
+	"systemd-analyze blame": {
+		Name:        "systemd-analyze blame",
+		Description: "Flags: --no-pager (Do not pipe output into a pager)",
+	},
+	"systemd-analyze critical-chain": {
+		Name:        "systemd-analyze critical-chain",
+		Description: "Flags: --fuzz (Specify the fuzz factor for the critical chain)",
+	},
+	"systemd-analyze plot": {
+		Name:        "systemd-analyze plot",
+		Description: "Flags: --file (Specify the output file for the SVG plot)",
+	},
+	"systemd-analyze dump": {
+		Name:        "systemd-analyze dump",
+		Description: "Flags: None",
+	},
+	"systemd-analyze verify": {
+		Name:        "systemd-analyze verify",
+		Description: "Flags: --man (Show the man page for the unit file)",
+	},
+	"systemd-analyze security": {
+		Name:        "systemd-analyze security",
+		Description: "Flags: --no-pager (Do not pipe output into a pager)",
+	},
+	"systemd-analyze time": {
+		Name:        "systemd-analyze time",
+		Description: "Flags: None",
+	},
+	"cron start": {
+		Name:        "cron start",
+		Description: "Flags: None",
+	},
+	"cron stop": {
+		Name:        "cron stop",
+		Description: "Flags: None",
+	},
+	"cron restart": {
+		Name:        "cron restart",
+		Description: "Flags: None",
+	},
+	"cron reload": {
+		Name:        "cron reload",
+		Description: "Flags: None",
+	},
+	"cron status": {
+		Name:        "cron status",
+		Description: "Flags: None",
+	},
+	"cron list": {
+		Name:        "cron list",
+		Description: "Flags: None",
+	},
+	"cron add": {
+		Name:        "cron add",
+		Description: "Flags: None",
+	},
+	"cron remove": {
+		Name:        "cron remove",
+		Description: "Flags: None",
+	},
+	"cron edit": {
+		Name:        "cron edit",
+		Description: "Flags: None",
+	},
+	"ufw enable": {
+		Name:        "ufw enable",
+		Description: "Flags: None",
+	},
+	"ufw disable": {
+		Name:        "ufw disable",
+		Description: "Flags: None",
+	},
+	"ufw status": {
+		Name:        "ufw status",
+		Description: "Flags: None",
+	},
+	"ufw allow": {
+		Name:        "ufw allow",
+		Description: "Flags: None",
+	},
+	"ufw deny": {
+		Name:        "ufw deny",
+		Description: "Flags: None",
+	},
+	"ufw reject": {
+		Name:        "ufw reject",
+		Description: "Flags: None",
+	},
+	"ufw limit": {
+		Name:        "ufw limit",
+		Description: "Flags: None",
+	},
+	"ufw delete": {
+		Name:        "ufw delete",
+		Description: "Flags: None",
+	},
+	"ufw reset": {
+		Name:        "ufw reset",
+		Description: "Flags: None",
+	},
+	"ufw reload": {
+		Name:        "ufw reload",
+		Description: "Flags: None",
+	},
+	"ufw logging": {
+		Name:        "ufw logging",
+		Description: "Flags: None",
+	},
+	"nmcli general": {
+		Name:        "nmcli general",
+		Description: "Flags: None",
+	},
+	"nmcli networking": {
+		Name:        "nmcli networking",
+		Description: "Flags: None",
+	},
+	"nmcli radio": {
+		Name:        "nmcli radio",
+		Description: "Flags: None",
+	},
+	"nmcli connection": {
+		Name:        "nmcli connection",
+		Description: "Flags: None",
+	},
+	"nmcli device": {
+		Name:        "nmcli device",
+		Description: "Flags: None",
+	},
+	"nmcli agent": {
+		Name:        "nmcli agent",
+		Description: "Flags: None",
+	},
+	"nmcli monitor": {
+		Name:        "nmcli monitor",
+		Description: "Flags: None",
+	},
+	"loginctl list-sessions": {
+		Name:        "loginctl list-sessions",
+		Description: "Flags: None",
+	},
+	"loginctl session-status": {
+		Name:        "loginctl session-status",
+		Description: "Flags: None",
+	},
+	"loginctl terminate-session": {
+		Name:        "loginctl terminate-session",
+		Description: "Flags: None",
+	},
+	"loginctl list-users": {
+		Name:        "loginctl list-users",
+		Description: "Flags: None",
+	},
+	"loginctl user-status": {
+		Name:        "loginctl user-status",
+		Description: "Flags: None",
+	},
+	"loginctl enable-linger": {
+		Name:        "loginctl enable-linger",
+		Description: "Flags: None",
+	},
+	"loginctl disable-linger": {
+		Name:        "loginctl disable-linger",
+		Description: "Flags: None",
+	},
+	"loginctl lock-session": {
+		Name:        "loginctl lock-session",
+		Description: "Flags: None",
+	},
+	"loginctl unlock-session": {
+		Name:        "loginctl unlock-session",
+		Description: "Flags: None",
+	},
+	"loginctl lock-sessions": {
+		Name:        "loginctl lock-sessions",
+		Description: "Flags: None",
+	},
+	"loginctl unlock-sessions": {
+		Name:        "loginctl unlock-sessions",
+		Description: "Flags: None",
+	},
+	"localectl status": {
+		Name:        "localectl status",
+		Description: "Flags: None",
+	},
+	"localectl set-locale": {
+		Name:        "localectl set-locale",
+		Description: "Flags: None",
+	},
+	"localectl list-locales": {
+		Name:        "localectl list-locales",
+		Description: "Flags: None",
+	},
+	"localectl set-keymap": {
+		Name:        "localectl set-keymap",
+		Description: "Flags: None",
+	},
+	"localectl list-keymaps": {
+		Name:        "localectl list-keymaps",
+		Description: "Flags: None",
+	},
+	"hostnamectl status": {
+		Name:        "hostnamectl status",
+		Description: "Flags: None",
+	},
+	"hostnamectl set-hostname": {
+		Name:        "hostnamectl set-hostname",
+		Description: "Flags: None",
+	},
+	"hostnamectl set-icon-name": {
+		Name:        "hostnamectl set-icon-name",
+		Description: "Flags: None",
+	},
+	"hostnamectl set-chassis": {
+		Name:        "hostnamectl set-chassis",
+		Description: "Flags: None",
+	},
+	"hostnamectl set-deployment": {
+		Name:        "hostnamectl set-deployment",
+		Description: "Flags: None",
+	},
+	"hostnamectl set-location": {
+		Name:        "hostnamectl set-location",
+		Description: "Flags: None",
+	},
+	"timedatectl status": {
+		Name:        "timedatectl status",
+		Description: "Flags: None",
+	},
+	"timedatectl set-time": {
+		Name:        "timedatectl set-time",
+		Description: "Flags: None",
+	},
+	"timedatectl set-timezone": {
+		Name:        "timedatectl set-timezone",
+		Description: "Flags: None",
+	},
+	"timedatectl list-timezones": {
+		Name:        "timedatectl list-timezones",
+		Description: "Flags: None",
+	},
+	"timedatectl set-ntp": {
+		Name:        "timedatectl set-ntp",
+		Description: "Flags: None",
 	},
 }
