@@ -57,172 +57,172 @@ var Words = map[string]Flag{
         Description: ": No flags available",
     },
     "echo": {
-        Name:        "echo",
-        Description: ": -n (Do not output the trailing newline), -e (Enable interpretation of backslash escapes)",
-    },
-    "man": {
-        Name:        "man",
-        Description: ": -k (Search the short descriptions and manual page names for the keyword), -f (Display only the first line of each entry), -a (Display all matching manual pages)",
-    },
-    "grep": {
-        Name:        "grep",
-        Description: ": -i (Ignore case distinctions), -r (Read all files under each directory, recursively), -v (Invert the sense of matching, to select non-matching lines)",
-    },
-    "find": {
-        Name:        "find",
-        Description: ": -name (Base of file name (the path with the leading directories removed) matches shell pattern), -type (File is of type (e.g., f for regular file, d for directory)), -exec (Execute command; true if 0 status is returned)",
-    },
-    "chmod": {
-        Name:        "chmod",
-        Description: ": -R (Change files and directories recursively), -v (Output a diagnostic for every file processed), -c (Like verbose but report only when a change is made)",
-    },
-    "chown": {
-        Name:        "chown",
-        Description: ": -R (Operate on files and directories recursively), -v (Output a diagnostic for every file processed), -c (Like verbose but report only when a change is made)",
-    },
-    "df": {
-        Name:        "df",
-        Description: ": -h (Print sizes in human-readable format (e.g., 1K 234M 2G)), -T (Print file system type), -i (List inode information instead of block usage)",
-    },
-    "du": {
-        Name:        "du",
-        Description: ": -h (Print sizes in human-readable format (e.g., 1K 234M 2G)), -s (Display only a total for each argument), -a (Write counts for all files, not just directories)",
-    },
-    "head": {
-        Name:        "head",
-        Description: ": -n (Print the first NUM lines instead of the first 10), -c (Print the first NUM bytes of each file), -q (Never print headers giving file names)",
-    },
-    "tail": {
-        Name:        "tail",
-        Description: ": -n (Output the last NUM lines, instead of the last 10), -f (Output appended data as the file grows), -c (Output the last NUM bytes)",
-    },
-    "tar": {
-        Name:        "tar",
-        Description: ": -c (Create a new archive), -x (Extract files from an archive), -v (Verbally list files processed)",
-    },
-    "wget": {
-        Name:        "wget",
-        Description: ": -O (Write documents to FILE), -q (Turn off Wget's output), -r (Specify recursive download)",
-    },
-    "curl": {
-		Name:        "curl",
-		Description: ": -X GET (Perform a GET request), -X POST (Perform a POST request), -X PUT (Perform a PUT request), -X DELETE (Perform a DELETE request), -I (Fetch the HTTP headers only), -d (Send data in a POST request), -F (Submit form data), -H (Pass custom header(s) to the server), -u (Server user and password), -o (Write output to a file), -O (Save the file with the same name as the remote file), -L (Follow redirects), -k (Allow insecure server connections when using SSL), -s (Silent mode (don't show progress meter or error messages)), -v (Verbose mode (show detailed information about the request and response)), -C - (Resume a previous file transfer), -b (Send cookies from a file), -c (Save cookies to a file), -T (Upload a file), --proxy (Use a proxy for the request), --limit-rate (Limit the transfer rate), --max-time (Maximum time allowed for the transfer), --compressed (Request a compressed response), --data-urlencode (URL encode the data before sending it in a POST request), --http2 (Use HTTP/2 protocol), --http3 (Use HTTP/3 protocol)",
+		Name:        "echo",
+		Description: ": -n (Do not output the trailing newline), -e (Enable interpretation of backslash escapes), -E (Disable interpretation of backslash escapes), --help (Display help information), --version (Output version information)",
 	},
-    "ps": {
-        Name:        "ps",
-        Description: ": -e (Select all processes), -f (Do full-format listing), -u (Display processes for a specific user)",
-    },
-    "kill": {
-        Name:        "kill",
-        Description: ": -s (Specify the signal to send), -l (List all signal names), -p (Specify the process ID)",
-    },
-    "top": {
-        Name:        "top",
-        Description: ": -b (Batch mode operation), -n (Number of iterations), -u (Display processes for a specific user)",
-    },
-    "htop": {
-        Name:        "htop",
-        Description: ": -d (Delay between updates, in tenths of seconds), -u (Display processes for a specific user), -p (Show only the given PIDs)",
-    },
-    "ssh": {
-        Name:        "ssh",
-        Description: ": -l (Specify the user to log in as), -p (Port to connect to on the remote host), -i (File from which the identity (private key) is read)",
-    },
-    "scp": {
-        Name:        "scp",
-        Description: ": -r (Recursively copy entire directories), -P (Specify the port to connect to on the remote host), -i (File from which the identity (private key) is read)",
-    },
-    "nano": {
-        Name:        "nano",
-        Description: ": -B (Make a backup of the file), -m (Enable mouse support), -i (Automatically indent new lines to the same position as the previous line)",
-    },
-    "vim": {
-        Name:        "vim",
-        Description: ": -u (Use the specified vimrc file), -N (No compatible mode), -e (Start in Ex mode)",
-    },
-    "apt-get": {
-        Name:        "apt-get",
-        Description: ": -y (Assume yes to all prompts and run non-interactively), -q (Quiet; produces output suitable for logging), -d (Download only; package files are only retrieved, not unpacked or installed)",
-    },
-    "yum": {
-        Name:        "yum",
-        Description: ": -y (Assume yes to all prompts), -q (Quiet mode), -v (Verbose mode)",
-    },
-    "mount": {
-        Name:        "mount",
-        Description: ": -t (Indicate the filesystem type), -o (Specify mount options), -v (Verbose mode)",
-    },
-    "umount": {
-        Name:        "umount",
-        Description: ": -f (Force unmount), -l (Lazy unmount), -v (Verbose mode)",
-    },
+    "man": {
+		Name:        "man",
+		Description: ": -k (Search the short descriptions and manual page names for the keyword), -f (Display only the first line of each entry), -a (Display all matching manual pages), -w (List the location of the manual page files that would be displayed), -P (Specify which pager to use), -M (Specify the list of directories to search for manual pages), -L (Specify the locale for the manual pages), -C (Specify the configuration file to use), -7 (Display manual pages in ASCII format), -B (Specify the web browser to use for displaying HTML manual pages), -H (Display manual pages in HTML format), -X (Display manual pages in X Window System format)",
+	},
+    "grep": {
+		Name:        "grep",
+		Description: ": -i (Ignore case), -r, -R (Recurse directories), -v (Invert match), -E, -F, -G, -P (Pattern types), -w (Whole words), -x (Whole lines), -c (Count matches), -l, -L (List files), -n (Line numbers), -H, -h (File names), -o (Matched parts), -q (Quiet), -s (Suppress errors), -b (Byte offset), -d (Handle directories), -a, -I (Binary files), -z (Zero byte lines)",
+	},
+    "find": {
+		Name:        "find",
+		Description: ": -name (Match shell pattern), -type (File type), -exec (Execute command), -iname (Case-insensitive name), -path (Match shell pattern path), -ipath (Case-insensitive path), -regex (Match regex), -iregex (Case-insensitive regex), -size (File size), -perm (Permission bits), -user (File owner), -group (File group), -mtime (Modified n*24 hours ago), -atime (Accessed n*24 hours ago), -ctime (Status changed n*24 hours ago), -newer (Modified more recently than reference), -delete (Delete files), -print (Print file name), -ls (List in ls format)",
+	},
+    "chmod": {
+		Name:        "chmod",
+		Description: ": -R (Change files and directories recursively), -v (Output a diagnostic for every file processed), -c (Like verbose but report only when a change is made), --reference=RFILE (Use RFILE's mode instead of MODE values), --preserve-root (Fail to operate recursively on /), --no-preserve-root (Do not treat / specially), --help (Display help information), --version (Output version information)",
+	},
+    "chown": {
+		Name:        "chown",
+		Description: ": -R (Operate on files and directories recursively), -v (Output a diagnostic for every file processed), -c (Like verbose but report only when a change is made), --dereference (Affect the referent of each symbolic link), -h (Affect symbolic links instead of any referenced file), --from=CURRENT_OWNER:CURRENT_GROUP (Change the owner and/or group only if its current owner and/or group match those specified), --preserve-root (Fail to operate recursively on /), --no-preserve-root (Do not treat / specially), --reference=RFILE (Use RFILE's owner and group), --help (Display help information), --version (Output version information)",
+	},
+    "df": {
+		Name:        "df",
+		Description: ": -h (Print sizes in human-readable format (e.g., 1K 234M 2G)), -T (Print file system type), -i (List inode information instead of block usage), -a (Include dummy file systems), -B (Scale sizes by SIZE before printing them), --total (Produce a grand total)",
+	},
+	"du": {
+		Name:        "du",
+		Description: ": -h (Print sizes in human-readable format (e.g., 1K 234M 2G)), -s (Display only a total for each argument), -a (Write counts for all files, not just directories), -c (Produce a grand total), -d (Print the total for a directory (or file) only if it is N or fewer levels below the command line argument), -L (Dereference all symbolic links), -m (Print sizes in megabytes)",
+	},
+	"head": {
+		Name:        "head",
+		Description: ": -n (Print the first NUM lines instead of the first 10), -c (Print the first NUM bytes of each file), -q (Never print headers giving file names), -v (Always print headers giving file names), -z (Line delimiter is NUL instead of newline)",
+	},
+	"tail": {
+		Name:        "tail",
+		Description: ": -n (Output the last NUM lines, instead of the last 10), -f (Output appended data as the file grows), -c (Output the last NUM bytes), -q (Never output headers giving file names), -v (Always output headers giving file names), --pid=PID (Terminate after process ID, PID dies), -s (Sleep for N seconds between iterations)",
+	},
+	"tar": {
+		Name:        "tar",
+		Description: ": -c (Create a new archive), -x (Extract files from an archive), -v (Verbally list files processed), -f (Use archive file or device ARCHIVE), -z (Filter the archive through gzip), -j (Filter the archive through bzip2), -J (Filter the archive through xz), -C (Change to directory DIR)",
+	},
+	"wget": {
+		Name:        "wget",
+		Description: ": -O (Write documents to FILE), -q (Turn off Wget's output), -r (Specify recursive download), -N (Turn on timestamping), -P (Directory prefix where files will be saved), -A (Specify comma-separated list of accepted extensions), -R (Specify comma-separated list of rejected extensions), -l (Specify recursion level), --limit-rate (Limit download speed), --no-check-certificate (Don't validate the server's certificate)",
+	},
+	"curl": {
+		Name:        "curl",
+		Description: ": -X (HTTP method), -I (Headers only), -d (POST data), -F (Form data), -H (Custom headers), -u (User:password), -o (Output file), -O (Save as remote file), -L (Follow redirects), -k (Insecure SSL), -s (Silent mode), -v (Verbose), -C - (Resume transfer), -b (Send cookies), -c (Save cookies), -T (Upload file), --proxy (Proxy), --limit-rate (Limit rate), --max-time (Max time), --compressed (Compressed response), --data-urlencode (URL encode data), --http2 (HTTP/2), --http3 (HTTP/3), --cert (Client cert), --cacert (CA cert), --capath (CA cert dir)",
+	},
+	"ps": {
+		Name:        "ps",
+		Description: ": -e (Select all processes), -f (Do full-format listing), -u (Display processes for a specific user), -a (Select all processes except session leaders and processes not associated with a terminal), -x (Select processes without controlling ttys), -o (User-defined format), -p (Select by PID), --sort (Specify sorting order)",
+	},
+	"kill": {
+		Name:        "kill",
+		Description: ": -s (Specify the signal to send), -l (List all signal names), -p (Specify the process ID), -L (List signal names and numbers), -n (Specify signal number)",
+	},
+	"top": {
+		Name:        "top",
+		Description: ": -b (Batch mode operation), -n (Number of iterations), -u (Display processes for a specific user), -d (Delay between updates), -p (Monitor specific PIDs), -c (Show command line instead of command name), -H (Show threads)",
+	},
+	"htop": {
+		Name:        "htop",
+		Description: ": -d (Delay between updates, in tenths of seconds), -u (Display processes for a specific user), -p (Show only the given PIDs), -s (Sort by a specified column), -C (Disable color), -t (Tree view)",
+	},
+	"ssh": {
+		Name:        "ssh",
+		Description: ": -l (Specify the user to log in as), -p (Port to connect to on the remote host), -i (File from which the identity (private key) is read), -o (Specify options), -v (Verbose mode), -q (Quiet mode), -C (Enable compression), -N (Do not execute a remote command), -T (Disable pseudo-terminal allocation)",
+	},
+	"scp": {
+		Name:        "scp",
+		Description: ": -r (Recursively copy entire directories), -P (Specify the port to connect to on the remote host), -i (File from which the identity (private key) is read), -v (Verbose mode), -q (Quiet mode), -C (Enable compression), -l (Limit the bandwidth, specified in Kbit/s)",
+	},
+	"nano": {
+		Name:        "nano",
+		Description: ": -B (Make a backup of the file), -m (Enable mouse support), -i (Automatically indent new lines to the same position as the previous line), -c (Constantly show the cursor position), -l (Display line numbers), -E (Convert typed tabs to spaces), -S (Smooth scrolling)",
+	},
+	"vim": {
+		Name:        "vim",
+		Description: ": -u (Use the specified vimrc file), -N (No compatible mode), -e (Start in Ex mode), -s (Silent mode), -R (Read-only mode), -Z (Restricted mode), -y (Start in easy mode), -d (Start in diff mode)",
+	},
+	"apt-get": {
+		Name:        "apt-get",
+		Description: ": -y (Assume yes to all prompts and run non-interactively), -q (Quiet; produces output suitable for logging), -d (Download only; package files are only retrieved, not unpacked or installed), -s (No-act; perform a simulation of events that would occur but do not actually change the system), -f (Attempt to correct a system with broken dependencies), --purge (Remove packages and their configuration files), --reinstall (Reinstall the specified packages), --ignore-missing (Ignore missing packages; do not fail)",
+	},
+	"yum": {
+		Name:        "yum",
+		Description: ": -y (Assume yes to all prompts), -q (Quiet mode), -v (Verbose mode), -C (Run entirely from cache; do not update the cache), --enablerepo (Enable additional repositories), --disablerepo (Disable repositories), --nogpgcheck (Disable GPG signature checking), --noplugins (Disable all plugins)",
+	},
+	"mount": {
+		Name:        "mount",
+		Description: ": -t (Indicate the filesystem type), -o (Specify mount options), -v (Verbose mode), -a (Mount all filesystems mentioned in fstab), -r (Mount the filesystem read-only), -w (Mount the filesystem read-write), -L (Mount by label), -U (Mount by UUID)",
+	},
+	"umount": {
+		Name:        "umount",
+		Description: ": -f (Force unmount), -l (Lazy unmount), -v (Verbose mode), -a (Unmount all filesystems mentioned in fstab), -r (Remount the filesystem read-only), -d (Detach the loop device associated with the mount)",
+	},
     "uname": {
-        Name:        "uname",
-        Description: ": -a (Print all information), -r (Print the kernel release), -v (Print the kernel version)",
-    },
-    "uptime": {
-        Name:        "uptime",
-        Description: ": No flags available",
-    },
-    "whoami": {
-        Name:        "whoami",
-        Description: ": No flags available",
-    },
-    "hostname": {
-        Name:        "hostname",
-        Description: ": -i (Display the IP address), -f (Display the FQDN (Fully Qualified Domain Name)), -d (Display the domain name)",
-    },
-    "history": {
-        Name:        "history",
-        Description: ": -c (Clear the history list), -d (Delete the history entry at position offset), -a (Append the new history lines to the history file)",
-    },
-    "alias": {
-        Name:        "alias",
-        Description: ": No flags available",
-    },
-    "unalias": {
-        Name:        "unalias",
-        Description: ": -a (Remove all alias definitions)",
-    },
-    "env": {
-        Name:        "env",
-        Description: ": No flags available",
-    },
-    "export": {
-        Name:        "export",
-        Description: ": No flags available",
-    },
-    "source": {
+		Name:        "uname",
+		Description: ": -a (Print all information), -r (Print the kernel release), -v (Print the kernel version), -s (Print the kernel name), -n (Print the network node hostname), -m (Print the machine hardware name), -p (Print the processor type), -i (Print the hardware platform), -o (Print the operating system)",
+	},
+	"uptime": {
+		Name:        "uptime",
+		Description: ": No flags available",
+	},
+	"whoami": {
+		Name:        "whoami",
+		Description: ": No flags available",
+	},
+	"hostname": {
+		Name:        "hostname",
+		Description: ": -i (Display the IP address), -f (Display the FQDN (Fully Qualified Domain Name)), -d (Display the domain name), -s (Display the short hostname), -A (Display all FQDNs of the machine), -I (Display all network addresses of the host), -b (Display the hostname as a boot parameter)",
+	},
+	"history": {
+		Name:        "history",
+		Description: ": -c (Clear the history list), -d (Delete the history entry at position offset), -a (Append the new history lines to the history file), -r (Read the history file and append its contents to the history list), -w (Write the current history to the history file), -n (Read the history file and append only the lines not already read), -p (Perform history expansion on the following args and display the result without storing it in the history list), -s (Append the arguments to the history list as a single entry)",
+	},
+	"alias": {
+		Name:        "alias",
+		Description: ": No flags available",
+	},
+	"unalias": {
+		Name:        "unalias",
+		Description: ": -a (Remove all alias definitions)",
+	},
+	"env": {
+		Name:        "env",
+		Description: ": -u (Remove variable from the environment)",
+	},
+	"export": {
+		Name:        "export",
+		Description: ": No flags available",
+	},
+	"source": {
 		Name:        "source",
 		Description: ": No flags available",
 	},
 	"su": {
 		Name:        "su",
-		Description: ": -c (Pass command to the shell with -c), -l (Make the shell a login shell), -s (Run the specified shell instead of the default)",
+		Description: ": -c (Pass command to the shell with -c), -l (Make the shell a login shell), -s (Run the specified shell instead of the default), -m (Do not reset environment variables), -P (Do not reset environment variables), -g (Specify the primary group), -G (Specify supplementary groups), - (Make the shell a login shell)",
 	},
 	"passwd": {
 		Name:        "passwd",
-		Description: ": -d (Delete a user's password), -e (Expire a user's password), -l (Lock a user's password)",
+		Description: ": -d (Delete a user's password), -e (Expire a user's password), -l (Lock a user's password), -u (Unlock a user's password), -n (Set the minimum number of days between password changes), -x (Set the maximum number of days between password changes), -w (Set the number of days of warning before a password change is required), -i (Set the number of days after a password expires until the account is disabled)",
 	},
 	"useradd": {
 		Name:        "useradd",
-		Description: ": -m (Create the user's home directory), -s (Specify the user's login shell), -G (Specify supplementary groups for the user)",
+		Description: ": -m (Create the user's home directory), -s (Specify the user's login shell), -G (Specify supplementary groups for the user), -u (Specify the user ID), -d (Specify the user's home directory), -c (Add a comment for the user), -e (Specify the account expiration date), -f (Specify the number of days after a password expires until the account is permanently disabled)",
 	},
 	"usermod": {
 		Name:        "usermod",
-		Description: ": -l (Change the user's login name), -G (Specify supplementary groups for the user), -s (Specify the user's login shell)",
+		Description: ": -l (Change the user's login name), -G (Specify supplementary groups for the user), -s (Specify the user's login shell), -u (Change the user ID), -d (Change the user's home directory), -c (Change the comment for the user), -e (Change the account expiration date), -f (Change the number of days after a password expires until the account is permanently disabled)",
 	},
 	"userdel": {
 		Name:        "userdel",
-		Description: ": -r (Remove the user's home directory and mail spool), -f (Force removal of the user)",
+		Description: ": -r (Remove the user's home directory and mail spool), -f (Force removal of the user), -Z (Remove any SELinux user mapping for the user)",
 	},
 	"groupadd": {
 		Name:        "groupadd",
-		Description: ": -g (Specify the group ID), -r (Create a system group)",
+		Description: ": -g (Specify the group ID), -r (Create a system group), -f (Exit with success status if the specified group already exists)",
 	},
 	"groupmod": {
 		Name:        "groupmod",
-		Description: ": -n (Change the name of the group), -g (Change the group ID)",
+		Description: ": -n (Change the name of the group), -g (Change the group ID), -o (Allow using duplicate (non-unique) GID)",
 	},
 	"groupdel": {
 		Name:        "groupdel",
@@ -230,11 +230,11 @@ var Words = map[string]Flag{
 	},
 	"crontab": {
 		Name:        "crontab",
-		Description: ": -e (Edit the current crontab), -l (List the current crontab), -r (Remove the current crontab)",
+		Description: ": -e (Edit the current crontab), -l (List the current crontab), -r (Remove the current crontab), -u (Specify the user whose crontab is to be manipulated)",
 	},
 	"at": {
 		Name:        "at",
-		Description: ": -f (Read the job from the specified file), -m (Send mail to the user when the job has completed), -v (Verbose mode)",
+		Description: ": -f (Read the job from the specified file), -m (Send mail to the user when the job has completed), -v (Verbose mode), -q (Specify the queue to use), -t (Specify the time to run the job)",
 	},
 	"jobs": {
 		Name:        "jobs",
@@ -250,175 +250,175 @@ var Words = map[string]Flag{
 	},
 	"killall": {
 		Name:        "killall",
-		Description: ": -i (Ask for confirmation before killing each process), -v (Report if the signal was successfully sent), -w (Wait for all processes to die)",
+		Description: ": -i (Ask for confirmation before killing each process), -v (Report if the signal was successfully sent), -w (Wait for all processes to die), -q (Do not complain if no processes were killed), -e (Require an exact match for very long names), -u (Kill only processes the specified user owns)",
 	},
 	"xargs": {
 		Name:        "xargs",
-		Description: ": -n (Use at most max-args arguments per command line), -P (Run up to max-procs processes at a time), -I (Replace occurrences of replace-str in the initial arguments with names read from standard input)",
+		Description: ": -n (Use at most max-args arguments per command line), -P (Run up to max-procs processes at a time), -I (Replace occurrences of replace-str in the initial arguments with names read from standard input), -t (Print the command line on the standard error output before executing it), -r (Do not run the command if the standard input is empty), -0 (Input items are terminated by a null character instead of by whitespace)",
 	},
 	"tee": {
 		Name:        "tee",
-		Description: ": -a (Append to the given files, do not overwrite), -i (Ignore interrupts)",
+		Description: ": -a (Append to the given files, do not overwrite), -i (Ignore interrupts), -p (Write to the output file as well as the standard output)",
 	},
 	"diff": {
 		Name:        "diff",
-		Description: ": -u (Use the unified output format), -c (Use the context output format), -i (Ignore case differences in file contents)",
+		Description: ": -u (Use the unified output format), -c (Use the context output format), -i (Ignore case differences in file contents), -r (Recursively compare any subdirectories found), -N (Treat absent files as empty), -q (Output only whether files differ)",
 	},
 	"patch": {
 		Name:        "patch",
-		Description: ": -p (Strip the smallest prefix containing num leading slashes from each file name found in the patch file), -R (Assume the patch was already applied and attempt to un-apply it), -N (Ignore patches that seem to be already applied)",
+		Description: ": -p (Strip the smallest prefix containing num leading slashes from each file name found in the patch file), -R (Assume the patch was already applied and attempt to un-apply it), -N (Ignore patches that seem to be already applied), -b (Make a backup before applying the patch), -d (Change to directory DIR before applying the patch), -i (Read the patch from the specified file)",
 	},
 	"sed": {
 		Name:        "sed",
-		Description: ": -n (Suppress automatic printing of pattern space), -e (Add the script to the commands to be executed), -i (Edit files in place (makes backup if suffix supplied))",
+		Description: ": -n (Suppress automatic printing of pattern space), -e (Add the script to the commands to be executed), -i (Edit files in place (makes backup if suffix supplied)), -r (Use extended regular expressions in the script), -f (Add the contents of script-file to the commands to be executed)",
 	},
 	"awk": {
 		Name:        "awk",
-		Description: ": -F (Use the specified field separator), -v (Assign the specified variable), -f (Read the awk program source from the specified file)",
+		Description: ": -F (Use the specified field separator), -v (Assign the specified variable), -f (Read the awk program source from the specified file), -W (Enable compatibility mode), -b (Use binary mode for all I/O operations)",
 	},
 	"tr": {
 		Name:        "tr",
-		Description: ": -d (Delete characters in the first set from the input), -s (Replace each input sequence of a repeated character that is listed in the last specified set with a single occurrence of that character), -c (Complement the set of characters in string1)",
+		Description: ": -d (Delete characters in the first set from the input), -s (Replace each input sequence of a repeated character that is listed in the last specified set with a single occurrence of that character), -c (Complement the set of characters in string1), -t (Truncate the first set to the length of the second set)",
 	},
 	"cut": {
 		Name:        "cut",
-		Description: ": -f (Select only these fields), -d (Use the specified delimiter), -c (Select only these characters)",
+		Description: ": -f (Select only these fields), -d (Use the specified delimiter), -c (Select only these characters), -s (Suppress lines with no delimiter character)",
 	},
 	"sort": {
 		Name:        "sort",
-		Description: ": -r (Reverse the result of comparisons), -n (Compare according to string numerical value), -k (Sort via a key)",
+		Description: ": -r (Reverse the result of comparisons), -n (Compare according to string numerical value), -k (Sort via a key), -t (Use the specified character as the field separator), -u (Output only the first of an equal run), -o (Write result to the specified file)",
 	},
 	"uniq": {
 		Name:        "uniq",
-		Description: ": -c (Prefix lines by the number of occurrences), -d (Only print duplicate lines), -u (Only print unique lines)",
+		Description: ": -c (Prefix lines by the number of occurrences), -d (Only print duplicate lines), -u (Only print unique lines), -i (Ignore differences in case when comparing), -f (Skip fields when comparing), -s (Skip characters when comparing), -w (Compare no more than n characters in lines)",
 	},
 	"wc": {
 		Name:        "wc",
-		Description: ": -l (Print the newline counts), -w (Print the word counts), -c (Print the byte counts)",
+		Description: ": -l (Print the newline counts), -w (Print the word counts), -c (Print the byte counts), -m (Print the character counts), -L (Print the length of the longest line)",
 	},
 	"basename": {
 		Name:        "basename",
-		Description: ": -s (Remove a trailing suffix)",
+		Description: ": -s (Remove a trailing suffix), -a (Support multiple arguments and treat each as a NAME), -z (End each output line with NUL, not newline)",
 	},
 	"dirname": {
 		Name:        "dirname",
-		Description: ": No flags available",
+		Description: ": -z (End each output line with NUL, not newline)",
 	},
 	"readlink": {
 		Name:        "readlink",
-		Description: ": -f (Canonicalize by following every symlink in every component of the given name recursively), -e (Same as -f, but fail if any component is missing or not a directory), -m (Canonicalize by following every symlink in every component of the given name recursively, but do not fail if any component is missing or not a directory)",
+		Description: ": -f (Canonicalize by following every symlink in every component of the given name recursively), -e (Same as -f, but fail if any component is missing or not a directory), -m (Canonicalize by following every symlink in every component of the given name recursively, but do not fail if any component is missing or not a directory), -n (Do not output the trailing newline), -s (Suppress error messages about nonexistent or unreadable files)",
 	},
 	"ln": {
 		Name:        "ln",
-		Description: ": -s (Make symbolic links instead of hard links), -f (Remove existing destination files), -v (Print name of each linked file)",
+		Description: ": -s (Make symbolic links instead of hard links), -f (Remove existing destination files), -v (Print name of each linked file), -n (Do not dereference symlinks), -b (Make a backup of each existing destination file), -T (Treat LINK_NAME as a normal file always), -L (Dereference TARGETs that are symbolic links), -P (Make hard links directly to symbolic links)",
 	},
 	"stat": {
 		Name:        "stat",
-		Description: ": -f (Display information about the filesystem instead of the file), -t (Print the information in terse form), -c (Use the specified format instead of the default)",
+		Description: ": -f (Display information about the filesystem instead of the file), -t (Print the information in terse form), -c (Use the specified format instead of the default), -L (Dereference symbolic links), -h (Print sizes in human readable format), --printf (Print the specified format string)",
 	},
 	"file": {
 		Name:        "file",
-		Description: ": -b (Do not prepend filenames to output lines), -i (Output MIME type strings), -z (Try to look inside compressed files)",
+		Description: ": -b (Do not prepend filenames to output lines), -i (Output MIME type strings), -z (Try to look inside compressed files), -L (Follow symbolic links), -s (Read block or character special files), -k (Keep going after the first match), -r (Read the magic file from the specified directory)",
 	},
 	"strings": {
 		Name:        "strings",
-		Description: ": -a (Scan the whole file, not just the data segment), -n (Print sequences of at least n characters (default is 4)), -t (Print the location of the string in the file)",
+		Description: ": -a (Scan the whole file, not just the data segment), -n (Print sequences of at least n characters (default is 4)), -t (Print the location of the string in the file), -e (Specify the character encoding), -o (Print the offset of each string in octal), -T (Print the length of each string)",
 	},
 	"md5sum": {
 		Name:        "md5sum",
-		Description: ": -c (Read MD5 sums from the FILEs and check them), -b (Read in binary mode), -t (Read in text mode)",
+		Description: ": -c (Read MD5 sums from the FILEs and check them), -b (Read in binary mode), -t (Read in text mode), -w (Warn about improperly formatted checksum lines), --tag (Create a BSD-style checksum), --strict (Exit non-zero for improperly formatted checksum lines)",
 	},
 	"sha256sum": {
 		Name:        "sha256sum",
-		Description: ": -c (Read SHA256 sums from the FILEs and check them), -b (Read in binary mode), -t (Read in text mode)",
+		Description: ": -c (Read SHA256 sums from the FILEs and check them), -b (Read in binary mode), -t (Read in text mode), -w (Warn about improperly formatted checksum lines), --tag (Create a BSD-style checksum), --strict (Exit non-zero for improperly formatted checksum lines)",
 	},
 	"gzip": {
 		Name:        "gzip",
-		Description: ": -d (Decompress), -k (Keep (don't delete) input files), -r (Operate recursively on directories)",
+		Description: ": -d (Decompress), -k (Keep (don't delete) input files), -r (Operate recursively on directories), -c (Write on standard output, keep original files unchanged), -f (Force compression or decompression), -l (List compressed file contents), -n (Do not save the original file name and time stamp), -q (Suppress all warnings), -v (Verbose mode), -1 to -9 (Set the compression level)",
 	},
 	"gunzip": {
 		Name:        "gunzip",
-		Description: ": -k (Keep (don't delete) input files), -r (Operate recursively on directories)",
+		Description: ": -k (Keep (don't delete) input files), -r (Operate recursively on directories), -c (Write on standard output, keep original files unchanged), -f (Force decompression), -l (List compressed file contents), -n (Do not save the original file name and time stamp), -q (Suppress all warnings), -v (Verbose mode)",
 	},
 	"bzip2": {
 		Name:        "bzip2",
-		Description: ": -d (Decompress), -k (Keep (don't delete) input files), -v (Verbose mode)",
+		Description: ": -d (Decompress), -k (Keep (don't delete) input files), -v (Verbose mode), -z (Compress), -c (Write on standard output, keep original files unchanged), -f (Force compression or decompression), -q (Suppress all warnings), -1 to -9 (Set the block size to 100k to 900k)",
 	},
 	"bunzip2": {
 		Name:        "bunzip2",
-		Description: ": -k (keep the original file after decompression), -v (verbose mode, show more details during operation)",
+		Description: ": -k (keep the original file after decompression), -v (verbose mode, show more details during operation), -c (Write on standard output, keep original files unchanged), -f (Force decompression), -q (Suppress all warnings)",
 	},
 	"zip": {
 		Name:        "zip",
-		Description: ": -r (recursively include files in subdirectories), -q (quiet mode, suppress output), -v (verbose mode, show more details during operation)",
+		Description: ": -r (recursively include files in subdirectories), -q (quiet mode, suppress output), -v (verbose mode, show more details during operation), -m (move files into the zip archive), -j (junk (don't record) directory names), -0 to -9 (Set the compression level), -x (exclude the following files), -i (include only the following files)",
 	},
 	"unzip": {
 		Name:        "unzip",
-		Description: ": -l (list the contents of the archive), -t (test the integrity of the archive), -d (specify the directory to extract files to)",
+		Description: ": -l (list the contents of the archive), -t (test the integrity of the archive), -d (specify the directory to extract files to), -n (never overwrite existing files), -o (overwrite existing files without prompting), -q (quiet mode), -v (verbose mode), -x (exclude the following files), -i (include only the following files)",
 	},
 	"rar": {
 		Name:        "rar",
-		Description: ": -a (add files to the archive), -x (extract files from the archive), -v (create volumes with a specified size)",
+		Description: ": -a (add files to the archive), -x (extract files from the archive), -v (create volumes with a specified size), -r (recurse into directories), -m (set the compression level), -p (set the password), -k (lock the archive), -s (convert paths to short format)",
 	},
 	"unrar": {
 		Name:        "unrar",
-		Description: ": -x (extract files from the archive), -l (list the contents of the archive), -v (verbose mode, show more details during operation)",
+		Description: ": -x (extract files from the archive), -l (list the contents of the archive), -v (verbose mode, show more details during operation), -p (set the password), -y (assume Yes on all queries), -o+ (overwrite files without prompting), -o- (do not overwrite files)",
 	},
 	"7z": {
 		Name:        "7z",
-		Description: ": -a (add files to the archive), -x (extract files from the archive), -t (specify the type of archive)",
+		Description: ": -a (add files to the archive), -x (extract files from the archive), -t (specify the type of archive), -r (recurse into directories), -m (set the compression level), -p (set the password), -y (assume Yes on all queries), -o (specify the output directory)",
 	},
 	"7za": {
 		Name:        "7za",
-		Description: ": -a (add files to the archive), -x (extract files from the archive), -t (specify the type of archive)",
+		Description: ": -a (add files to the archive), -x (extract files from the archive), -t (specify the type of archive), -r (recurse into directories), -m (set the compression level), -p (set the password), -y (assume Yes on all queries), -o (specify the output directory)",
 	},
 	"7zr": {
 		Name:        "7zr",
-		Description: ": -a (add files to the archive), -x (extract files from the archive), -t (specify the type of archive)",
+		Description: ": -a (add files to the archive), -x (extract files from the archive), -t (specify the type of archive), -r (recurse into directories), -m (set the compression level), -p (set the password), -y (assume Yes on all queries), -o (specify the output directory)",
 	},
 	"free": {
 		Name:        "free",
-		Description: ": -h (display sizes in human-readable format), -m (display memory in megabytes), -g (display memory in gigabytes)",
+		Description: ": -h (display sizes in human-readable format), -m (display memory in megabytes), -g (display memory in gigabytes), -b (display memory in bytes), -k (display memory in kilobytes), -t (display total memory), -s (display memory usage periodically)",
 	},
 	"who": {
 		Name:        "who",
-		Description: ": -a (display all information), -b (show the last system boot time), -q (display the number of logged-in users)",
+		Description: ": -a (display all information), -b (show the last system boot time), -q (display the number of logged-in users), -m (show only the current terminal), -r (show current runlevel), -T (display terminal line status)",
 	},
 	"last": {
 		Name:        "last",
-		Description: ": -n (specify the number of lines to display), -R (do not display the hostname), -x (display system shutdown and reboot entries)",
+		Description: ": -n (specify the number of lines to display), -R (do not display the hostname), -x (display system shutdown and reboot entries), -a (display the hostname in the last column), -d (display the IP address instead of the hostname)",
 	},
 	"dmesg": {
 		Name:        "dmesg",
-		Description: ": -C (clear the ring buffer), -c (read and clear the ring buffer), -T (display human-readable timestamps)",
+		Description: ": -C (clear the ring buffer), -c (read and clear the ring buffer), -T (display human-readable timestamps), -f (restrict output to defined facilities), -l (restrict output to defined levels), -n (set the level at which logging of messages is done to the console), -r (print raw message buffer), -w (wait for new messages)",
 	},
 	"lsblk": {
 		Name:        "lsblk",
-		Description: ": -f (display file system information), -o (specify output columns), -d (do not display child devices)",
+		Description: ": -f (display file system information), -o (specify output columns), -d (do not display child devices), -a (display all devices), -b (display sizes in bytes), -n (do not print the header), -p (display full device path), -t (display topology information)",
 	},
 	"blkid": {
 		Name:        "blkid",
-		Description: ": -p (probe for partitions), -s (show specific information), -o (specify output format)",
+		Description: ": -p (probe for partitions), -s (show specific information), -o (specify output format), -L (list all labels), -U (list all UUIDs), -c (use the specified cache file), -g (garbage collect the cache file)",
 	},
 	"fdisk": {
 		Name:        "fdisk",
-		Description: ": -l (list partition tables), -u (specify units), -c (compatibility mode)",
+		Description: ": -l (list partition tables), -u (specify units), -c (compatibility mode), -b (specify the sector size), -s (list the size of a partition), -t (list the partition table type)",
 	},
 	"mkfs": {
 		Name:        "mkfs",
-		Description: ": -t (specify the file system type), -c (check the device for bad blocks), -v (verbose mode, show more details during operation)",
+		Description: ": -t (specify the file system type), -c (check the device for bad blocks), -v (verbose mode, show more details during operation), -L (set the volume label), -n (do not actually create the file system), -q (quiet mode), -f (force creation even if the file system already exists)",
 	},
 	"fsck": {
 		Name:        "fsck",
-		Description: ": -a (automatically repair the file system), -r (prompt interactively before making repairs), -y (assume 'yes' to all prompts)",
+		Description: ": -a (automatically repair the file system), -r (prompt interactively before making repairs), -y (assume 'yes' to all prompts), -n (assume 'no' to all prompts), -C (display completion/progress bars), -V (verbose mode), -t (specify the file system type), -A (check all file systems listed in /etc/fstab)",
 	},
 	"parted": {
 		Name:        "parted",
-		Description: ": -l (list partition tables), -s (script mode, do not prompt for user input), -a (specify alignment type)",
+		Description: ": -l (list partition tables), -s (script mode, do not prompt for user input), -a (specify alignment type), -m (machine-readable output), -v (verbose mode), -h (display help message), -V (display version information)",
 	},
 	"dd": {
 		Name:        "dd",
-		Description: ": if (specify input file), of (specify output file), bs (specify block size)",
+		Description: ": if (specify input file), of (specify output file), bs (specify block size), count (specify number of blocks to copy), skip (skip blocks at start of input), seek (skip blocks at start of output), conv (convert the file as specified), status (specify the level of information to print)",
 	},
 	"sync": {
 		Name:        "sync",
@@ -426,7 +426,7 @@ var Words = map[string]Flag{
 	},
 	"shutdown": {
 		Name:        "shutdown",
-		Description: ": -h (halt the system), -r (reboot the system), -c (cancel a scheduled shutdown)",
+		Description: ": -h (halt the system), -r (reboot the system), -c (cancel a scheduled shutdown), -k (send a warning message, but do not actually shut down), -P (power off the machine), -H (halt the machine), -f (reboot fast, without fsck), -F (force fsck on reboot)",
 	},
 	"reboot": {
 		Name:        "reboot",
@@ -434,123 +434,123 @@ var Words = map[string]Flag{
 	},
 	"systemctl": {
 		Name:        "systemctl",
-		Description: ": -t (specify unit type), -a (show all units), -l (show full output)",
+		Description: ": -t (specify unit type), -a (show all units), -l (show full output), -q (suppress output), -r (reload the systemd manager configuration), -n (limit the number of journal entries shown), --no-pager (do not pipe output into a pager), --no-ask-password (do not ask for system passwords)",
 	},
 	"journalctl": {
 		Name:        "journalctl",
-		Description: ": -f (follow new log entries), -u (show logs for a specific unit), -p (specify priority level)",
+		Description: ": -f (follow new log entries), -u (show logs for a specific unit), -p (specify priority level), -n (number of lines to show), -r (reverse output), -o (output format), -x (show explanatory messages), --no-pager (do not pipe output into a pager), --since (show logs since a specific date/time), --until (show logs until a specific date/time)",
 	},
 	"timedatectl": {
 		Name:        "timedatectl",
-		Description: ": -s (set the system time), -p (print properties), -l (list time zones)",
+		Description: ": -s (set the system time), -p (print properties), -l (list time zones), -n (do not query the server), -H (operate on a remote host), --adjust-system-clock (adjust the system clock when changing the local RTC time)",
 	},
 	"hostnamectl": {
 		Name:        "hostnamectl",
-		Description: ": -s (set the system hostname), -p (print properties), -l (list hostnames)",
+		Description: ": -s (set the system hostname), -p (print properties), -l (list hostnames), -H (operate on a remote host), --static (set the static hostname), --transient (set the transient hostname), --pretty (set the pretty hostname)",
 	},
 	"localectl": {
 		Name:        "localectl",
-		Description: ": -s (set locale settings), -p (print properties), -l (list locales)",
+		Description: ": -s (set locale settings), -p (print properties), -l (list locales), -H (operate on a remote host), --no-convert (do not convert the specified locale settings)",
 	},
 	"loginctl": {
 		Name:        "loginctl",
-		Description: ": -s (set login settings), -p (print properties), -l (list sessions)",
+		Description: ": -s (set login settings), -p (print properties), -l (list sessions), -H (operate on a remote host), --kill-session (kill a specific session), --kill-user (kill all sessions of a specific user), --no-pager (do not pipe output into a pager)",
 	},
 	"nmcli": {
 		Name:        "nmcli",
-		Description: ": -t (terse output), -p (pretty output), -m (specify mode)",
+		Description: ": -t (terse output), -p (pretty output), -m (specify mode), -f (specify fields to display), -g (specify groups to display), -a (ask for missing parameters), -w (specify timeout for operations), --colors (enable or disable color output)",
 	},
 	"iwconfig": {
 		Name:        "iwconfig",
-		Description: ": -a (display all information), -d (enable debug mode), -s (display status)",
+		Description: ": -a (display all information), -d (enable debug mode), -s (display status), essid (Set the ESSID), mode (Set the mode), freq (Set the frequency), ap (Set the access point), rate (Set the bit rate), txpower (Set the transmit power), retry (Set the retry limit), rts (Set the RTS threshold), frag (Set the fragmentation threshold), key (Set the encryption key), power (Set the power management mode)",
 	},
 	"iwconfig essid": {
 		Name:        "iwconfig essid",
-		Description: ": None",
+		Description: ": Set the ESSID (network name)",
 	},
 	"iwconfig mode": {
 		Name:        "iwconfig mode",
-		Description: ": None",
+		Description: ": Set the mode (Managed, Ad-Hoc, Master, Repeater, Secondary, Monitor, Auto)",
 	},
 	"iwconfig freq": {
 		Name:        "iwconfig freq",
-		Description: ": None",
+		Description: ": Set the frequency or channel",
 	},
 	"iwconfig ap": {
 		Name:        "iwconfig ap",
-		Description: ": None",
+		Description: ": Set the access point address",
 	},
 	"iwconfig rate": {
 		Name:        "iwconfig rate",
-		Description: ": None",
+		Description: ": Set the bit rate",
 	},
 	"iwconfig txpower": {
 		Name:        "iwconfig txpower",
-		Description: ": None",
+		Description: ": Set the transmit power",
 	},
 	"iwconfig retry": {
 		Name:        "iwconfig retry",
-		Description: ": None",
+		Description: ": Set the retry limit",
 	},
 	"iwconfig rts": {
 		Name:        "iwconfig rts",
-		Description: ": None",
+		Description: ": Set the RTS (Request to Send) threshold",
 	},
 	"iwconfig frag": {
 		Name:        "iwconfig frag",
-		Description: ": None",
+		Description: ": Set the fragmentation threshold",
 	},
 	"iwconfig key": {
 		Name:        "iwconfig key",
-		Description: ": None",
+		Description: ": Set the encryption key",
 	},
 	"iwconfig power": {
 		Name:        "iwconfig power",
-		Description: ": None",
+		Description: ": Set the power management mode",
 	},
 	"iwlist": {
 		Name:        "iwlist",
-		Description: ": -a (display all information), -d (enable debug mode), -s (display status)",
+		Description: ": -a (display all information), -d (enable debug mode), -s (display status), scan (Scan for available networks), frequency (Show available frequencies), bitrate (Show available bit rates), encryption (Show encryption information), power (Show power management information), txpower (Show transmit power information), retry (Show retry limit information)",
 	},
 	"iwlist scan": {
 		Name:        "iwlist scan",
-		Description: ": None",
+		Description: ": Scan for available networks",
 	},
 	"iwlist frequency": {
 		Name:        "iwlist frequency",
-		Description: ": None",
+		Description: ": Show available frequencies",
 	},
 	"iwlist bitrate": {
 		Name:        "iwlist bitrate",
-		Description: ": None",
+		Description: ": Show available bit rates",
 	},
 	"iwlist encryption": {
 		Name:        "iwlist encryption",
-		Description: ": None",
+		Description: ": Show encryption information",
 	},
 	"iwlist power": {
 		Name:        "iwlist power",
-		Description: ": None",
+		Description: ": Show power management information",
 	},
 	"iwlist txpower": {
 		Name:        "iwlist txpower",
-		Description: ": None",
+		Description: ": Show transmit power information",
 	},
 	"iwlist retry": {
 		Name:        "iwlist retry",
-		Description: ": None",
+		Description: ": Show retry limit information",
 	},
 	"ufw": {
 		Name:        "ufw",
-		Description: ": -a (allow traffic), -d (deny traffic), -r (reject traffic)",
+		Description: ": -a (allow traffic), -d (deny traffic), -r (reject traffic), enable (Enable the firewall), disable (Disable the firewall), status (Show the firewall status), default (Set the default policy), logging (Set the logging level), reset (Reset the firewall to default settings)",
 	},
 	"fail2ban": {
 		Name:        "fail2ban",
-		Description: ": -d (debug mode), -q (quiet mode, suppress output), -v (verbose mode, show more details during operation)",
+		Description: ": -d (debug mode), -q (quiet mode, suppress output), -v (verbose mode, show more details during operation), start (Start the fail2ban service), stop (Stop the fail2ban service), restart (Restart the fail2ban service), status (Show the status of the fail2ban service), reload (Reload the fail2ban configuration)",
 	},
 	"logrotate": {
 		Name:        "logrotate",
-		Description: ": -d (debug mode), -f (force mode), -v (verbose mode, show more details during operation)",
+		Description: ": -d (debug mode), -f (force mode), -v (verbose mode, show more details during operation), -s (specify state file), -m (specify mail command), -l (specify log file), -p (specify PID file)",
 	},
 	"cron": {
 		Name:        "cron",
@@ -558,43 +558,43 @@ var Words = map[string]Flag{
 	},
 	"anacron": {
 		Name:        "anacron",
-		Description: ": -d (debug mode), -s (safe mode), -u (update timestamps)",
+		Description: ": -d (debug mode), -s (safe mode), -u (update timestamps), -t (specify timestamp file), -n (run jobs now), -q (quiet mode)",
 	},
 	"systemd-analyze": {
 		Name:        "systemd-analyze",
-		Description: ": -p (specify property), -t (specify type), -f (specify filter)",
+		Description: ": -p (specify property), -t (specify type), -f (specify filter), blame (Show time taken to initialize each service), critical-chain (Show the critical chain of services), plot (Generate a graphical plot of boot process), dot (Generate a dependency graph in dot format)",
 	},
 	"pkill": {
 		Name:        "pkill",
-		Description: ": -u (specify user), -t (specify terminal), -x (exact match)",
+		Description: ": -u (specify user), -t (specify terminal), -x (exact match), -f (match against the full command line), -g (specify process group), -P (specify parent process ID), -n (kill the newest process), -o (kill the oldest process), -l (list signal names), -s (specify session ID)",
 	},
 	"pgrep": {
 		Name:        "pgrep",
-		Description: ": -u (specify user), -t (specify terminal), -x (exact match)",
+		Description: ": -u (specify user), -t (specify terminal), -x (exact match), -l (list PID and name), -f (match against full argument lists), -n (select most recently started), -o (select oldest process), -v (negate the matching), -c (count of matching processes)",
 	},
 	"nice": {
 		Name:        "nice",
-		Description: ": -n (specify adjustment value)",
+		Description: ": -n (specify adjustment value), -10 to 19 (specify the priority increment)",
 	},
 	"renice": {
 		Name:        "renice",
-		Description: ": -n (specify adjustment value), -p (specify process ID), -u (specify user)",
+		Description: ": -n (specify adjustment value), -p (specify process ID), -u (specify user), -g (specify process group ID)",
 	},
 	"ionice": {
 		Name:        "ionice",
-		Description: ": -c (specify class), -n (specify priority), -p (specify process ID)",
+		Description: ": -c (specify class), -n (specify priority), -p (specify process ID), -t (set the idle I/O scheduling class)",
 	},
 	"watch": {
 		Name:        "watch",
-		Description: ": -n (specify interval), -d (highlight differences), -t (turn off header)",
+		Description: ": -n (specify interval), -d (highlight differences), -t (turn off header), -p (precise mode), -e (exit when command produces output), -g (exit when command exits with a non-zero status), -x (do not exec, but interpret the command as a shell command)",
 	},
 	"screen": {
 		Name:        "screen",
-		Description: ": -d (detach session), -r (reattach session), -S (specify session name)",
+		Description: ": -d (detach session), -r (reattach session), -S (specify session name), -ls (list sessions), -X (send a command to a session), -RR (reattach if possible, otherwise start a new session), -dmS (start a session in detached mode with a name)",
 	},
 	"tmux": {
 		Name:        "tmux",
-		Description: ": -d (detach session), -r (reattach session), -S (specify session name)",
+		Description: ": -d (detach session), -r (reattach session), -S (specify session name), -L (specify socket name), -f (specify configuration file), -2 (force 256-color mode), -u (force UTF-8 mode), -v (verbose mode), -V (print version information)",
 	},
 	"nohup": {
 		Name:        "nohup",
@@ -602,7 +602,7 @@ var Words = map[string]Flag{
 	},
 	"disown": {
 		Name:        "disown",
-		Description: ": -h (do not remove job from table)",
+		Description: ": -h (do not remove job from table), -a (remove all jobs), -r (remove running jobs)",
 	},
     "git init": {
         Name:        "git init",
@@ -886,7 +886,7 @@ var Words = map[string]Flag{
 	},
 	"dig": {
 		Name:        "dig",
-		Description: ": +short (Provide a short output), +trace (Trace the path to the name server), @server (Specify the DNS server to query), -b (Set the source IP address of the query), -c (Specify the query class (IN, CH, HS)), -f (Perform batch processing of multiple queries), -k (Specify a TSIG key file), -p (Specify the port number to query on the server), -q (Specify the query name), -t (Specify the query type (A, AAAA, MX, etc.)), -x (Perform a reverse lookup), -y (Specify a TSIG key), +short (Provide a short answer), +trace (Trace the delegation path from the root name servers), +stats (Print query statistics), +noall (Set or clear all display flags), +answer (Display the answer section of a reply), +authority (Display the authority section of a reply), +additional (Display the additional section of a reply), +question (Display the question section of a reply)",
+		Description: ": +short (Short output), +trace (Trace path), @server (DNS server), -b (Source IP), -c (Query class), -f (Batch queries), -k (TSIG key file), -p (Port), -q (Query name), -t (Query type), -x (Reverse lookup), -y (TSIG key), +stats (Query stats), +noall (Clear display flags), +answer (Answer section), +authority (Authority section), +additional (Additional section), +question (Question section)",
 	},
 	"nslookup": {
 		Name:        "nslookup",
@@ -906,75 +906,75 @@ var Words = map[string]Flag{
 	},
 	"ftp open": {
 		Name:        "ftp open",
-		Description: ": None",
+		Description: ": none",
 	},
 	"ftp close": {
 		Name:        "ftp close",
-		Description: ": None",
+		Description: ": none",
 	},
 	"ftp put": {
 		Name:        "ftp put",
-		Description: ": None",
+		Description: ": none",
 	},
 	"ftp mput": {
 		Name:        "ftp mput",
-		Description: ": None",
+		Description: ": none",
 	},
 	"ftp get": {
 		Name:        "ftp get",
-		Description: ": None",
+		Description: ": none",
 	},
 	"ftp mget": {
 		Name:        "ftp mget",
-		Description: ": None",
+		Description: ": none",
 	},
 	"ftp delete": {
 		Name:        "ftp delete",
-		Description: ": None",
+		Description: ": none",
 	},
 	"ftp mdelete": {
 		Name:        "ftp mdelete",
-		Description: ": None",
+		Description: ": none",
 	},
 	"ftp rename": {
 		Name:        "ftp rename",
-		Description: ": None",
+		Description: ": none",
 	},
 	"ftp mkdir": {
 		Name:        "ftp mkdir",
-		Description: ": None",
+		Description: ": none",
 	},
 	"ftp rmdir": {
 		Name:        "ftp rmdir",
-		Description: ": None",
+		Description: ": none",
 	},
 	"ftp ls": {
 		Name:        "ftp ls",
-		Description: ": None",
+		Description: ": none",
 	},
 	"ftp lcd": {
 		Name:        "ftp lcd",
-		Description: ": None",
+		Description: ": none",
 	},
 	"ftp cd": {
 		Name:        "ftp cd",
-		Description: ": None",
+		Description: ": none",
 	},
 	"ftp ascii": {
 		Name:        "ftp ascii",
-		Description: ": None",
+		Description: ": none",
 	},
 	"ftp binary": {
 		Name:        "ftp binary",
-		Description: ": None",
+		Description: ": none",
 	},
 	"ftp passive": {
 		Name:        "ftp passive",
-		Description: ": None",
+		Description: ": none",
 	},
 	"ftp active": {
 		Name:        "ftp active",
-		Description: ": None",
+		Description: ": none",
 	},
 	"sftp": {
 		Name:        "sftp",
@@ -982,127 +982,127 @@ var Words = map[string]Flag{
 	},
 	"sftp get": {
 		Name:        "sftp get",
-		Description: ": None",
+		Description: ": none",
 	},
 	"sftp put": {
 		Name:        "sftp put",
-		Description: ": None",
+		Description: ": none",
 	},
 	"sftp ls": {
 		Name:        "sftp ls",
-		Description: ": None",
+		Description: ": none",
 	},
 	"sftp cd": {
 		Name:        "sftp cd",
-		Description: ": None",
+		Description: ": none",
 	},
 	"sftp lcd": {
 		Name:        "sftp lcd",
-		Description: ": None",
+		Description: ": none",
 	},
 	"sftp mkdir": {
 		Name:        "sftp mkdir",
-		Description: ": None",
+		Description: ": none",
 	},
 	"sftp rmdir": {
 		Name:        "sftp rmdir",
-		Description: ": None",
+		Description: ": none",
 	},
 	"sftp rm": {
 		Name:        "sftp rm",
-		Description: ": None",
+		Description: ": none",
 	},
 	"sftp rename": {
 		Name:        "sftp rename",
-		Description: ": None",
+		Description: ": none",
 	},
 	"sftp chmod": {
 		Name:        "sftp chmod",
-		Description: ": None",
+		Description: ": none",
 	},
 	"sftp chown": {
 		Name:        "sftp chown",
-		Description: ": None",
+		Description: ": none",
 	},
 	"sftp chgrp": {
 		Name:        "sftp chgrp",
-		Description: ": None",
+		Description: ": none",
 	},
 	"sftp lls": {
 		Name:        "sftp lls",
-		Description: ": None",
+		Description: ": none",
 	},
 	"sftp lmkdir": {
 		Name:        "sftp lmkdir",
-		Description: ": None",
+		Description: ": none",
 	},
 	"sftp lrm": {
 		Name:        "sftp lrm",
-		Description: ": None",
+		Description: ": none",
 	},
 	"sftp lrename": {
 		Name:        "sftp lrename",
-		Description: ": None",
+		Description: ": none",
 	},
 	"sftp lchmod": {
 		Name:        "sftp lchmod",
-		Description: ": None",
+		Description: ": none",
 	},
 	"sftp lchown": {
 		Name:        "sftp lchown",
-		Description: ": None",
+		Description: ": none",
 	},
 	"sftp lchgrp": {
 		Name:        "sftp lchgrp",
-		Description: ": None",
+		Description: ": none",
 	},
 	"telnet": {
 		Name:        "telnet",
 		Description: ": -8 (Use an 8-bit data path), -E (Stop any escape character from being recognized)",
 	},
 	"telnet open": {
-    Name:        "telnet open",
-    Description: ": None",
+		Name:        "telnet open",
+		Description: ": none",
 	},
 	"telnet close": {
 		Name:        "telnet close",
-		Description: ": None",
+		Description: ": none",
 	},
 	"telnet quit": {
 		Name:        "telnet quit",
-		Description: ": None",
+		Description: ": none",
 	},
 	"telnet send": {
 		Name:        "telnet send",
-		Description: ": None",
+		Description: ": none",
 	},
 	"telnet status": {
 		Name:        "telnet status",
-		Description: ": None",
+		Description: ": none",
 	},
 	"telnet set": {
 		Name:        "telnet set",
-		Description: ": None",
+		Description: ": none",
 	},
 	"telnet unset": {
 		Name:        "telnet unset",
-		Description: ": None",
+		Description: ": none",
 	},
 	"telnet toggle": {
 		Name:        "telnet toggle",
-		Description: ": None",
+		Description: ": none",
 	},
 	"telnet mode": {
 		Name:        "telnet mode",
-		Description: ": None",
+		Description: ": none",
 	},
 	"telnet display": {
 		Name:        "telnet display",
-		Description: ": None",
+		Description: ": none",
 	},
 	"telnet environ": {
 		Name:        "telnet environ",
-		Description: ": None",
+		Description: ": none",
 	},
 	"nc": {
 		Name:        "nc",
@@ -1114,11 +1114,11 @@ var Words = map[string]Flag{
 	},
 	"tcpdump": {
 		Name:        "tcpdump",
-		Description: ": -i (Specify the interface to listen on), -w (Write the raw packets to a file), -r (Read packets from a file), -c (Exit after receiving a specified number of packets), -s (Set the snapshot length), -v (Verbose output), -vv (More verbose output), -vvv (Even more verbose output), -e (Print link-level header on each dump line), -q (Quick (quiet?) output), -X (Print packet data in both hex and ASCII), -XX (Print packet data in hex and ASCII, including link-level header), -A (Print each packet (minus its link level header) in ASCII), -D (Print the list of available interfaces), -l (Make stdout line buffered), -tt (Print an unformatted timestamp on each dump line), -ttt (Print a delta (micro-second resolution) between current and previous line on each dump line), -tttt (Print a timestamp in default format proceeded by date on each dump line), -ttttt (Print a delta (micro-second resolution) between current and first line on each dump line), -C (Before writing a raw packet to a file, check whether the file is larger than file_size and, if so, close the current file and open a new one), -G (Rotate dump files every specified number of seconds), -W (Used in conjunction with the -C or -G options, limits the number of files created to specified number), -Z (Drop privileges to user and group after opening the capture file), -K (Do not attempt to verify IP, TCP, or UDP checksums), -E (Decrypt IPsec ESP packets using provided key), -M (Use the specified secret for IPsec AH authentication)",
+		Description: ": -i (Interface), -w (Write file), -r (Read file), -c (Packet count), -s (Snapshot length), -v, -vv, -vvv (Verbose), -e (Link-level header), -q (Quiet), -X (Hex and ASCII), -XX (Hex, ASCII, link-level), -A (ASCII), -D (List interfaces), -l (Line buffered), -tt, -ttt, -tttt, -ttttt (Timestamps), -C (File size limit), -G (Rotate files), -W (Limit files), -Z (Drop privileges), -K (No checksum verify), -E (Decrypt IPsec), -M (IPsec AH secret)",
 	},
 	"wireshark": {
 		Name:        "wireshark",
-		Description: ": -i (Specify the interface to listen on), -k (Start capturing immediately), -w (Write the raw packets to a file), -r (Read packets from a file), -c (Exit after receiving a specified number of packets), -f (Set the capture filter expression), -s (Set the snapshot length), -v (Verbose output), -h (Display help information), -b (Set ring buffer options), -t (Set the time stamp format), -n (Disable network object name resolution), -N (Set name resolution flags), -S (Update packet list in real-time), -T (Set the format of text output), -X (Specify an option to pass to the plugin), -Y (Set the display filter expression), -z (Specify statistics to calculate and display)",
+		Description: ": -i (Interface), -k (Immediate start), -w (Write to file), -r (Read from file), -c (Packet count), -f (Capture filter), -s (Snapshot length), -v (Verbose), -h (Help), -b (Ring buffer), -t (Timestamp format), -n (No name resolution), -N (Name resolution flags), -S (Real-time update), -T (Text output format), -X (Plugin option), -Y (Display filter), -z (Statistics)",
 	},
 	"iptables": {
 		Name:        "iptables",
@@ -1342,11 +1342,11 @@ var Words = map[string]Flag{
 	},
 	"docker logout": {
 		Name:        "docker logout",
-		Description: ": None",
+		Description: ": none",
 	},
 	"docker tag": {
 		Name:        "docker tag",
-		Description: ": None",
+		Description: ": none",
 	},
 	"docker inspect": {
 		Name:        "docker inspect",
@@ -1362,75 +1362,75 @@ var Words = map[string]Flag{
 	},
 	"docker network": {
 		Name:        "docker network",
-		Description: ": None",
+		Description: ": none",
 	},
 	"docker volume": {
 		Name:        "docker volume",
-		Description: ": None",
+		Description: ": none",
 	},
 	"docker info": {
 		Name:        "docker info",
-		Description: ": None",
+		Description: ": none",
 	},
 	"docker version": {
 		Name:        "docker version",
-		Description: ": None",
+		Description: ": none",
 	},
 	"docker swarm": {
 		Name:        "docker swarm",
-		Description: ": None",
+		Description: ": none",
 	},
 	"docker node": {
 		Name:        "docker node",
-		Description: ": None",
+		Description: ": none",
 	},
 	"docker service": {
 		Name:        "docker service",
-		Description: ": None",
+		Description: ": none",
 	},
 	"docker stack": {
 		Name:        "docker stack",
-		Description: ": None",
+		Description: ": none",
 	},
 	"docker secret": {
 		Name:        "docker secret",
-		Description: ": None",
+		Description: ": none",
 	},
 	"docker config": {
 		Name:        "docker config",
-		Description: ": None",
+		Description: ": none",
 	},
 	"docker plugin": {
 		Name:        "docker plugin",
-		Description: ": None",
+		Description: ": none",
 	},
 	"docker container": {
 		Name:        "docker container",
-		Description: ": None",
+		Description: ": none",
 	},
 	"docker image": {
 		Name:        "docker image",
-		Description: ": None",
+		Description: ": none",
 	},
 	"docker system": {
 		Name:        "docker system",
-		Description: ": None",
+		Description: ": none",
 	},
 	"docker context": {
 		Name:        "docker context",
-		Description: ": None",
+		Description: ": none",
 	},
 	"docker builder": {
 		Name:        "docker builder",
-		Description: ": None",
+		Description: ": none",
 	},
 	"docker checkpoint": {
 		Name:        "docker checkpoint",
-		Description: ": None",
+		Description: ": none",
 	},
 	"docker trust": {
 		Name:        "docker trust",
-		Description: ": None",
+		Description: ": none",
 	},
 	"systemctl start": {
 		Name:        "systemctl start",
@@ -1478,7 +1478,7 @@ var Words = map[string]Flag{
 	},
 	"systemctl daemon-reload": {
 		Name:        "systemctl daemon-reload",
-		Description: ": None",
+		Description: ": none",
 	},
 	"systemctl mask": {
 		Name:        "systemctl mask",
@@ -1502,7 +1502,7 @@ var Words = map[string]Flag{
 	},
 	"systemctl cat": {
 		Name:        "systemctl cat",
-		Description: ": None",
+		Description: ": none",
 	},
 	"systemctl edit": {
 		Name:        "systemctl edit",
@@ -1510,11 +1510,11 @@ var Words = map[string]Flag{
 	},
 	"systemctl set-property": {
 		Name:        "systemctl set-property",
-		Description: ": None",
+		Description: ": none",
 	},
 	"systemctl help": {
 		Name:        "systemctl help",
-		Description: ": None",
+		Description: ": none",
 	},
 	"journalctl --boot": {
 		Name:        "journalctl --boot",
@@ -1522,7 +1522,7 @@ var Words = map[string]Flag{
 	},
 	"journalctl --list-boots": {
 		Name:        "journalctl --list-boots",
-		Description: ": None",
+		Description: ": none",
 	},
 	"journalctl --unit": {
 		Name:        "journalctl --unit",
@@ -1530,15 +1530,15 @@ var Words = map[string]Flag{
 	},
 	"journalctl --since": {
 		Name:        "journalctl --since",
-		Description: ": None",
+		Description: ": none",
 	},
 	"journalctl --until": {
 		Name:        "journalctl --until",
-		Description: ": None",
+		Description: ": none",
 	},
 	"journalctl --follow": {
 		Name:        "journalctl --follow",
-		Description: ": None",
+		Description: ": none",
 	},
 	"journalctl --output": {
 		Name:        "journalctl --output",
@@ -1546,11 +1546,11 @@ var Words = map[string]Flag{
 	},
 	"journalctl --priority": {
 		Name:        "journalctl --priority",
-		Description: ": None",
+		Description: ": none",
 	},
 	"journalctl --grep": {
 		Name:        "journalctl --grep",
-		Description: ": None",
+		Description: ": none",
 	},
 	"systemd-analyze blame": {
 		Name:        "systemd-analyze blame",
@@ -1566,7 +1566,7 @@ var Words = map[string]Flag{
 	},
 	"systemd-analyze dump": {
 		Name:        "systemd-analyze dump",
-		Description: ": None",
+		Description: ": none",
 	},
 	"systemd-analyze verify": {
 		Name:        "systemd-analyze verify",
@@ -1578,222 +1578,222 @@ var Words = map[string]Flag{
 	},
 	"systemd-analyze time": {
 		Name:        "systemd-analyze time",
-		Description: ": None",
+		Description: ": none",
 	},
 	"cron start": {
 		Name:        "cron start",
-		Description: ": None",
+		Description: ": none",
 	},
 	"cron stop": {
 		Name:        "cron stop",
-		Description: ": None",
+		Description: ": none",
 	},
 	"cron restart": {
 		Name:        "cron restart",
-		Description: ": None",
+		Description: ": none",
 	},
 	"cron reload": {
 		Name:        "cron reload",
-		Description: ": None",
+		Description: ": none",
 	},
 	"cron status": {
 		Name:        "cron status",
-		Description: ": None",
+		Description: ": none",
 	},
 	"cron list": {
 		Name:        "cron list",
-		Description: ": None",
+		Description: ": none",
 	},
 	"cron add": {
 		Name:        "cron add",
-		Description: ": None",
+		Description: ": none",
 	},
 	"cron remove": {
 		Name:        "cron remove",
-		Description: ": None",
+		Description: ": none",
 	},
 	"cron edit": {
 		Name:        "cron edit",
-		Description: ": None",
+		Description: ": none",
 	},
 	"ufw enable": {
 		Name:        "ufw enable",
-		Description: ": None",
+		Description: ": none",
 	},
 	"ufw disable": {
 		Name:        "ufw disable",
-		Description: ": None",
+		Description: ": none",
 	},
 	"ufw status": {
 		Name:        "ufw status",
-		Description: ": None",
+		Description: ": none",
 	},
 	"ufw allow": {
 		Name:        "ufw allow",
-		Description: ": None",
+		Description: ": none",
 	},
 	"ufw deny": {
 		Name:        "ufw deny",
-		Description: ": None",
+		Description: ": none",
 	},
 	"ufw reject": {
 		Name:        "ufw reject",
-		Description: ": None",
+		Description: ": none",
 	},
 	"ufw limit": {
 		Name:        "ufw limit",
-		Description: ": None",
+		Description: ": none",
 	},
 	"ufw delete": {
 		Name:        "ufw delete",
-		Description: ": None",
+		Description: ": none",
 	},
 	"ufw reset": {
 		Name:        "ufw reset",
-		Description: ": None",
+		Description: ": none",
 	},
 	"ufw reload": {
 		Name:        "ufw reload",
-		Description: ": None",
+		Description: ": none",
 	},
 	"ufw logging": {
 		Name:        "ufw logging",
-		Description: ": None",
+		Description: ": none",
 	},
 	"nmcli general": {
 		Name:        "nmcli general",
-		Description: ": None",
+		Description: ": none",
 	},
 	"nmcli networking": {
 		Name:        "nmcli networking",
-		Description: ": None",
+		Description: ": none",
 	},
 	"nmcli radio": {
 		Name:        "nmcli radio",
-		Description: ": None",
+		Description: ": none",
 	},
 	"nmcli connection": {
 		Name:        "nmcli connection",
-		Description: ": None",
+		Description: ": none",
 	},
 	"nmcli device": {
 		Name:        "nmcli device",
-		Description: ": None",
+		Description: ": none",
 	},
 	"nmcli agent": {
 		Name:        "nmcli agent",
-		Description: ": None",
+		Description: ": none",
 	},
 	"nmcli monitor": {
 		Name:        "nmcli monitor",
-		Description: ": None",
+		Description: ": none",
 	},
 	"loginctl list-sessions": {
 		Name:        "loginctl list-sessions",
-		Description: ": None",
+		Description: ": none",
 	},
 	"loginctl session-status": {
 		Name:        "loginctl session-status",
-		Description: ": None",
+		Description: ": none",
 	},
 	"loginctl terminate-session": {
 		Name:        "loginctl terminate-session",
-		Description: ": None",
+		Description: ": none",
 	},
 	"loginctl list-users": {
 		Name:        "loginctl list-users",
-		Description: ": None",
+		Description: ": none",
 	},
 	"loginctl user-status": {
 		Name:        "loginctl user-status",
-		Description: ": None",
+		Description: ": none",
 	},
 	"loginctl enable-linger": {
 		Name:        "loginctl enable-linger",
-		Description: ": None",
+		Description: ": none",
 	},
 	"loginctl disable-linger": {
 		Name:        "loginctl disable-linger",
-		Description: ": None",
+		Description: ": none",
 	},
 	"loginctl lock-session": {
 		Name:        "loginctl lock-session",
-		Description: ": None",
+		Description: ": none",
 	},
 	"loginctl unlock-session": {
 		Name:        "loginctl unlock-session",
-		Description: ": None",
+		Description: ": none",
 	},
 	"loginctl lock-sessions": {
 		Name:        "loginctl lock-sessions",
-		Description: ": None",
+		Description: ": none",
 	},
 	"loginctl unlock-sessions": {
 		Name:        "loginctl unlock-sessions",
-		Description: ": None",
+		Description: ": none",
 	},
 	"localectl status": {
 		Name:        "localectl status",
-		Description: ": None",
+		Description: ": none",
 	},
 	"localectl set-locale": {
 		Name:        "localectl set-locale",
-		Description: ": None",
+		Description: ": none",
 	},
 	"localectl list-locales": {
 		Name:        "localectl list-locales",
-		Description: ": None",
+		Description: ": none",
 	},
 	"localectl set-keymap": {
 		Name:        "localectl set-keymap",
-		Description: ": None",
+		Description: ": none",
 	},
 	"localectl list-keymaps": {
 		Name:        "localectl list-keymaps",
-		Description: ": None",
+		Description: ": none",
 	},
 	"hostnamectl status": {
 		Name:        "hostnamectl status",
-		Description: ": None",
+		Description: ": none",
 	},
 	"hostnamectl set-hostname": {
 		Name:        "hostnamectl set-hostname",
-		Description: ": None",
+		Description: ": none",
 	},
 	"hostnamectl set-icon-name": {
 		Name:        "hostnamectl set-icon-name",
-		Description: ": None",
+		Description: ": none",
 	},
 	"hostnamectl set-chassis": {
 		Name:        "hostnamectl set-chassis",
-		Description: ": None",
+		Description: ": none",
 	},
 	"hostnamectl set-deployment": {
 		Name:        "hostnamectl set-deployment",
-		Description: ": None",
+		Description: ": none",
 	},
 	"hostnamectl set-location": {
 		Name:        "hostnamectl set-location",
-		Description: ": None",
+		Description: ": none",
 	},
 	"timedatectl status": {
 		Name:        "timedatectl status",
-		Description: ": None",
+		Description: ": none",
 	},
 	"timedatectl set-time": {
 		Name:        "timedatectl set-time",
-		Description: ": None",
+		Description: ": none",
 	},
 	"timedatectl set-timezone": {
 		Name:        "timedatectl set-timezone",
-		Description: ": None",
+		Description: ": none",
 	},
 	"timedatectl list-timezones": {
 		Name:        "timedatectl list-timezones",
-		Description: ": None",
+		Description: ": none",
 	},
 	"timedatectl set-ntp": {
 		Name:        "timedatectl set-ntp",
-		Description: ": None",
+		Description: ": none",
 	},
 }
