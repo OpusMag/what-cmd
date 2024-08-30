@@ -105,9 +105,9 @@ var Words = map[string]Flag{
         Description: ": -O (Write documents to FILE), -q (Turn off Wget's output), -r (Specify recursive download)",
     },
     "curl": {
-        Name:        "curl",
-        Description: ": -o (Write output to FILE instead of stdout), -I (Fetch the HTTP-header only), -L (Follow redirects)",
-    },
+		Name:        "curl",
+		Description: ": -X GET (Perform a GET request), -X POST (Perform a POST request), -X PUT (Perform a PUT request), -X DELETE (Perform a DELETE request), -I (Fetch the HTTP headers only), -d (Send data in a POST request), -F (Submit form data), -H (Pass custom header(s) to the server), -u (Server user and password), -o (Write output to a file), -O (Save the file with the same name as the remote file), -L (Follow redirects), -k (Allow insecure server connections when using SSL), -s (Silent mode (don't show progress meter or error messages)), -v (Verbose mode (show detailed information about the request and response)), -C - (Resume a previous file transfer), -b (Send cookies from a file), -c (Save cookies to a file), -T (Upload a file), --proxy (Use a proxy for the request), --limit-rate (Limit the transfer rate), --max-time (Maximum time allowed for the transfer), --compressed (Request a compressed response), --data-urlencode (URL encode the data before sending it in a POST request), --http2 (Use HTTP/2 protocol), --http3 (Use HTTP/3 protocol)",
+	},
     "ps": {
         Name:        "ps",
         Description: ": -e (Select all processes), -f (Do full-format listing), -u (Display processes for a specific user)",
