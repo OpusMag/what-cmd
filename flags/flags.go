@@ -2089,133 +2089,670 @@ var Words = map[string]Flag{
 		Description: ": none",
 	},
 	"lazygit": {
-    Name:        "lazygit",
-    Description: "A simple terminal UI for git commands",
-    Flags:       ": -v (Show version), --version (Show version), -h (Show help), --help (Show help)",
+    	Name:        "lazygit",
+    	Description:       ": -v (Show version), --version (Show version), -h (Show help), --help (Show help)",
 	},
 	"fzf": {
 		Name:        "fzf",
 		Description: "A command-line fuzzy finder",
-		Flags:       ": --version (Show version), --help (Show help), --height (Set height), --reverse (Reverse layout), --border (Show border), --prompt (Set prompt), --multi (Enable multi-select), --no-mouse (Disable mouse), --inline-info (Show inline info), --preview (Set preview command), --preview-window (Set preview window), --preview-wrap (Wrap preview), --preview-border (Set preview border), --preview-panes (Set preview panes), --preview-lines (Set preview lines), --preview-columns (Set preview columns), --preview-on (Set preview on), --bind (Set key bindings), --expect (Set expected keys), --header (Set header), --header-lines (Set header lines), --ansi (Enable ANSI color), --color (Set color), --no-bold (Disable bold), --tabstop (Set tab stop), --margin (Set margin), --min-height (Set minimum height), --min-width (Set minimum width), --prompt (Set prompt), --pointer (Set pointer), --marker (Set marker), --print-query (Print query), --query (Set query), --select-1 (Select first match), --exit-0 (Exit if no match), --tiebreak (Set tiebreak), --cycle (Enable cycling), --keep-right (Keep right), --keep-bottom (Keep bottom), --sync (Enable sync), --no-clear (Disable clear), --print0 (Print null), --delimiter (Set delimiter), --nth (Set nth), --with-nth (Set with nth), --layout (Set layout), --min (Set minimum), --max (Set maximum), --no-sort (Disable sort), --filter (Set filter)",
+		Description:       ": --version (Show version), --help (Show help), --height (Set height), --reverse (Reverse layout), --border (Show border), --prompt (Set prompt), --multi (Enable multi-select), --no-mouse (Disable mouse), --inline-info (Show inline info), --preview (Set preview command), --preview-window (Set preview window), --preview-wrap (Wrap preview), --preview-border (Set preview border), --preview-panes (Set preview panes), --preview-lines (Set preview lines), --preview-columns (Set preview columns), --preview-on (Set preview on), --bind (Set key bindings), --expect (Set expected keys), --header (Set header), --header-lines (Set header lines), --ansi (Enable ANSI color), --color (Set color), --no-bold (Disable bold), --tabstop (Set tab stop), --margin (Set margin), --min-height (Set minimum height), --min-width (Set minimum width), --prompt (Set prompt), --pointer (Set pointer), --marker (Set marker), --print-query (Print query), --query (Set query), --select-1 (Select first match), --exit-0 (Exit if no match), --tiebreak (Set tiebreak), --cycle (Enable cycling), --keep-right (Keep right), --keep-bottom (Keep bottom), --sync (Enable sync), --no-clear (Disable clear), --print0 (Print null), --delimiter (Set delimiter), --nth (Set nth), --with-nth (Set with nth), --layout (Set layout), --min (Set minimum), --max (Set maximum), --no-sort (Disable sort), --filter (Set filter)",
 	},
 	"rg": {
 		Name:        "rg",
 		Description: "ripgrep, a line-oriented search tool that recursively searches your current directory for a regex pattern",
-		Flags:       ": -i (Ignore case), --ignore-case (Ignore case), -v (Invert match), --invert-match (Invert match), -w (Word regexp), --word-regexp (Word regexp), -r (Replace), --replace (Replace)",
+		Description:       ": -i (Ignore case), --ignore-case (Ignore case), -v (Invert match), --invert-match (Invert match), -w (Word regexp), --word-regexp (Word regexp), -r (Replace), --replace (Replace)",
 	},
 	"postman": {
 		Name:        "postman",
 		Description: "A collaboration platform for API development",
-		Flags:       ": --help (Show help), --version (Show version)",
+		Description:       ": --help (Show help), --version (Show version)",
 	},
 	"http": {
 		Name:        "http",
 		Description: "HTTPie, a command line HTTP client",
-		Flags:       ": --json (Send JSON), --form (Send form), --pretty (Pretty print), --style (Set style), --verbose (Verbose output)",
+		Description:       ": --json (Send JSON), --form (Send form), --pretty (Pretty print), --style (Set style), --verbose (Verbose output)",
 	},
 	"jq": {
 		Name:        "jq",
 		Description: "A lightweight and flexible command-line JSON processor",
-		Flags:       ": -c (Compact output), --compact-output (Compact output), -r (Raw output), --raw-output (Raw output), -s (Slurp), --slurp (Slurp), -R (Raw input), --raw-input (Raw input)",
+		Description:       ": -c (Compact output), --compact-output (Compact output), -r (Raw output), --raw-output (Raw output), -s (Slurp), --slurp (Slurp), -R (Raw input), --raw-input (Raw input)",
 	},
 	"scp": {
 		Name:        "scp",
 		Description: "Secure copy (remote file copy program)",
-		Flags:       ": -r (Recursive), -p (Preserve attributes), -q (Quiet mode), -C (Compression), -i (Identity file)",
-	},
-	"svn": {
-		Name:        "svn",
-		Description: "Subversion version control system",
-		Flags:       ": --version (Show version), --help (Show help), --quiet (Quiet mode), --verbose (Verbose mode)",
+		Description:       ": -r (Recursive), -p (Preserve attributes), -q (Quiet mode), -C (Compression), -i (Identity file)",
 	},
 	"hg": {
 		Name:        "hg",
 		Description: "Mercurial version control system",
-		Flags:       ": -v (Verbose), --verbose (Verbose), -q (Quiet), --quiet (Quiet), --debug (Debug), --traceback (Traceback)",
-	},
-	"bzr": {
-		Name:        "bzr",
-		Description: "Bazaar version control system",
-		Flags:       ": --version (Show version), --help (Show help), --quiet (Quiet mode), --verbose (Verbose mode)",
-	},
-	"podman": {
-		Name:        "podman",
-		Description: "Tool for managing OCI containers and pods",
-		Flags:       ": --version (Show version), --help (Show help), --log-level (Set log level), --root (Set root), --runroot (Set runroot)",
-	},
-	"rkt": {
-		Name:        "rkt",
-		Description: "App Container runtime",
-		Flags:       ": --insecure-options (Set insecure options), --dir (Set directory), --local-config (Set local config), --system-config (Set system config), --user-config (Set user config)",
+		Description:       ": -v (Verbose), --verbose (Verbose), -q (Quiet), --quiet (Quiet), --debug (Debug), --traceback (Traceback)",
 	},
 	"kubernetes": {
 		Name:        "kubernetes",
-		Description: "Container orchestration",
-		Flags:       ": --kubeconfig (Set kubeconfig), --context (Set context), --namespace (Set namespace), --user (Set user)",
-	},
-	"minikube": {
-		Name:        "minikube",
-		Description: "Run Kubernetes locally",
-		Flags:       ": --vm-driver (Set VM driver), --cpus (Set CPUs), --memory (Set memory), --disk-size (Set disk size), --kubernetes-version (Set Kubernetes version)",
-	},
-	"helm": {
-		Name:        "helm",
-		Description: "The Kubernetes Package Manager",
-		Flags:       ": --debug (Enable debug), --home (Set home), --host (Set host), --kube-context (Set kube context), --tiller-namespace (Set tiller namespace)",
-	},
-	"kubeadm": {
-		Name:        "kubeadm",
-		Description: "Bootstrap a Kubernetes cluster",
-		Flags:       ": --config (Set config), --kubernetes-version (Set Kubernetes version), --pod-network-cidr (Set pod network CIDR), --service-cidr (Set service CIDR), --token (Set token)",
-	},
-	"kops": {
-		Name:        "kops",
-		Description: "Kubernetes Operations",
-		Flags:       ": --state (Set state), --name (Set name), --zones (Set zones), --node-count (Set node count), --node-size (Set node size)",
+		Description:       ": --kubeconfig (Set kubeconfig), --context (Set context), --namespace (Set namespace), --user (Set user)",
 	},
 	"kubectx": {
 		Name:        "kubectx",
-		Description: "Switch between clusters on kubectl",
-		Flags:       ": -h (Show help), --help (Show help)",
+		Description:       ": -h (Show help), --help (Show help)",
 	},
 	"kubens": {
 		Name:        "kubens",
-		Description: "Switch between Kubernetes namespaces",
-		Flags:       ": -h (Show help), --help (Show help)",
+		Description:       ": -h (Show help), --help (Show help)",
+	},
+	"svn": {
+		Name:        "svn",
+		Description:       ": --version (Show version), --help (Show help), --quiet (Quiet mode), --verbose (Verbose mode)",
+	},
+	"svn checkout": {
+    	Name:        "svn checkout",
+   		Description: ": --revision (Specify revision), --quiet (Suppress output), --depth (Limit operation by depth), --force (Force operation), --ignore-externals (Ignore externals)",
+	},
+	"svn commit": {
+		Name:        "svn commit",
+		Description: ": --message (Log message), --file (Log message file), --quiet (Suppress output), --depth (Limit operation by depth), --targets (Targets file)",
+	},
+	"svn update": {
+		Name:        "svn update",
+		Description: ": --revision (Specify revision), --quiet (Suppress output), --depth (Limit operation by depth), --set-depth (Set new working copy depth), --force (Force operation)",
+	},
+	"svn add": {
+		Name:        "svn add",
+		Description: ": --quiet (Suppress output), --depth (Limit operation by depth), --force (Force operation), --no-ignore (Disregard default and svn:ignore property ignores)",
+	},
+	"svn delete": {
+		Name:        "svn delete",
+		Description: ": --message (Log message), --file (Log message file), --quiet (Suppress output), --force (Force operation), --keep-local (Keep local copy)",
+	},
+	"svn status": {
+		Name:        "svn status",
+		Description: ": --quiet (Suppress output), --verbose (Print extra information), --show-updates (Display update information), --depth (Limit operation by depth), --no-ignore (Disregard default and svn:ignore property ignores)",
+	},
+	"svn log": {
+		Name:        "svn log",
+		Description: ": --revision (Specify revision), --quiet (Suppress output), --verbose (Print extra information), --stop-on-copy (Stop on copy), --incremental (Output incrementally)",
+	},
+	"svn diff": {
+		Name:        "svn diff",
+		Description: ": --revision (Specify revision), --quiet (Suppress output), --depth (Limit operation by depth), --diff-cmd (Use external diff command), --extensions (Pass arguments to diff command)",
+	},
+	"svn merge": {
+		Name:        "svn merge",
+		Description: ": --revision (Specify revision), --quiet (Suppress output), --depth (Limit operation by depth), --force (Force operation), --record-only (Record merge information only)",
+	},
+	"svn revert": {
+		Name:        "svn revert",
+		Description: ": --quiet (Suppress output), --depth (Limit operation by depth), --targets (Targets file), --changelist (Operate only on members of changelist)",
+	},
+	"hg init": {
+		Name:        "hg init",
+		Description: ": --quiet (Suppress output), --verbose (Print extra information), --debug (Print debug information), --traceback (Print traceback on error), --config (Set/override config option)",
+	},
+	"hg clone": {
+		Name:        "hg clone",
+		Description: ": --quiet (Suppress output), --verbose (Print extra information), --debug (Print debug information), --traceback (Print traceback on error), --config (Set/override config option)",
+	},
+	"hg add": {
+		Name:        "hg add",
+		Description: ": --quiet (Suppress output), --verbose (Print extra information), --debug (Print debug information), --traceback (Print traceback on error), --config (Set/override config option)",
+	},
+	"hg commit": {
+		Name:        "hg commit",
+		Description: ": --message (Log message), --file (Log message file), --addremove (Mark new/missing files), --close-branch (Mark branch as closed), --date (Record datecode as commit date)",
+	},
+	"hg update": {
+		Name:        "hg update",
+		Description: ": --clean (Discard uncommitted changes), --check (Check for uncommitted changes), --date (Update to date), --rev (Update to revision), --quiet (Suppress output)",
+	},
+	"hg merge": {
+		Name:        "hg merge",
+		Description: ": --tool (Specify merge tool), --preview (Preview merge), --quiet (Suppress output), --verbose (Print extra information), --debug (Print debug information)",
+	},
+	"hg push": {
+		Name:        "hg push",
+		Description: ": --force (Force push), --new-branch (Allow push of new branch), --rev (Push only specified revision), --bookmark (Push only specified bookmark), --branch (Push only specified branch)",
+	},
+	"hg pull": {
+		Name:        "hg pull",
+		Description: ": --update (Update to new branch head), --force (Force pull), --rev (Pull only specified revision), --bookmark (Pull only specified bookmark), --branch (Pull only specified branch)",
+	},
+	"hg log": {
+		Name:        "hg log",
+		Description: ": --rev (Show specified revision), --branch (Show specified branch), --limit (Limit number of changesets), --date (Show changesets matching date), --keyword (Do case-insensitive search for keyword)",
+	},
+	"hg status": {
+		Name:        "hg status",
+		Description: ": --all (Show status of all files), --modified (Show only modified files), --added (Show only added files), --removed (Show only removed files), --deleted (Show only deleted files)",
+	},
+	"hg diff": {
+		Name:        "hg diff",
+		Description: ": --rev (Show changes relative to revision), --change (Show changes in revision), --stat (Show diffstat), --git (Use git extended diff format), --unified (Number of lines of context)",
+	},
+	"hg revert": {
+		Name:        "hg revert",
+		Description: ": --rev (Revert to revision), --date (Revert to date), --all (Revert all changes), --no-backup (Do not save backup), --interactive (Prompt for each change)",
+	},
+	"bzr init": {
+		Name:        "bzr init",
+		Description: ": --quiet (Suppress output), --verbose (Print extra information), --no-tree (Do not create working tree), --format (Specify repository format), --standalone (Create standalone branch)",
+	},
+	"bzr branch": {
+		Name:        "bzr branch",
+		Description: ": --quiet (Suppress output), --verbose (Print extra information), --stacked (Create stacked branch), --use-existing-dir (Use existing directory), --revision (Branch at revision)",
+	},
+	"bzr add": {
+		Name:        "bzr add",
+		Description: ": --quiet (Suppress output), --verbose (Print extra information), --dry-run (Show what would be done), --no-recurse (Do not recurse into subdirectories), --file (Add specific file)",
+	},
+	"bzr commit": {
+		Name:        "bzr commit",
+		Description: ": --message (Log message), --file (Log message file), --quiet (Suppress output), --verbose (Print extra information), --unchanged (Commit even if no changes)",
+	},
+	"bzr update": {
+		Name:        "bzr update",
+		Description: ": --revision (Update to revision), --quiet (Suppress output), --verbose (Print extra information), --force (Force update), --dry-run (Show what would be done)",
+	},
+	"bzr merge": {
+		Name:        "bzr merge",
+		Description: ": --revision (Merge revision), --quiet (Suppress output), --verbose (Print extra information), --force (Force merge), --dry-run (Show what would be done)",
+	},
+	"bzr push": {
+		Name:        "bzr push",
+		Description: ": --quiet (Suppress output), --verbose (Print extra information), --stacked (Create stacked branch), --use-existing-dir (Use existing directory), --revision (Push at revision)",
+	},
+	"bzr pull": {
+		Name:        "bzr pull",
+		Description: ": --quiet (Suppress output), --verbose (Print extra information), --overwrite (Overwrite local changes), --revision (Pull at revision), --dry-run (Show what would be done)",
+	},
+	"bzr log": {
+		Name:        "bzr log",
+		Description: ": --revision (Show revision), --quiet (Suppress output), --verbose (Print extra information), --short (Show short log), --line (Show log in one line)",
+	},
+	"bzr status": {
+		Name:        "bzr status",
+		Description: ": --quiet (Suppress output), --verbose (Print extra information), --short (Show short status), --revision (Show status at revision), --no-pending (Do not show pending merges)",
+	},
+	"bzr diff": {
+		Name:        "bzr diff",
+		Description: ": --revision (Show diff at revision), --quiet (Suppress output), --verbose (Print extra information), --stat (Show diffstat), --diff-options (Pass options to diff command)",
+	},
+	"bzr revert": {
+		Name:        "bzr revert",
+		Description: ": --revision (Revert to revision), --quiet (Suppress output), --verbose (Print extra information), --no-backup (Do not save backup), --dry-run (Show what would be done)",
+	},
+	"podman run": {
+		Name:        "podman run",
+		Description: ": --detach (Run container in background), --name (Assign name to container), --rm (Remove container after exit), --interactive (Keep STDIN open), --tty (Allocate pseudo-TTY)",
+	},
+	"podman build": {
+		Name:        "podman build",
+		Description: ": --tag (Name and optionally a tag in the 'name:tag' format), --file (Name of the Dockerfile), --quiet (Suppress output), --no-cache (Do not use cache), --rm (Remove intermediate containers)",
+	},
+	"podman pull": {
+		Name:        "podman pull",
+		Description: ": --quiet (Suppress output), --all-tags (Download all tagged images), --disable-content-trust (Skip image verification), --platform (Set platform), --tls-verify (Verify TLS)",
+	},
+	"podman push": {
+		Name:        "podman push",
+		Description: ": --quiet (Suppress output), --all-tags (Push all tagged images), --disable-content-trust (Skip image verification), --platform (Set platform), --tls-verify (Verify TLS)",
+	},
+	"podman images": {
+		Name:        "podman images",
+		Description: ": --quiet (Only show numeric IDs), --all (Show all images), --digests (Show digests), --no-trunc (Do not truncate output), --format (Pretty-print images using a Go template)",
+	},
+	"podman ps": {
+		Name:        "podman ps",
+		Description: ": --all (Show all containers), --quiet (Only display numeric IDs), --no-trunc (Do not truncate output), --size (Display total file sizes), --filter (Filter output based on conditions)",
+	},
+	"podman stop": {
+		Name:        "podman stop",
+		Description: ": --time (Seconds to wait for stop before killing it), --all (Stop all running containers), --ignore (Ignore errors), --latest (Stop the latest container), --cidfile (Read container ID from file)",
+	},
+	"podman start": {
+		Name:        "podman start",
+		Description: ": --attach (Attach container's STDOUT and STDERR), --interactive (Keep STDIN open), --latest (Start the latest container), --all (Start all containers), --detach-keys (Override the key sequence for detaching a container)",
+	},
+	"podman rm": {
+		Name:        "podman rm",
+		Description: ": --force (Force removal of running container), --volumes (Remove anonymous volumes), --all (Remove all containers), --latest (Remove the latest container), --cidfile (Read container ID from file)",
+	},
+	"podman rmi": {
+		Name:        "podman rmi",
+		Description: ": --force (Force removal of image), --all (Remove all images), --prune (Remove dangling images), --no-prune (Do not remove untagged parents), --filter (Filter output based on conditions)",
+	},
+	"rkt": {
+    	Name:        "rkt",
+    	Description: ": --insecure-options (Set insecure options), --dir (Set directory), --local-config (Set local config), --system-config (Set system config), --user-config (Set user config)",
+	},
+	"rkt run": {
+		Name:        "rkt run",
+		Description: ": --insecure-options (Set insecure options), --dir (Set directory), --local-config (Set local config), --system-config (Set system config), --user-config (Set user config)",
+	},
+	"rkt fetch": {
+		Name:        "rkt fetch",
+		Description: ": --insecure-options (Set insecure options), --dir (Set directory), --local-config (Set local config), --system-config (Set system config), --user-config (Set user config)",
+	},
+	"rkt list": {
+		Name:        "rkt list",
+		Description: ": --full (Show full output), --no-legend (Do not print legend), --format (Format output), --sort (Sort output), --filter (Filter output)",
+	},
+	"rkt rm": {
+		Name:        "rkt rm",
+		Description: ": --force (Force removal), --uuid-file (Read UUID from file), --wait (Wait for removal), --quiet (Suppress output), --no-legend (Do not print legend)",
+	},
+	"rkt gc": {
+		Name:        "rkt gc",
+		Description: ": --grace-period (Set grace period), --mark-only (Mark for garbage collection only), --no-legend (Do not print legend), --quiet (Suppress output), --uuid-file (Read UUID from file)",
+	},
+	"rkt stop": {
+		Name:        "rkt stop",
+		Description: ": --force (Force stop), --uuid-file (Read UUID from file), --wait (Wait for stop), --quiet (Suppress output), --no-legend (Do not print legend)",
+	},
+	"minikube": {
+		Name:        "minikube",
+		Description: ": --vm-driver (Set VM driver), --cpus (Set CPUs), --memory (Set memory), --disk-size (Set disk size), --kubernetes-version (Set Kubernetes version)",
+	},
+	"minikube start": {
+		Name:        "minikube start",
+		Description: ": --vm-driver (Set VM driver), --cpus (Set CPUs), --memory (Set memory), --disk-size (Set disk size), --kubernetes-version (Set Kubernetes version)",
+	},
+	"minikube stop": {
+		Name:        "minikube stop",
+		Description: ": --all (Stop all running clusters), --force (Force stop), --wait (Wait for stop), --quiet (Suppress output), --no-legend (Do not print legend)",
+	},
+	"minikube delete": {
+		Name:        "minikube delete",
+		Description: ": --all (Delete all clusters), --force (Force delete), --wait (Wait for delete), --quiet (Suppress output), --no-legend (Do not print legend)",
+	},
+	"minikube status": {
+		Name:        "minikube status",
+		Description: ": --format (Format output), --wait (Wait for status), --quiet (Suppress output), --no-legend (Do not print legend), --cluster (Specify cluster)",
+	},
+	"minikube dashboard": {
+		Name:        "minikube dashboard",
+		Description: ": --url (Display dashboard URL), --wait (Wait for dashboard), --quiet (Suppress output), --no-legend (Do not print legend), --cluster (Specify cluster)",
+	},
+	"minikube addons": {
+		Name:        "minikube addons",
+		Description: ": --enable (Enable addon), --disable (Disable addon), --list (List addons), --wait (Wait for addon), --quiet (Suppress output), --no-legend (Do not print legend)",
+	},
+	"minikube service": {
+		Name:        "minikube service",
+		Description: ": --url (Display service URL), --wait (Wait for service), --quiet (Suppress output), --no-legend (Do not print legend), --namespace (Specify namespace)",
+	},
+	"helm": {
+		Name:        "helm",
+		Description: ": --debug (Enable debug), --home (Set home), --host (Set host), --kube-context (Set kube context), --tiller-namespace (Set tiller namespace)",
+	},
+	"helm repo": {
+		Name:        "helm repo",
+		Description: ": --add (Add repository), --remove (Remove repository), --update (Update repository), --list (List repositories), --wait (Wait for repository), --quiet (Suppress output)",
+	},
+	"helm search": {
+		Name:        "helm search",
+		Description: ": --repo (Specify repository), --version (Specify version), --regexp (Use regular expression), --devel (Include development versions), --wait (Wait for search), --quiet (Suppress output)",
+	},
+	"helm install": {
+		Name:        "helm install",
+		Description: ": --name (Specify release name), --namespace (Specify namespace), --version (Specify version), --values (Specify values file), --wait (Wait for install), --quiet (Suppress output)",
+	},
+	"helm upgrade": {
+		Name:        "helm upgrade",
+		Description: ": --name (Specify release name), --namespace (Specify namespace), --version (Specify version), --values (Specify values file), --wait (Wait for upgrade), --quiet (Suppress output)",
+	},
+	"helm uninstall": {
+		Name:        "helm uninstall",
+		Description: ": --name (Specify release name), --namespace (Specify namespace), --wait (Wait for uninstall), --quiet (Suppress output), --no-legend (Do not print legend)",
+	},
+	"helm list": {
+		Name:        "helm list",
+		Description: ": --all (List all releases), --namespace (Specify namespace), --deployed (List deployed releases), --failed (List failed releases), --pending (List pending releases), --quiet (Suppress output)",
+	},
+	"helm status": {
+		Name:        "helm status",
+		Description: ": --name (Specify release name), --namespace (Specify namespace), --wait (Wait for status), --quiet (Suppress output), --no-legend (Do not print legend)",
+	},
+	"helm rollback": {
+		Name:        "helm rollback",
+		Description: ": --name (Specify release name), --namespace (Specify namespace), --version (Specify version), --wait (Wait for rollback), --quiet (Suppress output), --no-legend (Do not print legend)",
+	},
+	"kubeadm": {
+		Name:        "kubeadm",
+		Description: ": --config (Set config), --kubernetes-version (Set Kubernetes version), --pod-network-cidr (Set pod network CIDR), --service-cidr (Set service CIDR), --token (Set token)",
+	},
+	"kubeadm init": {
+		Name:        "kubeadm init",
+		Description: ": --config (Set config), --kubernetes-version (Set Kubernetes version), --pod-network-cidr (Set pod network CIDR), --service-cidr (Set service CIDR), --token (Set token)",
+	},
+	"kubeadm join": {
+		Name:        "kubeadm join",
+		Description: ": --token (Specify token), --discovery-token-ca-cert-hash (Specify discovery token CA cert hash), --control-plane (Join as control plane), --node-name (Specify node name), --quiet (Suppress output)",
+	},
+	"kubeadm reset": {
+		Name:        "kubeadm reset",
+		Description: ": --force (Force reset), --cert-dir (Specify certificate directory), --cri-socket (Specify CRI socket), --ignore-preflight-errors (Ignore preflight errors), --quiet (Suppress output)",
+	},
+	"kubeadm upgrade": {
+		Name:        "kubeadm upgrade",
+		Description: ": --config (Set config), --kubernetes-version (Set Kubernetes version), --etcd-upgrade (Upgrade etcd), --renew-certificates (Renew certificates), --quiet (Suppress output)",
+	},
+	"kubeadm token": {
+		Name:        "kubeadm token",
+		Description: ": --print-join-command (Print join command), --ttl (Set token TTL), --usages (Specify token usages), --groups (Specify token groups), --quiet (Suppress output)",
+	},
+	"kubeadm config": {
+		Name:        "kubeadm config",
+		Description: ": --print-default (Print default config), --kubeconfig (Specify kubeconfig), --component-config (Manage component config), --upload (Upload config), --quiet (Suppress output)",
+	},
+	"kops": {
+		Name:        "kops",
+		Description: ": --state (Set state), --name (Set name), --zones (Set zones), --node-count (Set node count), --node-size (Set node size)",
+	},
+	"kops create": {
+		Name:        "kops create",
+		Description: ": --state (Set state), --name (Set name), --zones (Set zones), --node-count (Set node count), --node-size (Set node size)",
+	},
+	"kops update": {
+		Name:        "kops update",
+		Description: ": --state (Set state), --name (Set name), --yes (Apply changes), --dry-run (Show what would be done), --quiet (Suppress output)",
+	},
+	"kops delete": {
+		Name:        "kops delete",
+		Description: ": --state (Set state), --name (Set name), --yes (Apply changes), --dry-run (Show what would be done), --quiet (Suppress output)",
+	},
+	"kops get": {
+		Name:        "kops get",
+		Description: ": --state (Set state), --name (Set name), --output (Specify output format), --fields (Specify fields), --quiet (Suppress output)",
+	},
+	"kops validate": {
+		Name:        "kops validate",
+		Description: ": --state (Set state), --name (Set name), --wait (Wait for validation), --quiet (Suppress output), --no-legend (Do not print legend)",
+	},
+	"kops rolling-update": {
+		Name:        "kops rolling-update",
+		Description: ": --state (Set state), --name (Set name), --yes (Apply changes), --dry-run (Show what would be done), --quiet (Suppress output)",
 	},
 	"kubectl": {
 		Name:        "kubectl",
-		Description: "Kubernetes command-line tool",
-		Flags:       ": --kubeconfig (Set kubeconfig), --context (Set context), --namespace (Set namespace), --user (Set user)",
+		Description: ": --kubeconfig (Set kubeconfig), --context (Set context), --namespace (Set namespace), --user (Set user)",
+	},
+	"kubectl get": {
+		Name:        "kubectl get",
+		Description: ": --output (Specify output format), --watch (Watch for changes), --all-namespaces (Show all namespaces), --selector (Specify label selector), --field-selector (Specify field selector)",
+	},
+	"kubectl describe": {
+		Name:        "kubectl describe",
+		Description: ": --namespace (Specify namespace), --selector (Specify label selector), --field-selector (Specify field selector), --show-events (Show events), --quiet (Suppress output)",
+	},
+	"kubectl create": {
+		Name:        "kubectl create",
+		Description: ": --filename (Specify filename), --namespace (Specify namespace), --output (Specify output format), --dry-run (Show what would be done), --quiet (Suppress output)",
+	},
+	"kubectl delete": {
+		Name:        "kubectl delete",
+		Description: ": --filename (Specify filename), --namespace (Specify namespace), --output (Specify output format), --force (Force delete), --grace-period (Set grace period)",
+	},
+	"kubectl apply": {
+		Name:        "kubectl apply",
+		Description: ": --filename (Specify filename), --namespace (Specify namespace), --output (Specify output format), --dry-run (Show what would be done), --force (Force apply)",
+	},
+	"kubectl logs": {
+		Name:        "kubectl logs",
+		Description: ": --follow (Follow logs), --previous (Show previous logs), --timestamps (Show timestamps), --tail (Show last N lines), --since (Show logs since duration)",
+	},
+	"kubectl exec": {
+		Name:        "kubectl exec",
+		Description: ": --stdin (Keep STDIN open), --tty (Allocate pseudo-TTY), --container (Specify container), --namespace (Specify namespace), --quiet (Suppress output)",
+	},
+	"kubectl scale": {
+		Name:        "kubectl scale",
+		Description: ": --replicas (Set number of replicas), --filename (Specify filename), --namespace (Specify namespace), --output (Specify output format), --quiet (Suppress output)",
+	},
+	"kubectl expose": {
+		Name:        "kubectl expose",
+		Description: ": --port (Set port), --target-port (Set target port), --type (Set service type), --name (Set service name), --namespace (Specify namespace)",
 	},
 	"vagrant": {
-		Name:        "vagrant",
-		Description: "Build and maintain portable virtual software development environments",
-		Flags:       ": --version (Show version), --help (Show help), --debug (Enable debug), --machine-readable (Machine readable output)",
+    	Name:        "vagrant",
+    	Description: ": --version (Show version), --help (Show help), --provider (Specify provider), --debug (Enable debug), --no-color (Disable color output)",
+	},
+	"vagrant init": {
+		Name:        "vagrant init",
+		Description: ": --minimal (Create minimal Vagrantfile), --output (Specify output file), --force (Overwrite existing Vagrantfile), --box (Specify box), --box-version (Specify box version)",
+	},
+	"vagrant up": {
+		Name:        "vagrant up",
+		Description: ": --provision (Run provisioners), --no-provision (Do not run provisioners), --provider (Specify provider), --parallel (Enable parallel execution), --destroy-on-error (Destroy on error)",
+	},
+	"vagrant halt": {
+		Name:        "vagrant halt",
+		Description: ": --force (Force halt), --provider (Specify provider), --parallel (Enable parallel execution), --no-color (Disable color output), --debug (Enable debug)",
+	},
+	"vagrant destroy": {
+		Name:        "vagrant destroy",
+		Description: ": --force (Force destroy), --parallel (Enable parallel execution), --no-color (Disable color output), --debug (Enable debug), --graceful (Graceful shutdown)",
+	},
+	"vagrant ssh": {
+		Name:        "vagrant ssh",
+		Description: ": --command (Run command), --plain (Plain mode), --extra-args (Extra SSH arguments), --no-tty (Disable TTY), --no-color (Disable color output)",
+	},
+	"vagrant status": {
+		Name:        "vagrant status",
+		Description: ": --machine-readable (Machine-readable output), --debug (Enable debug), --no-color (Disable color output), --provider (Specify provider), --parallel (Enable parallel execution)",
+	},
+	"vagrant provision": {
+		Name:        "vagrant provision",
+		Description: ": --provision-with (Specify provisioners), --debug (Enable debug), --no-color (Disable color output), --parallel (Enable parallel execution), --force (Force provision)",
+	},
+	"vagrant reload": {
+		Name:        "vagrant reload",
+		Description: ": --provision (Run provisioners), --no-provision (Do not run provisioners), --provider (Specify provider), --parallel (Enable parallel execution), --force (Force reload)",
 	},
 	"packer": {
 		Name:        "packer",
-		Description: "Create identical machine images for multiple platforms from a single source configuration",
-		Flags:       ": --version (Show version), --help (Show help), --debug (Enable debug), --machine-readable (Machine readable output)",
+		Description: ": --version (Show version), --help (Show help), --debug (Enable debug), --color (Enable color output), --log (Enable logging)",
+	},
+	"packer build": {
+		Name:        "packer build",
+		Description: ": --only (Build only specified builders), --except (Exclude specified builders), --parallel-builds (Number of parallel builds), --timestamp-ui (Show timestamps), --var (Set variable)",
+	},
+	"packer validate": {
+		Name:        "packer validate",
+		Description: ": --syntax-only (Check syntax only), --var (Set variable), --var-file (Specify variable file), --except (Exclude specified builders), --only (Validate only specified builders)",
+	},
+	"packer inspect": {
+		Name:        "packer inspect",
+		Description: ": --except (Exclude specified builders), --only (Inspect only specified builders), --var (Set variable), --var-file (Specify variable file), --debug (Enable debug)",
+	},
+	"packer fix": {
+		Name:        "packer fix",
+		Description: ": --var (Set variable), --var-file (Specify variable file), --except (Exclude specified builders), --only (Fix only specified builders), --debug (Enable debug)",
+	},
+	"packer version": {
+		Name:        "packer version",
+		Description: ": --help (Show help), --debug (Enable debug), --color (Enable color output), --log (Enable logging), --timestamp-ui (Show timestamps)",
+	},
+	"packer fmt": {
+		Name:        "packer fmt",
+		Description: ": --check (Check format), --diff (Show differences), --list (List files), --write (Write result), --recursive (Recurse into directories)",
 	},
 	"terraform": {
 		Name:        "terraform",
-		Description: "Infrastructure as Code",
-		Flags:       ": --version (Show version), --help (Show help), --debug (Enable debug), --state (Set state), --var (Set variable)",
+		Description: ": --version (Show version), --help (Show help), --debug (Enable debug), --no-color (Disable color output), --log-level (Set log level)",
+	},
+	"terraform init": {
+		Name:        "terraform init",
+		Description: ": --backend (Configure backend), --force-copy (Force copy), --get (Download modules), --input (Ask for input), --lock (Lock state)",
+	},
+	"terraform plan": {
+		Name:        "terraform plan",
+		Description: ": --destroy (Create destroy plan), --detailed-exitcode (Detailed exit code), --input (Ask for input), --lock (Lock state), --out (Save plan)",
+	},
+	"terraform apply": {
+		Name:        "terraform apply",
+		Description: ": --auto-approve (Skip approval), --input (Ask for input), --lock (Lock state), --parallelism (Set parallelism), --refresh-only (Refresh state only)",
+	},
+	"terraform destroy": {
+		Name:        "terraform destroy",
+		Description: ": --auto-approve (Skip approval), --input (Ask for input), --lock (Lock state), --parallelism (Set parallelism), --refresh-only (Refresh state only)",
+	},
+	"terraform validate": {
+		Name:        "terraform validate",
+		Description: ": --json (Output in JSON), --no-color (Disable color output), --check-variables (Check variables), --backend (Configure backend), --lock (Lock state)",
+	},
+	"terraform fmt": {
+		Name:        "terraform fmt",
+		Description: ": --check (Check format), --diff (Show differences), --list (List files), --write (Write result), --recursive (Recurse into directories)",
+	},
+	"terraform show": {
+		Name:        "terraform show",
+		Description: ": --json (Output in JSON), --no-color (Disable color output), --module-depth (Set module depth), --lock (Lock state), --input (Ask for input)",
+	},
+	"terraform state": {
+		Name:        "terraform state",
+		Description: ": --backup (Create backup), --lock (Lock state), --input (Ask for input), --no-color (Disable color output), --parallelism (Set parallelism)",
+	},
+	"terraform output": {
+		Name:        "terraform output",
+		Description: ": --json (Output in JSON), --no-color (Disable color output), --state (Specify state file), --module (Specify module), --lock (Lock state)",
 	},
 	"ansible": {
 		Name:        "ansible",
-		Description: "Automate IT infrastructure",
-		Flags:       ": --version (Show version), --help (Show help), -v (Verbose), --verbose (Verbose), --inventory (Set inventory)",
+		Description: ": --version (Show version), --help (Show help), --inventory (Specify inventory), --limit (Limit hosts), --module-name (Specify module)",
+	},
+	"ansible-playbook": {
+		Name:        "ansible-playbook",
+		Description: ": --inventory (Specify inventory), --limit (Limit hosts), --tags (Specify tags), --skip-tags (Skip tags), --check (Check mode)",
+	},
+	"ansible-galaxy": {
+		Name:        "ansible-galaxy",
+		Description: ": --role-file (Specify role file), --roles-path (Specify roles path), --server (Specify server), --ignore-errors (Ignore errors), --force (Force operation)",
+	},
+	"ansible-vault": {
+		Name:        "ansible-vault",
+		Description: ": --vault-id (Specify vault ID), --new-vault-id (Specify new vault ID), --ask-vault-pass (Ask for vault password), --vault-password-file (Specify vault password file), --output (Specify output file)",
+	},
+	"ansible-doc": {
+		Name:        "ansible-doc",
+		Description: ": --module-path (Specify module path), --type (Specify type), --list (List modules), --json (Output in JSON), --quiet (Suppress output)",
+	},
+	"ansible-config": {
+		Name:        "ansible-config",
+		Description: ": --list (List configuration), --dump (Dump configuration), --only-changed (Show only changed), --quiet (Suppress output), --json (Output in JSON)",
+	},
+	"ansible-inventory": {
+		Name:        "ansible-inventory",
+		Description: ": --list (List inventory), --graph (Show graph), --host (Show host), --yaml (Output in YAML), --json (Output in JSON)",
 	},
 	"chef": {
 		Name:        "chef",
-		Description: "Automate how infrastructure is configured, deployed, and managed",
-		Flags:       ": --version (Show version), --help (Show help), --config (Set config), --log-level (Set log level), --chef-license (Set chef license)",
+		Description: ": --version (Show version), --help (Show help), --config (Set config), --log-level (Set log level), --environment (Set environment)",
+	},
+	"chef-client": {
+		Name:        "chef-client",
+		Description: ": --config (Set config), --log-level (Set log level), --environment (Set environment), --override-runlist (Override runlist), --json-attributes (Specify JSON attributes)",
+	},
+	"chef-solo": {
+		Name:        "chef-solo",
+		Description: ": --config (Set config), --log-level (Set log level), --environment (Set environment), --override-runlist (Override runlist), --json-attributes (Specify JSON attributes)",
+	},
+	"knife": {
+		Name:        "knife",
+		Description: ": --config (Set config), --log-level (Set log level), --environment (Set environment), --server-url (Set server URL), --user (Specify user)",
+	},
+	"chef-server-ctl": {
+		Name:        "chef-server-ctl",
+		Description: ": --config (Set config), --log-level (Set log level), --environment (Set environment), --server-url (Set server URL), --user (Specify user)",
+	},
+	"chef-apply": {
+		Name:        "chef-apply",
+		Description: ": --config (Set config), --log-level (Set log level), --environment (Set environment), --override-runlist (Override runlist), --json-attributes (Specify JSON attributes)",
+	},
+	"chef-shell": {
+    	Name:        "chef-shell",
+    	Description: ": --client (Run as client), --solo (Run as solo), --config (Specify config file), --log-level (Set log level), --environment (Set environment)",
+	},
+	"chef-zero": {
+		Name:        "chef-zero",
+		Description: ": --port (Set port), --host (Set host), --log-level (Set log level), --daemonize (Run as daemon), --config (Specify config file)",
 	},
 	"puppet": {
 		Name:        "puppet",
-		Description: "Automate the delivery and operation of the software that powers your business",
-		Flags:       ": --version (Show version), --help (Show help), --config (Set config), --log-level (Set log level), --environment (Set environment)",
+		Description: ": --version (Show version), --help (Show help), --config (Set config), --log-level (Set log level), --environment (Set environment)",
+	},
+	"puppet apply": {
+		Name:        "puppet apply",
+		Description: ": --noop (No operation), --verbose (Verbose output), --debug (Debug output), --modulepath (Set module path), --environment (Set environment)",
+	},
+	"puppet agent": {
+		Name:        "puppet agent",
+		Description: ": --test (Run in test mode), --onetime (Run once), --no-daemonize (Do not daemonize), --verbose (Verbose output), --environment (Set environment)",
+	},
+	"puppet cert": {
+		Name:        "puppet cert",
+		Description: ": --list (List certificates), --sign (Sign certificate), --revoke (Revoke certificate), --generate (Generate certificate), --clean (Clean certificate)",
+	},
+	"puppet config": {
+		Name:        "puppet config",
+		Description: ": --print (Print config), --set (Set config), --delete (Delete config), --environment (Set environment), --section (Specify section)",
+	},
+	"puppet describe": {
+		Name:        "puppet describe",
+		Description: ": --list (List resource types), --short (Short description), --providers (List providers), --meta (Show meta parameters), --environment (Set environment)",
+	},
+	"puppet device": {
+		Name:        "puppet device",
+		Description: ": --target (Specify target), --user (Specify user), --password (Specify password), --waitforcert (Wait for certificate), --environment (Set environment)",
+	},
+	"puppet doc": {
+		Name:        "puppet doc",
+		Description: ": --all (Show all documentation), --outputdir (Set output directory), --mode (Set mode), --environment (Set environment), --modulepath (Set module path)",
+	},
+	"puppet facts": {
+		Name:        "puppet facts",
+		Description: ": --terminus (Set terminus), --render-as (Set render format), --environment (Set environment), --modulepath (Set module path), --debug (Debug output)",
+	},
+	"puppet filebucket": {
+		Name:        "puppet filebucket",
+		Description: ": --local (Use local filebucket), --remote (Use remote filebucket), --bucket (Specify bucket), --debug (Debug output), --environment (Set environment)",
+	},
+	"puppet help": {
+		Name:        "puppet help",
+		Description: ": --all (Show all commands), --verbose (Verbose output), --debug (Debug output), --environment (Set environment), --modulepath (Set module path)",
+	},
+	"puppet lookup": {
+		Name:        "puppet lookup",
+		Description: ": --node (Specify node), --facts (Specify facts), --environment (Set environment), --modulepath (Set module path), --debug (Debug output)",
+	},
+	"puppet module": {
+		Name:        "puppet module",
+		Description: ": --install (Install module), --uninstall (Uninstall module), --list (List modules), --search (Search modules), --environment (Set environment)",
+	},
+	"puppet parser": {
+		Name:        "puppet parser",
+		Description: ": --validate (Validate manifests), --dump (Dump AST), --render-as (Set render format), --environment (Set environment), --modulepath (Set module path)",
+	},
+	"puppet resource": {
+		Name:        "puppet resource",
+		Description: ": --types (List resource types), --edit (Edit resource), --environment (Set environment), --modulepath (Set module path), --debug (Debug output)",
+	},
+	"puppet server": {
+		Name:        "puppet server",
+		Description: ": --config (Specify config file), --log-level (Set log level), --daemonize (Run as daemon), --environment (Set environment), --debug (Debug output)",
+	},
+	"puppet status": {
+		Name:        "puppet status",
+		Description: ": --all (Show all statuses), --verbose (Verbose output), --debug (Debug output), --environment (Set environment), --modulepath (Set module path)",
+	},
+	"puppet task": {
+		Name:        "puppet task",
+		Description: ": --run (Run task), --list (List tasks), --environment (Set environment), --modulepath (Set module path), --debug (Debug output)",
+	},
+	"puppet test": {
+		Name:        "puppet test",
+		Description: ": --all (Run all tests), --verbose (Verbose output), --debug (Debug output), --environment (Set environment), --modulepath (Set module path)",
+	},
+	"puppet type": {
+		Name:        "puppet type",
+		Description: ": --list (List types), --providers (List providers), --environment (Set environment), --modulepath (Set module path), --debug (Debug output)",
 	},
 }
