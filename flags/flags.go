@@ -1336,14 +1336,6 @@ var Words = map[string]Flag{
 		Name:        "docker push",
 		Description: ": -a (Push all tagged images in the repository)",
 	},
-	"docker login": {
-		Name:        "docker login",
-		Description: ": -u (Username), -p (Password)",
-	},
-	"docker logout": {
-		Name:        "docker logout",
-		Description: ": none",
-	},
 	"docker tag": {
 		Name:        "docker tag",
 		Description: ": none",
@@ -2094,37 +2086,26 @@ var Words = map[string]Flag{
 	},
 	"fzf": {
 		Name:        "fzf",
-		Description: "A command-line fuzzy finder",
 		Description:       ": --version (Show version), --help (Show help), --height (Set height), --reverse (Reverse layout), --border (Show border), --prompt (Set prompt), --multi (Enable multi-select), --no-mouse (Disable mouse), --inline-info (Show inline info), --preview (Set preview command), --preview-window (Set preview window), --preview-wrap (Wrap preview), --preview-border (Set preview border), --preview-panes (Set preview panes), --preview-lines (Set preview lines), --preview-columns (Set preview columns), --preview-on (Set preview on), --bind (Set key bindings), --expect (Set expected keys), --header (Set header), --header-lines (Set header lines), --ansi (Enable ANSI color), --color (Set color), --no-bold (Disable bold), --tabstop (Set tab stop), --margin (Set margin), --min-height (Set minimum height), --min-width (Set minimum width), --prompt (Set prompt), --pointer (Set pointer), --marker (Set marker), --print-query (Print query), --query (Set query), --select-1 (Select first match), --exit-0 (Exit if no match), --tiebreak (Set tiebreak), --cycle (Enable cycling), --keep-right (Keep right), --keep-bottom (Keep bottom), --sync (Enable sync), --no-clear (Disable clear), --print0 (Print null), --delimiter (Set delimiter), --nth (Set nth), --with-nth (Set with nth), --layout (Set layout), --min (Set minimum), --max (Set maximum), --no-sort (Disable sort), --filter (Set filter)",
 	},
 	"rg": {
 		Name:        "rg",
-		Description: "ripgrep, a line-oriented search tool that recursively searches your current directory for a regex pattern",
 		Description:       ": -i (Ignore case), --ignore-case (Ignore case), -v (Invert match), --invert-match (Invert match), -w (Word regexp), --word-regexp (Word regexp), -r (Replace), --replace (Replace)",
 	},
 	"postman": {
 		Name:        "postman",
-		Description: "A collaboration platform for API development",
 		Description:       ": --help (Show help), --version (Show version)",
 	},
 	"http": {
 		Name:        "http",
-		Description: "HTTPie, a command line HTTP client",
 		Description:       ": --json (Send JSON), --form (Send form), --pretty (Pretty print), --style (Set style), --verbose (Verbose output)",
 	},
 	"jq": {
 		Name:        "jq",
-		Description: "A lightweight and flexible command-line JSON processor",
 		Description:       ": -c (Compact output), --compact-output (Compact output), -r (Raw output), --raw-output (Raw output), -s (Slurp), --slurp (Slurp), -R (Raw input), --raw-input (Raw input)",
-	},
-	"scp": {
-		Name:        "scp",
-		Description: "Secure copy (remote file copy program)",
-		Description:       ": -r (Recursive), -p (Preserve attributes), -q (Quiet mode), -C (Compression), -i (Identity file)",
 	},
 	"hg": {
 		Name:        "hg",
-		Description: "Mercurial version control system",
 		Description:       ": -v (Verbose), --verbose (Verbose), -q (Quiet), --quiet (Quiet), --debug (Debug), --traceback (Traceback)",
 	},
 	"kubernetes": {
