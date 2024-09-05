@@ -1429,8 +1429,300 @@ var Words = map[string]Flag{
 		Description: ": none",
 	},
 	"docker trust": {
-		Name:        "docker trust",
-		Description: ": none",
+    Name:        "docker trust",
+    Description: ": key generate (Generate and load a signing key-pair), key load (Load a private key for signing tags), signer add (Add a signer to a repository), signer remove (Remove a signer from a repository), inspect (Return low-level information about keys and signatures), revoke (Revoke trust for an image), sign (Sign an image), view (View signed tags in a repository)",
+	},
+	"docker compose": {
+		Name:        "docker compose",
+		Description: ": up (Create and start containers), down (Stop and remove containers, networks, images, and volumes), build (Build or rebuild services), ps (List containers), exec (Execute a command in a running container), logs (View output from containers), config (Validate and view the Compose file), pull (Pull service images), push (Push service images), restart (Restart services), rm (Remove stopped containers), run (Run a one-off command), start (Start services), stop (Stop services), top (Display the running processes), version (Show the Docker Compose version information)",
+	},
+	"docker save": {
+		Name:        "docker save",
+		Description: ": -o (Write to a file instead of STDOUT)",
+	},
+	"docker load": {
+		Name:        "docker load",
+		Description: ": -i (Read from a tar archive file), -q (Suppress the load output)",
+	},
+	"docker history": {
+		Name:        "docker history",
+		Description: ": -H (Print sizes and dates in human readable format), --no-trunc (Don’t truncate output), -q (Only show numeric IDs)",
+	},
+	"docker prune": {
+		Name:        "docker prune",
+		Description: ": -a (Remove all unused images, not just dangling ones), -f (Do not prompt for confirmation), --volumes (Prune volumes)",
+	},
+	"docker attach": {
+		Name:        "docker attach",
+		Description: ": --no-stdin (Do not attach STDIN), --sig-proxy (Proxy all received signals to the process)",
+	},
+	"docker diff": {
+		Name:        "docker diff",
+		Description: ": No flags available",
+	},
+	"docker events": {
+		Name:        "docker events",
+		Description: ": --since (Show all events created since timestamp), --until (Stream events until this timestamp), -f (Filter output based on conditions provided), --format (Format the output using the given Go template)",
+	},
+	"docker export": {
+		Name:        "docker export",
+		Description: ": -o (Write to a file instead of STDOUT)",
+	},
+	"docker import": {
+		Name:        "docker import",
+		Description: ": -c (Apply Dockerfile instruction to the created image), -m (Set commit message for imported image), --change (Apply Dockerfile instruction to the created image)",
+	},
+	"docker pause": {
+		Name:        "docker pause",
+		Description: ": No flags available",
+	},
+	"docker unpause": {
+		Name:        "docker unpause",
+		Description: ": No flags available",
+	},
+	"docker update": {
+		Name:        "docker update",
+		Description: ": --cpu-shares (Change CPU shares), --memory (Change memory limit), --restart (Change restart policy), --cpus (Change number of CPUs)",
+	},
+	"docker top": {
+		Name:        "docker top",
+		Description: ": No flags available",
+	},
+	"docker stats": {
+		Name:        "docker stats",
+		Description: ": --all (Show all containers), --no-stream (Disable streaming stats and only pull the first result), --format (Pretty-print images using a Go template)",
+	},
+	"docker wait": {
+		Name:        "docker wait",
+		Description: ": No flags available",
+	},
+	"docker rename": {
+		Name:        "docker rename",
+		Description: ": No flags available",
+	},
+	"docker cp": {
+		Name:        "docker cp",
+		Description: ": -L (Follow symbolic links in the source path)",
+	},
+	"docker login": {
+		Name:        "docker login",
+		Description: ": -u (Username), -p (Password), --password-stdin (Take the password from stdin)",
+	},
+	"docker logout": {
+		Name:        "docker logout",
+		Description: ": No flags available",
+	},
+	"docker search": {
+		Name:        "docker search",
+		Description: ": --filter (Filter output based on conditions provided), --format (Pretty-print search using a Go template), --limit (Max number of search results), --no-trunc (Don’t truncate output)",
+	},
+	"docker volume create": {
+		Name:        "docker volume create",
+		Description: ": --driver (Specify volume driver name), --label (Set metadata for a volume), --opt (Set driver specific options)",
+	},
+	"docker volume inspect": {
+		Name:        "docker volume inspect",
+		Description: ": --format (Format the output using the given Go template)",
+	},
+	"docker volume ls": {
+		Name:        "docker volume ls",
+		Description: ": -f (Filter output based on conditions provided), --format (Pretty-print volumes using a Go template), -q (Only display volume names)",
+	},
+	"docker volume prune": {
+		Name:        "docker volume prune",
+		Description: ": -f (Do not prompt for confirmation)",
+	},
+	"docker volume rm": {
+		Name:        "docker volume rm",
+		Description: ": No flags available",
+	},
+	"docker network create": {
+		Name:        "docker network create",
+		Description: ": --driver (Driver to manage the Network), --subnet (Subnet in CIDR format), --gateway (IPv4 or IPv6 Gateway for the master subnet), --ip-range (Allocate container IP from a sub-range), --label (Set metadata for a network), --opt (Set driver specific options)",
+	},
+	"docker network inspect": {
+		Name:        "docker network inspect",
+		Description: ": --format (Format the output using the given Go template)",
+	},
+	"docker network ls": {
+		Name:        "docker network ls",
+		Description: ": -f (Filter output based on conditions provided), --format (Pretty-print networks using a Go template), -q (Only display network IDs)",
+	},
+	"docker network prune": {
+		Name:        "docker network prune",
+		Description: ": -f (Do not prompt for confirmation)",
+	},
+	"docker network rm": {
+		Name:        "docker network rm",
+		Description: ": No flags available",
+	},
+	"docker plugin create": {
+		Name:        "docker plugin create",
+		Description: ": No flags available",
+	},
+	"docker plugin disable": {
+		Name:        "docker plugin disable",
+		Description: ": -f (Force disable)",
+	},
+	"docker plugin enable": {
+		Name:        "docker plugin enable",
+		Description: ": No flags available",
+	},
+	"docker plugin inspect": {
+		Name:        "docker plugin inspect",
+		Description: ": --format (Format the output using the given Go template)",
+	},
+	"docker plugin install": {
+		Name:        "docker plugin install",
+		Description: ": --alias (Local name for plugin), --disable (Do not enable the plugin on install), --grant-all-permissions (Grant all permissions necessary to run the plugin)",
+	},
+	"docker plugin ls": {
+		Name:        "docker plugin ls",
+		Description: ": -f (Filter output based on conditions provided), --format (Pretty-print plugins using a Go template), -q (Only display plugin IDs)",
+	},
+	"docker plugin push": {
+		Name:        "docker plugin push",
+		Description: ": No flags available",
+	},
+	"docker plugin rm": {
+		Name:        "docker plugin rm",
+		Description: ": -f (Force remove)",
+	},
+	"docker plugin set": {
+		Name:        "docker plugin set",
+		Description: ": No flags available",
+	},
+	"docker plugin upgrade": {
+		Name:        "docker plugin upgrade",
+		Description: ": --skip-remote-check (Do not check if specified plugin matches existing plugin image)",
+	},
+	"docker secret create": {
+		Name:        "docker secret create",
+		Description: ": --label (Set metadata for a secret)",
+	},
+	"docker secret inspect": {
+		Name:        "docker secret inspect",
+		Description: ": --format (Format the output using the given Go template)",
+	},
+	"docker secret ls": {
+		Name:        "docker secret ls",
+		Description: ": -f (Filter output based on conditions provided), --format (Pretty-print secrets using a Go template), -q (Only display secret IDs)",
+	},
+	"docker secret rm": {
+		Name:        "docker secret rm",
+		Description: ": No flags available",
+	},
+	"docker config create": {
+		Name:        "docker config create",
+		Description: ": --label (Set metadata for a config)",
+	},
+	"docker config inspect": {
+		Name:        "docker config inspect",
+		Description: ": --format (Format the output using the given Go template)",
+	},
+	"docker config ls": {
+		Name:        "docker config ls",
+		Description: ": -f (Filter output based on conditions provided), --format (Pretty-print configs using a Go template), -q (Only display config IDs)",
+	},
+	"docker config rm": {
+		Name:        "docker config rm",
+		Description: ": No flags available",
+	},
+	"docker swarm init": {
+		Name:        "docker swarm init",
+		Description: ": --advertise-addr (Advertise address), --autolock (Enable manager autolocking), --cert-expiry (Validity period for node certificates), --dispatcher-heartbeat (Dispatcher heartbeat period), --external-ca (Specifications of one or more certificate signing endpoints), --listen-addr (Listen address), --max-snapshots (Number of additional Raft snapshots to retain), --snapshot-interval (Number of log entries between Raft snapshots)",
+	},
+	"docker swarm join": {
+		Name:        "docker swarm join",
+		Description: ": --advertise-addr (Advertise address), --availability (Availability of the node), --data-path-addr (Address or interface to use for data path traffic), --listen-addr (Listen address), --token (Swarm join token)",
+	},
+	"docker swarm leave": {
+		Name:        "docker swarm leave",
+		Description: ": -f (Force leave)",
+	},
+	"docker swarm update": {
+		Name:        "docker swarm update",
+		Description: ": --autolock (Enable or disable manager autolocking), --cert-expiry (Validity period for node certificates), --dispatcher-heartbeat (Dispatcher heartbeat period), --external-ca (Specifications of one or more certificate signing endpoints), --max-snapshots (Number of additional Raft snapshots to retain), --snapshot-interval (Number of log entries between Raft snapshots)",
+	},
+	"docker node promote": {
+		Name:        "docker node promote",
+		Description: ": No flags available",
+	},
+	"docker node demote": {
+		Name:        "docker node demote",
+		Description: ": No flags available",
+	},
+	"docker node inspect": {
+		Name:        "docker node inspect",
+		Description: ": --format (Format the output using the given Go template)",
+	},
+	"docker node ls": {
+		Name:        "docker node ls",
+		Description: ": -f (Filter output based on conditions provided), --format (Pretty-print nodes using a Go template), -q (Only display node IDs)",
+	},
+	"docker node rm": {
+		Name:        "docker node rm",
+		Description: ": No flags available",
+	},
+	"docker service create": {
+		Name:        "docker service create",
+		Description: ": --name (Service name), --replicas (Number of tasks), --constraint (Placement constraints), --label (Service labels), --mode (Service mode), --publish (Publish a port), --network (Network attachments), --env (Set environment variables), --mount (Attach a filesystem mount to the service), --secret (Specify secrets to expose to the service), --config (Specify configs to expose to the service)",
+	},
+	"docker service inspect": {
+		Name:        "docker service inspect",
+		Description: ": --format (Format the output using the given Go template)",
+	},
+	"docker service ls": {
+		Name:        "docker service ls",
+		Description: ": -f (Filter output based on conditions provided), --format (Pretty-print services using a Go template), -q (Only display service IDs)",
+	},
+	"docker service rm": {
+		Name:        "docker service rm",
+		Description: ": No flags available",
+	},
+	"docker service scale": {
+		Name:        "docker service scale",
+		Description: ": No flags available",
+	},
+	"docker service update": {
+		Name:        "docker service update",
+		Description: ": --image (Service image), --replicas (Number of tasks), --constraint-add (Add placement constraints), --constraint-rm (Remove placement constraints), --label-add (Add service labels), --label-rm (Remove service labels), --publish-add (Add port to be published), --publish-rm (Remove port to be published), --env-add (Add environment variables), --env-rm (Remove environment variables), --mount-add (Add a filesystem mount to the service), --mount-rm (Remove a filesystem mount from the service), --secret-add (Add secrets to the service), --secret-rm (Remove secrets from the service), --config-add (Add configs to the service), --config-rm (Remove configs from the service)",
+	},
+	"docker stack deploy": {
+		Name:        "docker stack deploy",
+		Description: ": --compose-file (Path to a Compose file), --prune (Prune services that are no longer referenced), --with-registry-auth (Send registry authentication details to Swarm agents)",
+	},
+	"docker stack rm": {
+		Name:        "docker stack rm",
+		Description: ": No flags available",
+	},
+	"docker stack services": {
+		Name:        "docker stack services",
+		Description: ": --format (Format the output using the given Go template)",
+	},
+	"docker stack ps": {
+		Name:        "docker stack ps",
+		Description: ": --format (Format the output using the given Go template)",
+	},
+	"docker stack ls": {
+		Name:        "docker stack ls",
+		Description: ": --format (Format the output using the given Go template)",
+	},
+	"docker checkpoint create": {
+		Name:        "docker checkpoint create",
+		Description: ": --checkpoint-dir (Use a custom checkpoint storage directory), --leave-running (Leave the container running after checkpointing)",
+	},
+	"docker checkpoint ls": {
+		Name:        "docker checkpoint ls",
+		Description: ": --checkpoint-dir (Use a custom checkpoint storage directory)",
+	},
+	"docker checkpoint rm": {
+		Name:        "docker checkpoint rm",
+		Description: ": --checkpoint-dir (Use a custom checkpoint storage directory)",
+	},
+	"docker checkpoint restore": {
+		Name:        "docker checkpoint restore",
+		Description: ": --checkpoint-dir (Use a custom checkpoint storage directory), --leave-running (Leave the container running after restoring from checkpoint)",
 	},
 	"systemctl start": {
 		Name:        "systemctl start",
@@ -1795,5 +2087,135 @@ var Words = map[string]Flag{
 	"timedatectl set-ntp": {
 		Name:        "timedatectl set-ntp",
 		Description: ": none",
+	},
+	"lazygit": {
+    Name:        "lazygit",
+    Description: "A simple terminal UI for git commands",
+    Flags:       ": -v (Show version), --version (Show version), -h (Show help), --help (Show help)",
+	},
+	"fzf": {
+		Name:        "fzf",
+		Description: "A command-line fuzzy finder",
+		Flags:       ": --version (Show version), --help (Show help), --height (Set height), --reverse (Reverse layout), --border (Show border), --prompt (Set prompt), --multi (Enable multi-select), --no-mouse (Disable mouse), --inline-info (Show inline info), --preview (Set preview command), --preview-window (Set preview window), --preview-wrap (Wrap preview), --preview-border (Set preview border), --preview-panes (Set preview panes), --preview-lines (Set preview lines), --preview-columns (Set preview columns), --preview-on (Set preview on), --bind (Set key bindings), --expect (Set expected keys), --header (Set header), --header-lines (Set header lines), --ansi (Enable ANSI color), --color (Set color), --no-bold (Disable bold), --tabstop (Set tab stop), --margin (Set margin), --min-height (Set minimum height), --min-width (Set minimum width), --prompt (Set prompt), --pointer (Set pointer), --marker (Set marker), --print-query (Print query), --query (Set query), --select-1 (Select first match), --exit-0 (Exit if no match), --tiebreak (Set tiebreak), --cycle (Enable cycling), --keep-right (Keep right), --keep-bottom (Keep bottom), --sync (Enable sync), --no-clear (Disable clear), --print0 (Print null), --delimiter (Set delimiter), --nth (Set nth), --with-nth (Set with nth), --layout (Set layout), --min (Set minimum), --max (Set maximum), --no-sort (Disable sort), --filter (Set filter)",
+	},
+	"rg": {
+		Name:        "rg",
+		Description: "ripgrep, a line-oriented search tool that recursively searches your current directory for a regex pattern",
+		Flags:       ": -i (Ignore case), --ignore-case (Ignore case), -v (Invert match), --invert-match (Invert match), -w (Word regexp), --word-regexp (Word regexp), -r (Replace), --replace (Replace)",
+	},
+	"postman": {
+		Name:        "postman",
+		Description: "A collaboration platform for API development",
+		Flags:       ": --help (Show help), --version (Show version)",
+	},
+	"http": {
+		Name:        "http",
+		Description: "HTTPie, a command line HTTP client",
+		Flags:       ": --json (Send JSON), --form (Send form), --pretty (Pretty print), --style (Set style), --verbose (Verbose output)",
+	},
+	"jq": {
+		Name:        "jq",
+		Description: "A lightweight and flexible command-line JSON processor",
+		Flags:       ": -c (Compact output), --compact-output (Compact output), -r (Raw output), --raw-output (Raw output), -s (Slurp), --slurp (Slurp), -R (Raw input), --raw-input (Raw input)",
+	},
+	"scp": {
+		Name:        "scp",
+		Description: "Secure copy (remote file copy program)",
+		Flags:       ": -r (Recursive), -p (Preserve attributes), -q (Quiet mode), -C (Compression), -i (Identity file)",
+	},
+	"svn": {
+		Name:        "svn",
+		Description: "Subversion version control system",
+		Flags:       ": --version (Show version), --help (Show help), --quiet (Quiet mode), --verbose (Verbose mode)",
+	},
+	"hg": {
+		Name:        "hg",
+		Description: "Mercurial version control system",
+		Flags:       ": -v (Verbose), --verbose (Verbose), -q (Quiet), --quiet (Quiet), --debug (Debug), --traceback (Traceback)",
+	},
+	"bzr": {
+		Name:        "bzr",
+		Description: "Bazaar version control system",
+		Flags:       ": --version (Show version), --help (Show help), --quiet (Quiet mode), --verbose (Verbose mode)",
+	},
+	"podman": {
+		Name:        "podman",
+		Description: "Tool for managing OCI containers and pods",
+		Flags:       ": --version (Show version), --help (Show help), --log-level (Set log level), --root (Set root), --runroot (Set runroot)",
+	},
+	"rkt": {
+		Name:        "rkt",
+		Description: "App Container runtime",
+		Flags:       ": --insecure-options (Set insecure options), --dir (Set directory), --local-config (Set local config), --system-config (Set system config), --user-config (Set user config)",
+	},
+	"kubernetes": {
+		Name:        "kubernetes",
+		Description: "Container orchestration",
+		Flags:       ": --kubeconfig (Set kubeconfig), --context (Set context), --namespace (Set namespace), --user (Set user)",
+	},
+	"minikube": {
+		Name:        "minikube",
+		Description: "Run Kubernetes locally",
+		Flags:       ": --vm-driver (Set VM driver), --cpus (Set CPUs), --memory (Set memory), --disk-size (Set disk size), --kubernetes-version (Set Kubernetes version)",
+	},
+	"helm": {
+		Name:        "helm",
+		Description: "The Kubernetes Package Manager",
+		Flags:       ": --debug (Enable debug), --home (Set home), --host (Set host), --kube-context (Set kube context), --tiller-namespace (Set tiller namespace)",
+	},
+	"kubeadm": {
+		Name:        "kubeadm",
+		Description: "Bootstrap a Kubernetes cluster",
+		Flags:       ": --config (Set config), --kubernetes-version (Set Kubernetes version), --pod-network-cidr (Set pod network CIDR), --service-cidr (Set service CIDR), --token (Set token)",
+	},
+	"kops": {
+		Name:        "kops",
+		Description: "Kubernetes Operations",
+		Flags:       ": --state (Set state), --name (Set name), --zones (Set zones), --node-count (Set node count), --node-size (Set node size)",
+	},
+	"kubectx": {
+		Name:        "kubectx",
+		Description: "Switch between clusters on kubectl",
+		Flags:       ": -h (Show help), --help (Show help)",
+	},
+	"kubens": {
+		Name:        "kubens",
+		Description: "Switch between Kubernetes namespaces",
+		Flags:       ": -h (Show help), --help (Show help)",
+	},
+	"kubectl": {
+		Name:        "kubectl",
+		Description: "Kubernetes command-line tool",
+		Flags:       ": --kubeconfig (Set kubeconfig), --context (Set context), --namespace (Set namespace), --user (Set user)",
+	},
+	"vagrant": {
+		Name:        "vagrant",
+		Description: "Build and maintain portable virtual software development environments",
+		Flags:       ": --version (Show version), --help (Show help), --debug (Enable debug), --machine-readable (Machine readable output)",
+	},
+	"packer": {
+		Name:        "packer",
+		Description: "Create identical machine images for multiple platforms from a single source configuration",
+		Flags:       ": --version (Show version), --help (Show help), --debug (Enable debug), --machine-readable (Machine readable output)",
+	},
+	"terraform": {
+		Name:        "terraform",
+		Description: "Infrastructure as Code",
+		Flags:       ": --version (Show version), --help (Show help), --debug (Enable debug), --state (Set state), --var (Set variable)",
+	},
+	"ansible": {
+		Name:        "ansible",
+		Description: "Automate IT infrastructure",
+		Flags:       ": --version (Show version), --help (Show help), -v (Verbose), --verbose (Verbose), --inventory (Set inventory)",
+	},
+	"chef": {
+		Name:        "chef",
+		Description: "Automate how infrastructure is configured, deployed, and managed",
+		Flags:       ": --version (Show version), --help (Show help), --config (Set config), --log-level (Set log level), --chef-license (Set chef license)",
+	},
+	"puppet": {
+		Name:        "puppet",
+		Description: "Automate the delivery and operation of the software that powers your business",
+		Flags:       ": --version (Show version), --help (Show help), --config (Set config), --log-level (Set log level), --environment (Set environment)",
 	},
 }
