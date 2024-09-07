@@ -1,7 +1,7 @@
 # what-cmd
 What-cmd is a cross-platform (works on windows and linux) command line tool written in Go that gives you an easy way to find the terminal command (and its flags) you're looking for when you've forgotten it or if you're new to the terminal. It is inspired by which-key and lazygit.
 
-Future releases: In future releases the command list may be expanded further. In addition, improvements to the UX/UI may be considered as well as further functionality.
+Future releases: In future releases the command list may be expanded further. A guide on how to use it on MacOS may be added as well. Improvements to the UX/UI may be considered as well as further functionality.
 
 To use this tool:
 
