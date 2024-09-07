@@ -10,62 +10,63 @@ Install dependencies first (Git and Go programming language).
 in your terminal (linux):
 
 Depending on your package manager:
-Git:
-1. sudo pacman -S git -y
-2. sudo dnf install git-all
-3. sudo apt install git-all
+1. Git:
+   1. sudo pacman -S git -y
+   2. sudo dnf install git-all
+   3. sudo apt install git-all
 
-Go:
-1. sudo pacman -S go
-2. sudo dnf install go
-3. sudo apt install go
+2. Go:
+   1. sudo pacman -S go
+   2. sudo dnf install go
+   3. sudo apt install go
 
 Windows:
-Git:
-go to https://git-scm.com/download/win and the download should start automatically. Then install it.
+1. Git:
+   1. go to https://git-scm.com/download/win and the download should start automatically. Then install it.
 
-Go (in the terminal):
-go to https://golang.org/dl/ and download the latest version of go. Follow this guide to install properly: https://www.geeksforgeeks.org/how-to-install-go-on-windows/
+2. Go (in the terminal):
+   1. go to https://golang.org/dl/ and download the latest version of go. 
+   2. Follow this guide to install properly: https://www.geeksforgeeks.org/how-to-install-go-on-windows/
 
 Linux instructions:
 
 Option A: 
-1. Go to the latest release at https://github.com/OpusMag/what-cmd and download the binary. 
-2. Eun chmod +x ~/Downloads/what-cmd (or whatever dir you downloaded it to) 
-3. Move it to /usr/local/bin/ by running sudo mv what-cmd /usr/local/bin/
+   1. Go to the latest release at https://github.com/OpusMag/what-cmd and download the binary. 
+   2. Eun chmod +x ~/Downloads/what-cmd (or whatever dir you downloaded it to) 
+   3. Move it to /usr/local/bin/ by running sudo mv what-cmd /usr/local/bin/
 
 Option B: 
-1. Enter your terminal. 
-2. Git clone this repository either by using the URL or SSH (you can find this by clicking the green button in the upper right that says '<>Code'). 
-3. Then cd (change directory) into the repository. 
-4. Run the following commands to build and run the CLI:
+   1. Enter your terminal. 
+   2. Git clone this repository either by using the URL or SSH (you can find this by clicking the green button in the upper right that says '<>Code'). 
+   3. Then cd (change directory) into the repository. 
+   4. Run the following commands to build and run the CLI:
 
-   go mod tidy
-   go build -o what-cmd main.go
-   ./what-cmd
+      go mod tidy
+      go build -o what-cmd main.go
+      ./what-cmd
 
-   If you want to use it without the ./ prefix you can do the following:
-   while in the what-cmd directory and after building the binary:
-   sudo mv what-cmd /usr/local/bin/
+      If you want to use it without the ./ prefix you can do the following:
+      while in the what-cmd directory and after building the binary:
+      sudo mv what-cmd /usr/local/bin/
 
-   Confirm it has worked:
-   what-cmd --help (this also shows the available flags)
+      Confirm it has worked:
+      what-cmd --help (this also shows the available flags)
 
 Windows instructions:
 
 Option A: 
-1. Go to the latest release at https://github.com/OpusMag/what-cmd, download the binary what-cmd.exe.
-2. Move the binary to a directory, for example C:\Tools.
-3. Add the directory to PATH by pressing Win + X and selecting System, then click on Advanced system settings. 
-4. In the System properties window, click on the Environment variables button. 
-5. In the Environment Variables window, find the Path variable in the System variables section and select it and click Edit. 
-6. In the Edit Environment Variable window, click New and add the path to the directory where you placed what-cmd.exe (for example c:\Tools), then click OK to close. 
-7. Verify it's working by opening a terminal and running 'what-cmd --help'. 
+   1. Go to the latest release at https://github.com/OpusMag/what-cmd, download the binary what-cmd.exe.
+   2. Move the binary to a directory, for example C:\Tools.
+   3. Add the directory to PATH by pressing Win + X and selecting System, then click on Advanced system settings. 
+   4. In the System properties window, click on the Environment variables button. 
+   5. In the Environment Variables window, find the Path variable in the System variables section and select it and click Edit. 
+   6. In the Edit Environment Variable window, click New and add the path to the directory where you placed what-cmd.exe (for example c:\Tools), then click OK to close. 
+   7. Verify it's working by opening a terminal and running 'what-cmd --help'. 
 
 Option B: 
-1. 'git clone https://github.com/OpusMag/what-cmd' then cd into the repository. 
-2. Run 'go mod tidy' in the terminal to make sure dependencies are installed. 
-3. Then run 'go build -o what-cmd.exe main.go'. Then run the tool with '.\what-cmd.exe'
+   1. 'git clone https://github.com/OpusMag/what-cmd' then cd into the repository. 
+   2. Run 'go mod tidy' in the terminal to make sure dependencies are installed. 
+   3. Then run 'go build -o what-cmd.exe main.go'. Then run the tool with '.\what-cmd.exe'
 
 Further use of the tool(both windows and linux):
 
