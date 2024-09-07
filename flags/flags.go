@@ -2736,4 +2736,288 @@ var Words = map[string]Flag{
 		Name:        "puppet type",
 		Description: ": --list (List types), --providers (List providers), --environment (Set environment), --modulepath (Set module path), --debug (Debug output)",
 	},
+	"wt": {
+    Name:        "wt",
+    Description: ": --new-tab (Open a new tab), --split-pane (Split the current pane), --focus-tab (Focus on a specific tab), --move-focus (Move focus between panes), --resize-pane (Resize the current pane), --close-tab (Close a specific tab), --close-pane (Close the current pane), --list-profiles (List all profiles), --settings (Open the settings file)",
+	},
+	"wt new-tab": {
+		Name:        "wt new-tab",
+		Description: ": --profile (Specify profile), --title (Set tab title), --startingDirectory (Set starting directory), --commandline (Set command line to run)",
+	},
+	"wt split-pane": {
+		Name:        "wt split-pane",
+		Description: ": --horizontal (Split horizontally), --vertical (Split vertically), --size (Set size of the pane), --profile (Specify profile), --title (Set pane title), --startingDirectory (Set starting directory), --commandline (Set command line to run)",
+	},
+	"wt focus-tab": {
+		Name:        "wt focus-tab",
+		Description: ": --index (Specify tab index)",
+	},
+	"wt move-focus": {
+		Name:        "wt move-focus",
+		Description: ": --direction (Specify direction to move focus: left, right, up, down)",
+	},
+	"wt resize-pane": {
+		Name:        "wt resize-pane",
+		Description: ": --direction (Specify direction to resize: left, right, up, down), --amount (Specify amount to resize)",
+	},
+	"wt close-tab": {
+		Name:        "wt close-tab",
+		Description: ": --index (Specify tab index to close)",
+	},
+	"wt close-pane": {
+		Name:        "wt close-pane",
+		Description: ": --force (Force close the pane)",
+	},
+	"wt list-profiles": {
+		Name:        "wt list-profiles",
+		Description: ": --all (List all profiles), --defaults (List default profiles)",
+	},
+	"wt settings": {
+		Name:        "wt settings",
+		Description: ": --file (Specify settings file to open)",
+	},
+	"Get-Help": {
+    Name:        "Get-Help",
+    Description: ": -Name (Specify the name of the cmdlet), -Category (Specify the category of help), -Detailed (Show detailed help), -Full (Show full help), -Examples (Show examples)",
+	},
+	"Get-Process": {
+		Name:        "Get-Process",
+		Description: ": -Name (Specify the name of the process), -Id (Specify the process ID), -ComputerName (Specify the computer name), -FileVersionInfo (Include file version information)",
+	},
+	"Start-Process": {
+		Name:        "Start-Process",
+		Description: ": -FilePath (Specify the file path), -ArgumentList (Specify arguments), -Credential (Specify credentials), -NoNewWindow (Start in the same window), -PassThru (Return the process object)",
+	},
+	"Stop-Process": {
+		Name:        "Stop-Process",
+		Description: ": -Name (Specify the name of the process), -Id (Specify the process ID), -Force (Forcefully stop the process), -PassThru (Return the process object)",
+	},
+	"Get-Service": {
+		Name:        "Get-Service",
+		Description: ": -Name (Specify the name of the service), -DisplayName (Specify the display name of the service), -ComputerName (Specify the computer name), -DependentServices (Include dependent services)",
+	},
+	"Start-Service": {
+		Name:        "Start-Service",
+		Description: ": -Name (Specify the name of the service), -DisplayName (Specify the display name of the service), -PassThru (Return the service object)",
+	},
+	"Stop-Service": {
+		Name:        "Stop-Service",
+		Description: ": -Name (Specify the name of the service), -DisplayName (Specify the display name of the service), -Force (Forcefully stop the service), -PassThru (Return the service object)",
+	},
+	"Restart-Service": {
+		Name:        "Restart-Service",
+		Description: ": -Name (Specify the name of the service), -DisplayName (Specify the display name of the service), -Force (Forcefully restart the service), -PassThru (Return the service object)",
+	},
+	"Set-Service": {
+		Name:        "Set-Service",
+		Description: ": -Name (Specify the name of the service), -DisplayName (Specify the display name of the service), -StartupType (Set the startup type), -Status (Set the status), -Description (Set the description)",
+	},
+	"Get-EventLog": {
+		Name:        "Get-EventLog",
+		Description: ": -LogName (Specify the log name), -Newest (Specify the number of newest entries), -EntryType (Specify the entry type), -Source (Specify the source), -ComputerName (Specify the computer name)",
+	},
+	"Clear-EventLog": {
+		Name:        "Clear-EventLog",
+		Description: ": -LogName (Specify the log name), -ComputerName (Specify the computer name), -Confirm (Prompt for confirmation), -WhatIf (Show what would happen if the command runs)",
+	},
+	"Get-EventSubscriber": {
+		Name:        "Get-EventSubscriber",
+		Description: ": -SourceIdentifier (Specify the source identifier), -Action (Specify the action), -EventName (Specify the event name), -ComputerName (Specify the computer name)",
+	},
+	"Unregister-Event": {
+		Name:        "Unregister-Event",
+		Description: ": -SourceIdentifier (Specify the source identifier), -Force (Forcefully unregister the event), -Confirm (Prompt for confirmation), -WhatIf (Show what would happen if the command runs)",
+	},
+	"Get-Job": {
+		Name:        "Get-Job",
+		Description: ": -Name (Specify the name of the job), -Id (Specify the job ID), -State (Specify the state of the job), -InstanceId (Specify the instance ID), -ComputerName (Specify the computer name)",
+	},
+	"Start-Job": {
+		Name:        "Start-Job",
+		Description: ": -ScriptBlock (Specify the script block), -FilePath (Specify the file path), -Name (Specify the name of the job), -ArgumentList (Specify arguments), -Credential (Specify credentials)",
+	},
+	"Stop-Job": {
+		Name:        "Stop-Job",
+		Description: ": -Name (Specify the name of the job), -Id (Specify the job ID), -Force (Forcefully stop the job), -PassThru (Return the job object)",
+	},
+	"Remove-Job": {
+		Name:        "Remove-Job",
+		Description: ": -Name (Specify the name of the job), -Id (Specify the job ID), -Force (Forcefully remove the job), -PassThru (Return the job object)",
+	},
+	"Get-Variable": {
+		Name:        "Get-Variable",
+		Description: ": -Name (Specify the name of the variable), -ValueOnly (Return only the value), -Include (Include variables matching a pattern), -Exclude (Exclude variables matching a pattern)",
+	},
+	"Set-Variable": {
+		Name:        "Set-Variable",
+		Description: ": -Name (Specify the name of the variable), -Value (Specify the value), -Scope (Specify the scope), -Option (Specify the option), -Force (Forcefully set the variable)",
+	},
+	"Remove-Variable": {
+		Name:        "Remove-Variable",
+		Description: ": -Name (Specify the name of the variable), -Scope (Specify the scope), -Force (Forcefully remove the variable), -Confirm (Prompt for confirmation), -WhatIf (Show what would happen if the command runs)",
+	},
+	"Get-Alias": {
+		Name:        "Get-Alias",
+		Description: ": -Name (Specify the name of the alias), -Definition (Specify the definition), -Description (Specify the description), -Option (Specify the option), -Scope (Specify the scope)",
+	},
+	"Set-Alias": {
+		Name:        "Set-Alias",
+		Description: ": -Name (Specify the name of the alias), -Value (Specify the value), -Description (Specify the description), -Option (Specify the option), -Scope (Specify the scope)",
+	},
+	"Remove-Alias": {
+		Name:        "Remove-Alias",
+		Description: ": -Name (Specify the name of the alias), -Scope (Specify the scope), -Force (Forcefully remove the alias), -Confirm (Prompt for confirmation), -WhatIf (Show what would happen if the command runs)",
+	},
+	"Get-Content": {
+		Name:        "Get-Content",
+		Description: ": -Path (Specify the path), -Filter (Specify the filter), -Include (Include items matching a pattern), -Exclude (Exclude items matching a pattern), -ReadCount (Specify the number of lines to read at a time)",
+	},
+	"Set-Content": {
+		Name:        "Set-Content",
+		Description: ": -Path (Specify the path), -Value (Specify the value), -Force (Forcefully set the content), -NoNewline (Do not add a new line), -Encoding (Specify the encoding)",
+	},
+	"Add-Content": {
+		Name:        "Add-Content",
+		Description: ": -Path (Specify the path), -Value (Specify the value), -Force (Forcefully add the content), -NoNewline (Do not add a new line), -Encoding (Specify the encoding)",
+	},
+	"Clear-Content": {
+		Name:        "Clear-Content",
+		Description: ": -Path (Specify the path), -Force (Forcefully clear the content), -Filter (Specify the filter), -Include (Include items matching a pattern), -Exclude (Exclude items matching a pattern)",
+	},
+	"Get-Item": {
+		Name:        "Get-Item",
+		Description: ": -Path (Specify the path), -Filter (Specify the filter), -Include (Include items matching a pattern), -Exclude (Exclude items matching a pattern), -Force (Forcefully get the item)",
+	},
+	"Set-Item": {
+		Name:        "Set-Item",
+		Description: ": -Path (Specify the path), -Value (Specify the value), -Force (Forcefully set the item), -Credential (Specify credentials), -Confirm (Prompt for confirmation)",
+	},
+	"New-Item": {
+		Name:        "New-Item",
+		Description: ": -Path (Specify the path), -ItemType (Specify the item type), -Value (Specify the value), -Force (Forcefully create the item), -Confirm (Prompt for confirmation)",
+	},
+	"Remove-Item": {
+		Name:        "Remove-Item",
+		Description: ": -Path (Specify the path), -Recurse (Remove items recursively), -Force (Forcefully remove the item), -Confirm (Prompt for confirmation), -WhatIf (Show what would happen if the command runs)",
+	},
+	"Copy-Item": {
+		Name:        "Copy-Item",
+		Description: ": -Path (Specify the path), -Destination (Specify the destination), -Recurse (Copy items recursively), -Force (Forcefully copy the item), -PassThru (Return the copied item)",
+	},
+	"Move-Item": {
+		Name:        "Move-Item",
+		Description: ": -Path (Specify the path), -Destination (Specify the destination), -Force (Forcefully move the item), -PassThru (Return the moved item), -Confirm (Prompt for confirmation)",
+	},
+	"Rename-Item": {
+		Name:        "Rename-Item",
+		Description: ": -Path (Specify the path), -NewName (Specify the new name), -Force (Forcefully rename the item), -PassThru (Return the renamed item), -Confirm (Prompt for confirmation)",
+	},
+	"Get-ChildItem": {
+		Name:        "Get-ChildItem",
+		Description: ": -Path (Specify the path), -Recurse (Get items recursively), -Filter (Specify the filter), -Include (Include items matching a pattern), -Exclude (Exclude items matching a pattern)",
+	},
+	"Get-Location": {
+		Name:        "Get-Location",
+		Description: ": -Path (Specify the path), -StackName (Specify the stack name), -PSDrive (Specify the PowerShell drive), -PSProvider (Specify the PowerShell provider)",
+	},
+	"Set-Location": {
+		Name:        "Set-Location",
+		Description: ": -Path (Specify the path), -StackName (Specify the stack name), -PSDrive (Specify the PowerShell drive), -PSProvider (Specify the PowerShell provider), -PassThru (Return the location object)",
+	},
+	"Push-Location": {
+		Name:        "Push-Location",
+		Description: ": -Path (Specify the path), -StackName (Specify the stack name), -PSDrive (Specify the PowerShell drive), -PSProvider (Specify the PowerShell provider), -PassThru (Return the location object)",
+	},
+	"Pop-Location": {
+		Name:        "Pop-Location",
+		Description: ": -StackName (Specify the stack name), -PassThru (Return the location object), -Confirm (Prompt for confirmation), -WhatIf (Show what would happen if the command runs)",
+	},
+	"Get-History": {
+		Name:        "Get-History",
+		Description: ": -Id (Specify the history ID), -Count (Specify the number of entries), -Newest (Get the newest entries), -ComputerName (Specify the computer name)",
+	},
+	"Invoke-History": {
+		Name:        "Invoke-History",
+		Description: ": -Id (Specify the history ID), -PassThru (Return the command object), -Confirm (Prompt for confirmation), -WhatIf (Show what would happen if the command runs)",
+	},
+	"Clear-History": {
+		Name:        "Clear-History",
+		Description: ": -Id (Specify the history ID), -Count (Specify the number of entries), -Newest (Clear the newest entries), -Confirm (Prompt for confirmation), -WhatIf (Show what would happen if the command runs)",
+	},
+	"Get-PSDrive": {
+		Name:        "Get-PSDrive",
+		Description: ": -Name (Specify the name of the drive), -PSProvider (Specify the PowerShell provider), -Scope (Specify the scope), -Include (Include drives matching a pattern), -Exclude (Exclude drives matching a pattern)",
+	},
+	"New-PSDrive": {
+		Name:        "New-PSDrive",
+		Description: ": -Name (Specify the name of the drive), -PSProvider (Specify the PowerShell provider), -Root (Specify the root), -Description (Specify the description), -Scope (Specify the scope)",
+	},
+	"Remove-PSDrive": {
+		Name:        "Remove-PSDrive",
+		Description: ": -Name (Specify the name of the drive), -Scope (Specify the scope), -Force (Forcefully remove the drive), -Confirm (Prompt for confirmation), -WhatIf (Show what would happen if the command runs)",
+	},
+	"Get-PSProvider": {
+		Name:        "Get-PSProvider",
+		Description: ": -Name (Specify the name of the provider), -PSDrive (Specify the PowerShell drive), -Scope (Specify the scope), -Include (Include providers matching a pattern), -Exclude (Exclude providers matching a pattern)",
+	},
+	"Get-PSBreakpoint": {
+		Name:        "Get-PSBreakpoint",
+		Description: ": -Id (Specify the breakpoint ID), -Script (Specify the script), -Line (Specify the line number), -Command (Specify the command), -Variable (Specify the variable)",
+	},
+	"Set-PSBreakpoint": {
+		Name:        "Set-PSBreakpoint",
+		Description: ": -Script (Specify the script), -Line (Specify the line number), -Command (Specify the command), -Variable (Specify the variable), -Action (Specify the action)",
+	},
+	"Remove-PSBreakpoint": {
+		Name:        "Remove-PSBreakpoint",
+		Description: ": -Id (Specify the breakpoint ID), -Script (Specify the script), -Line (Specify the line number), -Command (Specify the command), -Variable (Specify the variable)",
+	},
+	"Enable-PSBreakpoint": {
+		Name:        "Enable-PSBreakpoint",
+		Description: ": -Id (Specify the breakpoint ID), -Script (Specify the script), -Line (Specify the line number), -Command (Specify the command), -Variable (Specify the variable)",
+	},
+	"Disable-PSBreakpoint": {
+		Name:        "Disable-PSBreakpoint",
+		Description: ": -Id (Specify the breakpoint ID), -Script (Specify the script), -Line (Specify the line number), -Command (Specify the command), -Variable (Specify the variable)",
+	},
+	"Get-PSCallStack": {
+		Name:        "Get-PSCallStack",
+		Description: ": -FunctionName (Specify the function name), -ScriptName (Specify the script name), -Line (Specify the line number), -Command (Specify the command), -ComputerName (Specify the computer name)",
+	},
+	"Get-PSHostProcessInfo": {
+		Name:        "Get-PSHostProcessInfo",
+		Description: ": -Id (Specify the process ID), -Name (Specify the process name), -ComputerName (Specify the computer name), -IncludeUser (Include user information)",
+	},
+	"Enter-PSHostProcess": {
+		Name:        "Enter-PSHostProcess",
+		Description: ": -Id (Specify the process ID), -Name (Specify the process name), -ComputerName (Specify the computer name), -Credential (Specify credentials)",
+	},
+	"Exit-PSHostProcess": {
+		Name:        "Exit-PSHostProcess",
+		Description: ": -Confirm (Prompt for confirmation), -WhatIf (Show what would happen if the command runs)",
+	},
+	"Get-Runspace": {
+		Name:        "Get-Runspace",
+		Description: ": -Id (Specify the runspace ID), -Name (Specify the runspace name), -ComputerName (Specify the computer name), -State (Specify the state of the runspace)",
+	},
+	"Debug-Runspace": {
+		Name:        "Debug-Runspace",
+		Description: ": -Id (Specify the runspace ID), -Name (Specify the runspace name), -ComputerName (Specify the computer name), -Credential (Specify credentials)",
+	},
+	"Get-Module": {
+		Name:        "Get-Module",
+		Description: ": -Name (Specify the name of the module), -ListAvailable (List available modules), -FullyQualifiedName (Specify the fully qualified name), -PSEdition (Specify the PowerShell edition), -Scope (Specify the scope)",
+	},
+	"Import-Module": {
+		Name:        "Import-Module",
+		Description: ": -Name (Specify the name of the module), -FullyQualifiedName (Specify the fully qualified name), -PSEdition (Specify the PowerShell edition), -Scope (Specify the scope), -Force (Forcefully import the module)",
+	},
+	"Remove-Module": {
+		Name:        "Remove-Module",
+		Description: ": -Name (Specify the name of the module), -FullyQualifiedName (Specify the fully qualified name), -PSEdition (Specify the PowerShell edition), -Scope (Specify the scope), -Force (Forcefully remove the module)",
+	},
+	"New-Module": {
+		Name:        "New-Module",
+		Description: ": -Name (Specify the name of the module), -ScriptBlock (Specify the script block), -ArgumentList (Specify arguments), -Credential (Specify credentials), -Description (Specify the description)",
+	},
 }

@@ -9,6 +9,7 @@ import (
     "what-cmd/commands"
     "what-cmd/flags"
     "what-cmd/hotkeys"
+    "path/filepath"
 )
 
 // KeyValuePair structure
