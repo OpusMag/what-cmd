@@ -91,7 +91,10 @@ func distanceAtoB(str1, str2 string) int {
     for row := range distanceMatrix {
         distanceMatrix[row] = make([]int, len2+1)
     }
-
+    // This nested for loop calculates the Levenshtein distance between two strings, str1 and str2.
+    // The Levenshtein distance is a measure of the difference between two sequences, which is the
+    // minimum number of single-character edits (insertions, deletions, or substitutions) required
+    // to change one string into the other. The distance is stored in the distanceMatrix.
     for row := 0; row <= len1; row++ {
         for col := 0; col <= len2; col++ {
             if row == 0 {
