@@ -3020,4 +3020,164 @@ var Words = map[string]Flag{
 		Name:        "New-Module",
 		Description: ": -Name (Specify the name of the module), -ScriptBlock (Specify the script block), -ArgumentList (Specify arguments), -Credential (Specify credentials), -Description (Specify the description)",
 	},
+	"brew install": {
+    	Name:        "brew install",
+    	Description: ": -v (Verbose output), -d (Debug output), -f (Force install), -q (Quiet mode)",
+	},
+	"brew uninstall": {
+ 		Name:        "brew uninstall",
+    	Description: ": -f (Force uninstall), -d (Remove all versions), -v (Verbose output)",
+	},
+	"brew update": {
+		Name:        "brew update",
+		Description: ": -v (Verbose output), -f (Force update), -d (Debug output)",
+	},
+	"brew upgrade": {
+		Name:        "brew upgrade",
+		Description: ": -v (Verbose output), -f (Force upgrade), -d (Debug output)",
+	},
+	"brew list": {
+		Name:        "brew list",
+		Description: ": -1 (List one entry per line), -l (List long format), -r (List reverse order)",
+	},
+	"brew search": {
+		Name:        "brew search",
+		Description: ": -d (Search descriptions), -v (Verbose output), -f (Force search)",
+	},
+	"brew info": {
+		Name:        "brew info",
+		Description: ": -v (Verbose output), -d (Debug output), -f (Force info)",
+	},
+	"brew doctor": {
+		Name:        "brew doctor",
+		Description: ": -v (Verbose output), -d (Debug output), -f (Force doctor)",
+	},
+	"brew cleanup": {
+		Name:        "brew cleanup",
+		Description: ": -n (Dry run), -v (Verbose output), -d (Debug output)",
+	},
+	"brew services start": {
+		Name:        "brew services start",
+		Description: ": -v (Verbose output), -d (Debug output), -f (Force start)",
+	},
+	"brew services stop": {
+		Name:        "brew services stop",
+		Description: ": -v (Verbose output), -d (Debug output), -f (Force stop)",
+	},
+	"brew services restart": {
+		Name:        "brew services restart",
+		Description: ": -v (Verbose output), -d (Debug output), -f (Force restart)",
+	},
+	"brew services list": {
+		Name:        "brew services list",
+		Description: ": -v (Verbose output), -d (Debug output), -f (Force list)",
+	},
+	"defaults read": {
+		Name:        "defaults read",
+		Description: ": -g (Global domain), -app (Application domain), -currentHost (Current host domain)",
+	},
+	"defaults write": {
+		Name:        "defaults write",
+		Description: ": -g (Global domain), -app (Application domain), -currentHost (Current host domain)",
+	},
+	"defaults delete": {
+		Name:        "defaults delete",
+		Description: ": -g (Global domain), -app (Application domain), -currentHost (Current host domain)",
+	},
+	"open": {
+		Name:        "open",
+		Description: ": -a (Application), -e (TextEdit), -t (Default text editor), -n (New instance), -g (Background)",
+	},
+	"diskutil eraseDisk": {
+		Name:        "diskutil eraseDisk",
+		Description: ": -format (File system format), -name (Volume name), -uuid (Volume UUID)",
+	},
+	"diskutil mount": {
+		Name:        "diskutil mount",
+		Description: ": -mountPoint (Mount point), -readonly (Read-only), -noverify (No verification)",
+	},
+	"diskutil unmount": {
+		Name:        "diskutil unmount",
+		Description: ": -force (Force unmount), -quiet (Quiet mode)",
+	},
+	"diskutil eject": {
+		Name:        "diskutil eject",
+		Description: ": -force (Force eject), -quiet (Quiet mode)",
+	},
+	"spctl": {
+		Name:        "spctl",
+		Description: ": --status (Check status), --enable (Enable Gatekeeper), --disable (Disable Gatekeeper), --add (Add rule), --remove (Remove rule)",
+	},
+	"csrutil status": {
+		Name:        "csrutil status",
+		Description: ": (No flags available)",
+	},
+	"csrutil enable": {
+		Name:        "csrutil enable",
+		Description: ": (No flags available)",
+	},
+	"csrutil disable": {
+		Name:        "csrutil disable",
+		Description: ": (No flags available)",
+	},
+	"tmutil listbackups": {
+		Name:        "tmutil listbackups",
+		Description: ": (No flags available)",
+	},
+	"tmutil startbackup": {
+		Name:        "tmutil startbackup",
+		Description: ": -block (Block until backup is complete), -destination (Specify destination), -auto (Automatic backup)",
+	},
+	"tmutil stopbackup": {
+		Name:        "tmutil stopbackup",
+		Description: ": (No flags available)",
+	},
+	"tmutil deletelocalsnapshots": {
+		Name:        "tmutil deletelocalsnapshots",
+		Description: ": (No flags available)",
+	},
+	"tmutil compare": {
+		Name:        "tmutil compare",
+		Description: ": -a (Compare all files), -n (No output), -s (Summary output)",
+	},
+	"tmutil restore": {
+		Name:        "tmutil restore",
+		Description: ": -v (Verbose output), -d (Debug output), -f (Force restore)",
+	},
+	"networksetup": {
+		Name:        "networksetup",
+		Description: ": -listallhardwareports (List all hardware ports), -getinfo (Get network info), -setmanual (Set manual IP), -setdhcp (Set DHCP), -setdnsservers (Set DNS servers)",
+	},
+	"softwareupdate": {
+		Name:        "softwareupdate",
+		Description: ": -l (List updates), -i (Install updates), -d (Download updates), -r (Restart after update), -h (Help)",
+	},
+	"say": {
+		Name:        "say",
+		Description: ": -v (Voice), -o (Output file), -f (Input file), -r (Rate), -i (Interactive mode)",
+	},
+	"screencapture": {
+		Name:        "screencapture",
+		Description: ": -C (Capture cursor), -T (Delay), -x (No sound), -t (File type), -m (Capture main display only)",
+	},
+	"pmset": {
+		Name:        "pmset",
+		Description: ": -g (Get settings), -a (Apply to all), -b (Apply to battery), -c (Apply to charger), -u (Apply to UPS)",
+	},
+	"system_profiler": {
+		Name:        "system_profiler",
+		Description: ": -detailLevel (Detail level), -xml (Output in XML), -timeout (Timeout), -listDataTypes (List data types)",
+	},
+	"sw_vers": {
+		Name:        "sw_vers",
+		Description: ": -productName (Product name), -productVersion (Product version), -buildVersion (Build version)",
+	},
+	"source": {
+		Name:        "source",
+		Description: ": (No flags available)",
+	},
+	". (dot)": {
+		Name:        ". (dot)",
+		Description: ": (No flags available)",
+	},
 }

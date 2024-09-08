@@ -1,34 +1,53 @@
 # what-cmd
-What-cmd is a cross-platform (works on windows and linux) command line tool written in Go that gives you an easy way to find the terminal command (and its flags) you're looking for when you've forgotten it or if you're new to the terminal. It is inspired by which-key and lazygit.
+What-cmd is a cross-platform (windows, linux and macOS) command line tool written in Go that gives you an easy way to find the terminal command (and its flags) you're looking for when you've forgotten it or if you're new to the terminal. It is inspired by which-key and lazygit.
 
-Future releases: In future releases the command list may be expanded further. A guide on how to use it on MacOS may be added as well. Improvements to the UX/UI may be considered as well as further functionality.
+Future releases: In future releases the command list may be expanded further. Improvements to the UX/UI may be considered as well as further functionality.
 
 To use this tool:
 
 Install dependencies first (Git and Go programming language).  
 
-in your terminal (linux):
-
+Linux:
 Depending on your package manager:
-1. Git:
+1. **Git:**
    1. sudo pacman -S git -y
    2. sudo dnf install git-all
    3. sudo apt install git-all
 
-2. Go:
+2. **Git:**
    1. sudo pacman -S go
    2. sudo dnf install go
    3. sudo apt install go
 
 Windows:
-1. Git:
+1. **Git:**
    1. go to https://git-scm.com/download/win and the download should start automatically. Then install it.
 
-2. Go (in the terminal):
+2. **Git:**
    1. go to https://golang.org/dl/ and download the latest version of go. 
    2. Follow this guide to install properly: https://www.geeksforgeeks.org/how-to-install-go-on-windows/
 
-Linux instructions:
+macOS
+1. **Git:**
+   - Using Homebrew (Recommended):
+     ```sh
+     brew install git
+     ```
+   - Using Xcode Command Line Tools:
+     ```sh
+     xcode-select --install
+     ```
+
+2. **Go:**
+   - Using Homebrew (Recommended):
+     ```sh
+     brew install go
+     ```
+   - Manual Installation:
+     - Download the latest version of Go from [https://golang.org/dl/](https://golang.org/dl/)
+     - Open the downloaded `.pkg` file and follow the instructions to install Go.
+
+Linux and macOS instructions for installing what-cmd:
 
 Option A: 
    1. Go to the latest release at https://github.com/OpusMag/what-cmd and download the binary. 
@@ -68,7 +87,7 @@ Option B:
    2. Run 'go mod tidy' in the terminal to make sure dependencies are installed. 
    3. Then run 'go build -o what-cmd.exe main.go'. Then run the tool with '.\what-cmd.exe'
 
-Further use of the tool(both windows and linux):
+General use of the tool(both windows and linux):
 
 1. Options for the command (run "what-cmd -hotkeys" for example to search hotkeys for the terminal)
 
