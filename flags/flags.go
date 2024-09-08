@@ -3172,10 +3172,6 @@ var Words = map[string]Flag{
 		Name:        "sw_vers",
 		Description: ": -productName (Product name), -productVersion (Product version), -buildVersion (Build version)",
 	},
-	"source": {
-		Name:        "source",
-		Description: ": (No flags available)",
-	},
 	". (dot)": {
 		Name:        ". (dot)",
 		Description: ": (No flags available)",

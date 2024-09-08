@@ -890,5 +890,5 @@ var Words = []Command{
     {"pmset", "For macOS: Manage power management settings"},
     {"system_profiler", "For macOS: Display detailed system information"},
     {"sw_vers", "For macOS: Display macOS version information"},
-    {"source", "For macOS: Execute commands from a file in the current shell"},
     {". (dot)", "For macOS: Execute commands from a file in the current shell"},
+}
