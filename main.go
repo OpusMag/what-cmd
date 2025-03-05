@@ -146,8 +146,6 @@ func drawBorder(screen tcell.Screen, x1, y1, x2, y2 int, style tcell.Style) {
     screen.SetContent(x2, y2, tcell.RuneLRCorner, nil, style)
 }
 
-// fetching flags for the selected command to surface crucial configuration options,
-// thereby contextualizing the command for the user.
 func getFlagsForCommand(commandName string) []flags.Flag {
     if commandFlag, exists := flags.Words[commandName]; exists {
         return []flags.Flag{commandFlag}
@@ -156,8 +154,6 @@ func getFlagsForCommand(commandName string) []flags.Flag {
 }
 
 func wrapText(text string, maxWidth int) []string {
-    // We wrap text to maintain readability within UI constraints,
-    // rather than letting long lines disrupt the layout.
     var lines []string
     words := strings.Fields(text)
     if len(words) == 0 {
@@ -177,8 +173,6 @@ func wrapText(text string, maxWidth int) []string {
     return lines
 }
 
-// Handling scroll input lets us adapt the view to many matching items,
-// ensuring that users can easily navigate a potentially large result set.
 func handleScrollInput(event *tcell.EventKey, scrollPosition *int, selectedIndex *int, filteredWords []KeyValuePair, cmdWindowHeight int) {
     switch event.Key() {
     case tcell.KeyUp:
@@ -199,15 +193,11 @@ func handleScrollInput(event *tcell.EventKey, scrollPosition *int, selectedIndex
 }
 
 func main() {
-    // customizing the CLI usage message to clearly convey how the tool should be used,
-    // aiming for clarity rather than relying on default messages.
     flag.CommandLine.Usage = func() {
         fmt.Fprintf(flag.CommandLine.Output(), "Usage of %s:\n", os.Args[0])
         flag.PrintDefaults()
     }
 
-    // setting up flags so that users can choose between different search modes, 
-    // offering flexibility by providing multiple context options.
     useFlags := flag.Bool("flags", false, "search in flags instead of commands")
     useHotkeys := flag.Bool("hotkeys", false, "search in hotkeys instead of commands")
     flag.Parse()
@@ -233,45 +223,30 @@ func main() {
     }
     defer screen.Fini()
 
-    // using a buffer for user input to capture live keystrokes,
-    // which supports an interactive and responsive experience.
     var userInput []rune
 
-    // Tracking the current selection allows us to highlight the most relevant match,
-    // thereby streamlining user navigation through search results.
     selectedIndex := 0
 
-    // Monitoring changes in user input lets us reset the selection,
-    // ensuring that updates reflect fresh user intent.
     inputChanged := false
 
-    // Scroll position management ensures smooth navigation when the results list exceeds visible space.
     scrollPosition := 0
 
     // The main loop continuously refreshes the UI to represent the current state,
     // supporting a dynamic interface that reacts in real time.
     for {
-        // We clear the screen to start with a clean slate, emphasizing current state over stale data.
         screen.Clear()
 
-        // Fetching terminal dimensions allows dynamic layout adjustments,
-        // ensuring the interface adapts well on different screen sizes.
         width, height := screen.Size()
 
-        // calculating window sizes to balance the command list and description sections,
-        // optimizing the use of available terminal space.
         cmdWindowHeight := height - 10
         cmdWindowWidth := width * 2 / 10
         descWindowWidth := width - cmdWindowWidth - 2
 
-        // Choosing specific color styles is intended to create a visually organized interface,
-        // guiding the user’s focus across different UI sections.
         whiteStyle := tcell.StyleDefault.Foreground(tcell.ColorWhite)
         tealStyle := tcell.StyleDefault.Foreground(tcell.ColorTeal)
         highlightStyle := tcell.StyleDefault.Foreground(tcell.ColorLightSkyBlue).Bold(true)
         promptStyle := tcell.StyleDefault.Foreground(tcell.ColorRed).Bold(true)
 
-        // drawing borders to separate interface sections because clear boundaries help users navigate the UI.
         drawBorder(screen, 0, 0, cmdWindowWidth, cmdWindowHeight, tealStyle)
         drawBorder(screen, cmdWindowWidth+1, 0, width-1, cmdWindowHeight, tealStyle)
 
