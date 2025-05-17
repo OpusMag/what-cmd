@@ -11,8 +11,8 @@ what-cmd
 # Output of the go coverage tool when used with LiteIDE
 *.out
 
-# Dependency directories (remove the comment below if you use vendoring)
-# vendor/
+# Envs and the like
+.github
 
 # Go workspace file
 go.work
