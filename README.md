@@ -201,17 +201,17 @@ When designing what-cmd, security was the top priority. However, it's crucial to
 ```bash
 # Safe modes (DEFAULT - no system discovery)
 what-cmd                    # Safe mode (default)
-what-cmd -safe             # Explicit safe mode
-what-cmd -no-discovery     # Explicit no-discovery mode
+what-cmd --safe             # Explicit safe mode
+what-cmd --no-discovery     # Explicit no-discovery mode
 
 # Discovery mode (EXPLICIT OPT-IN - with safety controls)
 what-cmd --enable-discovery # Enable system discovery safely
 
 # Emergency mode (INCIDENT RESPONSE)
-what-cmd -emergency        # Complete shutdown with error signaling
+what-cmd --emergency        # Complete shutdown with error signaling
 
 # Other options
-what-cmd -refresh          # Refresh cache (safe mode only)
+what-cmd --refresh          # Refresh cache (safe mode only)
 ```
 
 ### **Best Practices**
