@@ -35,24 +35,32 @@ type SafetyLimits struct {
 }
 
 func DefaultSafetyLimits() SafetyLimits {
-	return SafetyLimits{
-		MaxConcurrentScans:   5,
-		MaxHelpAttempts:      100,
-		HelpCommandTimeout:   1 * time.Second,
-		MaxExecutablesPerDir: 50,
+	limits := SafetyLimits{
+		MaxConcurrentScans:   3,
+		MaxHelpAttempts:      20,
+		HelpCommandTimeout:   500 * time.Millisecond,
+		MaxExecutablesPerDir: 25,
 		DangerousExecutables: []string{
 			"AppHostNameRegistrationVerifier.exe",
 			"SystemSettingsAdminFlows.exe",
 			"SystemSettingsRemoveDevice.exe",
 			"WindowsActionDialog.exe",
 			"UserAccountControlSettings.exe",
-			"shutdown.exe",
-			"reboot.exe",
-			"format.exe",
-			"del.exe",
-			"rmdir.exe",
+			"shutdown.exe", "reboot.exe", "format.exe",
+			"del.exe", "rmdir.exe", "diskpart.exe",
+			"regedit.exe", "reg.exe", "powercfg.exe",
+			"bcdedit.exe", "dism.exe", "sfc.exe",
+			"chkdsk.exe", "msiexec.exe",
 		},
 	}
+
+	if runtime.GOOS == "windows" {
+		limits.MaxHelpAttempts = 5
+		limits.HelpCommandTimeout = 200 * time.Millisecond
+		limits.MaxExecutablesPerDir = 10
+	}
+
+	return limits
 }
 
 func NewSystemScanner(cfg *config.Config) (*SystemScanner, error) {
@@ -110,30 +118,6 @@ func (s *SystemScanner) isExecutable(filePath string) bool {
 	return mode&0111 != 0
 }
 
-func (s *SystemScanner) getCommonInstallationPaths() []string {
-	switch runtime.GOOS {
-	case "windows":
-		return []string{
-			`C:\Program Files`,
-			`C:\Program Files (x86)`,
-			`C:\Windows\System32`,
-			`C:\ProgramData\chocolatey\bin`,
-		}
-	case "darwin":
-		return []string{
-			"/Applications",
-			"/usr/local/bin",
-			"/opt/homebrew/bin",
-		}
-	default:
-		return []string{
-			"/usr/bin",
-			"/usr/local/bin",
-			"/snap/bin",
-		}
-	}
-}
-
 func (s *SystemScanner) getDefaultConfigFiles() []string {
 	homeDir, _ := os.UserHomeDir()
 
@@ -151,6 +135,11 @@ func (s *SystemScanner) getDefaultConfigFiles() []string {
 			filepath.Join(homeDir, ".profile"),
 			filepath.Join(homeDir, ".bash_aliases"),
 			filepath.Join(homeDir, ".gitconfig"),
+			filepath.Join(homeDir, ".config", "fish", "config.fish"),
+			"/etc/bash.bashrc",
+			"/etc/bashrc",
+			"/etc/profile",
+			"/etc/zsh/zshrc",
 		}
 	}
 }
@@ -190,7 +179,6 @@ func (s *SystemScanner) parseShellConfig(configPath string) ([]models.Item, erro
 
 		if matches := functionPattern.FindStringSubmatch(line); matches != nil {
 			functionName := matches[1]
-
 			items = append(items, models.Item{
 				Name:        functionName,
 				Description: "User-defined shell function",
@@ -201,10 +189,9 @@ func (s *SystemScanner) parseShellConfig(configPath string) ([]models.Item, erro
 
 		if matches := bashFunctionPattern.FindStringSubmatch(line); matches != nil {
 			functionName := matches[1]
-
 			items = append(items, models.Item{
 				Name:        functionName,
-				Description: "User-defined shell function",
+				Description: fmt.Sprintf("Shell function: %s", functionName),
 				Type:        models.UserFunction,
 				Source:      configPath,
 			})
@@ -254,6 +241,11 @@ func (s *SystemScanner) inferDescriptionFromName(cmdName string) string {
 		"clang":   "C language family frontend",
 		"make":    "Build automation tool",
 		"cmake":   "Cross-platform build system",
+		"tldr":    "Simplified command examples",
+		"bat":     "Enhanced cat with syntax highlighting",
+		"fd":      "Fast alternative to find",
+		"rg":      "Fast text search tool",
+		"exa":     "Modern ls replacement",
 	}
 
 	lowerName := strings.ToLower(cmdName)
@@ -281,7 +273,47 @@ func (s *SystemScanner) deduplicateItems(items []models.Item) []models.Item {
 	return unique
 }
 
+func (s *SystemScanner) isPathAllowed(dirPath string) bool {
+	if runtime.GOOS != "windows" {
+		return true
+	}
+
+	if !s.config.Discovery.WindowsSafeMode {
+		return true
+	}
+
+	lowerPath := strings.ToLower(filepath.Clean(dirPath))
+
+	for _, blockedPath := range s.config.Discovery.WindowsBlockedPaths {
+		blockedLower := strings.ToLower(filepath.Clean(blockedPath))
+		if strings.HasPrefix(lowerPath, blockedLower) {
+			return false
+		}
+	}
+
+	for _, allowedPath := range s.config.Discovery.WindowsAllowedPaths {
+		allowedLower := strings.ToLower(filepath.Clean(allowedPath))
+		if strings.HasPrefix(lowerPath, allowedLower) {
+			return true
+		}
+	}
+
+	for _, customPath := range s.config.Discovery.CustomPaths {
+		customLower := strings.ToLower(filepath.Clean(customPath))
+		if strings.HasPrefix(lowerPath, customLower) {
+			return true
+		}
+	}
+
+	return false
+}
+
 func (s *SystemScanner) scanPATHExecutables(ctx context.Context) ([]models.Item, error) {
+	if runtime.GOOS == "windows" && s.config.Discovery.WindowsSafeMode {
+		fmt.Fprintf(os.Stderr, "Windows Safe Mode: Skipping PATH scan for security\n")
+		return []models.Item{}, nil
+	}
+
 	pathEnv := os.Getenv("PATH")
 	if pathEnv == "" {
 		return nil, nil
@@ -306,9 +338,14 @@ func (s *SystemScanner) scanPATHExecutables(ctx context.Context) ([]models.Item,
 			continue
 		}
 
+		if !s.isPathAllowed(path) {
+			fmt.Fprintf(os.Stderr, "SECURITY: Skipping disallowed PATH directory: %s\n", path)
+			continue
+		}
+
 		pathItems, err := s.scanDirectory(path, models.SystemCommand)
 		if err != nil {
-			continue // Skip directories we can't read
+			continue
 		}
 
 		items = append(items, pathItems...)
@@ -318,6 +355,11 @@ func (s *SystemScanner) scanPATHExecutables(ctx context.Context) ([]models.Item,
 }
 
 func (s *SystemScanner) scanCommonPaths(ctx context.Context) ([]models.Item, error) {
+	if runtime.GOOS == "windows" && s.config.Discovery.WindowsSafeMode {
+		fmt.Fprintf(os.Stderr, "Windows Safe Mode: Skipping common paths scan for security\n")
+		return []models.Item{}, nil
+	}
+
 	var items []models.Item
 	commonPaths := s.getCommonInstallationPaths()
 
@@ -326,6 +368,11 @@ func (s *SystemScanner) scanCommonPaths(ctx context.Context) ([]models.Item, err
 		case <-ctx.Done():
 			return items, ctx.Err()
 		default:
+		}
+
+		if !s.isPathAllowed(path) {
+			fmt.Fprintf(os.Stderr, "SECURITY: Skipping disallowed common directory: %s\n", path)
+			continue
 		}
 
 		pathItems, err := s.scanDirectory(path, models.SystemCommand)
@@ -367,12 +414,100 @@ func (s *SystemScanner) scanCustomPaths(ctx context.Context) ([]models.Item, err
 	var items []models.Item
 
 	for _, path := range s.config.Discovery.CustomPaths {
+		select {
+		case <-ctx.Done():
+			return items, ctx.Err()
+		default:
+		}
+
+		if !s.isPathAllowed(path) {
+			fmt.Fprintf(os.Stderr, "SECURITY: Skipping disallowed custom directory: %s\n", path)
+			continue
+		}
+
 		pathItems, err := s.scanDirectory(path, models.CustomCommand)
 		if err != nil {
+			fmt.Fprintf(os.Stderr, "Warning: Failed to scan custom path %s: %v\n", path, err)
 			continue
 		}
 
 		items = append(items, pathItems...)
+	}
+
+	return items, nil
+}
+
+func (s *SystemScanner) scanDirectory(dirPath string, itemType models.ItemType) ([]models.Item, error) {
+	if !s.isPathAllowed(dirPath) {
+		fmt.Fprintf(os.Stderr, "SECURITY: Directory access denied: %s\n", dirPath)
+		return []models.Item{}, nil
+	}
+	if _, err := os.Stat(dirPath); os.IsNotExist(err) {
+		return []models.Item{}, nil
+	} else if err != nil {
+		return nil, fmt.Errorf("cannot access directory %s: %w", dirPath, err)
+	}
+
+	var items []models.Item
+	helpAttemptCount := 0
+
+	entries, err := os.ReadDir(dirPath)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read directory %s: %w", dirPath, err)
+	}
+
+	processedCount := 0
+	for _, entry := range entries {
+		if processedCount >= s.safetyLimits.MaxExecutablesPerDir {
+			fmt.Fprintf(os.Stderr, "SAFETY: Reached max executables limit for directory: %s\n", dirPath)
+			break
+		}
+
+		if entry.IsDir() {
+			continue
+		}
+
+		filename := entry.Name()
+
+		if s.isDangerousExecutable(filename) {
+			fmt.Fprintf(os.Stderr, "SAFETY: Blocked dangerous executable: %s in %s\n", filename, dirPath)
+			continue
+		}
+
+		fullPath := filepath.Join(dirPath, filename)
+
+		if s.shouldExcludeFile(filename) {
+			continue
+		}
+
+		if !s.isExecutable(fullPath) {
+			continue
+		}
+
+		var description string
+		if s.shouldSkipHelpAttempt(filename) {
+			description = s.inferDescriptionFromName(filename)
+		} else if helpAttemptCount < s.safetyLimits.MaxHelpAttempts {
+			description = s.getSafeCommandDescription(filename, fullPath)
+			if description != "" {
+				helpAttemptCount++
+			}
+		} else {
+			description = s.inferDescriptionFromName(filename)
+		}
+
+		items = append(items, models.Item{
+			Name:        filename,
+			Description: description,
+			Type:        itemType,
+			Source:      dirPath,
+		})
+
+		processedCount++
+	}
+
+	if len(items) > 0 {
+		fmt.Fprintf(os.Stderr, "Scanned %s: found %d executables\n", dirPath, len(items))
 	}
 
 	return items, nil
@@ -385,8 +520,14 @@ func (s *SystemScanner) DiscoverItems(ctx context.Context) ([]models.Item, error
 	if s.shouldUseCachedResults() {
 		if items, err := s.cache.GetItems(); err == nil && len(items) > 0 {
 			s.discoveredItems = items
+			fmt.Fprintf(os.Stderr, "Using cached discovery results: %d items\n", len(items))
 			return items, nil
 		}
+	}
+
+	fmt.Fprintf(os.Stderr, "Starting system discovery...\n")
+	if runtime.GOOS == "windows" && s.config.Discovery.WindowsSafeMode {
+		fmt.Fprintf(os.Stderr, "Windows Safe Mode: Only scanning user-configured paths\n")
 	}
 
 	var allItems []models.Item
@@ -395,39 +536,25 @@ func (s *SystemScanner) DiscoverItems(ctx context.Context) ([]models.Item, error
 	itemsChan := make(chan []models.Item, 4)
 	errorsChan := make(chan error, 4)
 
-	discoveryCtx, cancel := context.WithTimeout(ctx, 30*time.Second)
+	discoveryCtx, cancel := context.WithTimeout(ctx, 15*time.Second)
 	defer cancel()
 
-	if s.config.Discovery.ScanPATH {
-		wg.Add(1)
-		go s.safeExecuteDiscovery(&wg, semaphore, discoveryCtx, itemsChan, errorsChan,
-			func(ctx context.Context) ([]models.Item, error) {
-				return s.scanPATHExecutables(ctx)
-			})
+	discoveryTasks := []struct {
+		name     string
+		enabled  bool
+		taskFunc func(context.Context) ([]models.Item, error)
+	}{
+		{"CustomPaths", len(s.config.Discovery.CustomPaths) > 0, s.scanCustomPaths},
+		{"PATH", s.config.Discovery.ScanPATH, s.scanPATHExecutables},
+		{"CommonPaths", s.config.Discovery.ScanCommonPaths, s.scanCommonPaths},
+		{"ShellConfigs", s.config.Discovery.ScanShellConfigs, s.scanShellConfigs},
 	}
 
-	if s.config.Discovery.ScanCommonPaths {
-		wg.Add(1)
-		go s.safeExecuteDiscovery(&wg, semaphore, discoveryCtx, itemsChan, errorsChan,
-			func(ctx context.Context) ([]models.Item, error) {
-				return s.scanCommonPaths(ctx)
-			})
-	}
-
-	if s.config.Discovery.ScanShellConfigs {
-		wg.Add(1)
-		go s.safeExecuteDiscovery(&wg, semaphore, discoveryCtx, itemsChan, errorsChan,
-			func(ctx context.Context) ([]models.Item, error) {
-				return s.scanShellConfigs(ctx)
-			})
-	}
-
-	if len(s.config.Discovery.CustomPaths) > 0 {
-		wg.Add(1)
-		go s.safeExecuteDiscovery(&wg, semaphore, discoveryCtx, itemsChan, errorsChan,
-			func(ctx context.Context) ([]models.Item, error) {
-				return s.scanCustomPaths(ctx)
-			})
+	for _, task := range discoveryTasks {
+		if task.enabled {
+			wg.Add(1)
+			go s.safeExecuteDiscovery(&wg, semaphore, discoveryCtx, itemsChan, errorsChan, task.taskFunc)
+		}
 	}
 
 	go func() {
@@ -463,6 +590,7 @@ func (s *SystemScanner) DiscoverItems(ctx context.Context) ([]models.Item, error
 	s.discoveredItems = allItems
 	s.lastScan = time.Now()
 
+	fmt.Fprintf(os.Stderr, "Discovery completed: %d items found\n", len(allItems))
 	return allItems, nil
 }
 
@@ -499,79 +627,22 @@ func (s *SystemScanner) safeExecuteDiscovery(
 	}()
 }
 
-func (s *SystemScanner) scanDirectory(dirPath string, itemType models.ItemType) ([]models.Item, error) {
-	var items []models.Item
-	helpAttemptCount := 0
-
-	entries, err := os.ReadDir(dirPath)
-	if err != nil {
-		return nil, err
-	}
-
-	processedCount := 0
-	for _, entry := range entries {
-		if processedCount >= s.safetyLimits.MaxExecutablesPerDir {
-			break
-		}
-
-		if entry.IsDir() {
-			continue
-		}
-
-		filename := entry.Name()
-		fullPath := filepath.Join(dirPath, filename)
-
-		if s.isDangerousExecutable(filename) {
-			continue
-		}
-
-		if s.shouldExcludeFile(filename) {
-			continue
-		}
-
-		if !s.isExecutable(fullPath) {
-			continue
-		}
-
-		var description string
-		if helpAttemptCount < s.safetyLimits.MaxHelpAttempts {
-			description = s.getSafeCommandDescription(filename, fullPath)
-			if description != "" {
-				helpAttemptCount++
-			}
-		} else {
-			description = s.inferDescriptionFromName(filename)
-		}
-
-		items = append(items, models.Item{
-			Name:        filename,
-			Description: description,
-			Type:        itemType,
-			Source:      dirPath,
-		})
-
-		processedCount++
-	}
-
-	return items, nil
-}
-
 func (s *SystemScanner) isDangerousExecutable(filename string) bool {
 	lowerName := strings.ToLower(filename)
 
 	for _, dangerous := range s.safetyLimits.DangerousExecutables {
-		if strings.ToLower(dangerous) == lowerName {
+		if lowerName == strings.ToLower(dangerous) {
 			return true
 		}
 	}
 
 	dangerousPatterns := []string{
-		"systemsettings",
-		"useraccount",
-		"shutdown",
-		"format",
-		"diskpart",
-		"regedit",
+		"systemsettings", "useraccount", "apphostname", "windowsaction",
+		"adminflows", "removedevice", "registrationverifier",
+		"shutdown", "format", "diskpart", "regedit", "powercfg",
+		"bcdedit", "dism", "sfc", "chkdsk", "microsoft", "windows",
+		"setup", "install", "uninstall", "msiexec", "config",
+		"admin", "control", "manage",
 	}
 
 	for _, pattern := range dangerousPatterns {
@@ -583,8 +654,36 @@ func (s *SystemScanner) isDangerousExecutable(filename string) bool {
 	return false
 }
 
+func (s *SystemScanner) shouldSkipHelpAttempt(filename string) bool {
+	lower := strings.ToLower(filename)
+
+	neverExecute := []string{
+		"apphostname", "systemsettings", "useraccount", "windowsaction",
+		"adminflows", "removedevice", "registrationverifier",
+		"shutdown", "format", "diskpart", "regedit", "powercfg",
+		"bcdedit", "dism", "sfc", "chkdsk", "msiexec",
+		"setup", "install", "uninstall", "config", "admin",
+		"control", "manage", "microsoft", "windows",
+		".dll", ".sys", ".msi", ".bat", ".cmd", ".ps1", ".vbs", ".js",
+	}
+
+	for _, pattern := range neverExecute {
+		if strings.Contains(lower, pattern) {
+			return true
+		}
+	}
+
+	return false
+}
+
 func (s *SystemScanner) getSafeCommandDescription(cmdName, cmdPath string) string {
 	if s.shouldSkipHelpAttempt(cmdName) {
+		fmt.Fprintf(os.Stderr, "SAFETY: Blocked help attempt for: %s\n", cmdName)
+		return s.inferDescriptionFromName(cmdName)
+	}
+
+	if s.isDangerousExecutable(filepath.Base(cmdPath)) {
+		fmt.Fprintf(os.Stderr, "SAFETY: Blocked dangerous path: %s\n", cmdPath)
 		return s.inferDescriptionFromName(cmdName)
 	}
 
@@ -599,34 +698,13 @@ func (s *SystemScanner) getSafeCommandDescription(cmdName, cmdPath string) strin
 	return s.inferDescriptionFromName(cmdName)
 }
 
-func (s *SystemScanner) shouldSkipHelpAttempt(filename string) bool {
-	lower := strings.ToLower(filename)
-
-	skipPatterns := []string{
-		"apphostname",
-		"systemsettings",
-		"useraccount",
-		"windows",
-		"microsoft",
-		".dll",
-		".sys",
-		"setup",
-		"install",
-		"uninstall",
-		"config",
-		"admin",
-	}
-
-	for _, pattern := range skipPatterns {
-		if strings.Contains(lower, pattern) {
-			return true
-		}
-	}
-
-	return false
-}
-
 func (s *SystemScanner) getSafeHelpFromCommand(cmdPath string) string {
+	filename := filepath.Base(cmdPath)
+	if s.isDangerousExecutable(filename) || s.shouldSkipHelpAttempt(filename) {
+		fmt.Fprintf(os.Stderr, "SAFETY: Final block for: %s\n", filename)
+		return ""
+	}
+
 	ctx, cancel := context.WithTimeout(context.Background(), s.safetyLimits.HelpCommandTimeout)
 	defer cancel()
 
@@ -640,25 +718,51 @@ func (s *SystemScanner) getSafeHelpFromCommand(cmdPath string) string {
 		}
 
 		cmd := exec.CommandContext(ctx, cmdPath, flag)
-		cmd.Env = []string{}
+		cmd.Env = []string{"PATH="}
 
-		output, err := cmd.Output()
+		output, err := cmd.CombinedOutput()
 		if err != nil {
 			continue
 		}
 
-		lines := strings.Split(string(output), "\n")
+		outputStr := string(output)
+		if len(outputStr) > 10000 {
+			outputStr = outputStr[:10000]
+		}
+
+		lines := strings.Split(outputStr, "\n")
 		for _, line := range lines {
 			line = strings.TrimSpace(line)
 			if len(line) > 10 && len(line) < 200 &&
 				!strings.Contains(strings.ToLower(line), "usage:") &&
-				!strings.Contains(strings.ToLower(line), "error:") {
+				!strings.Contains(strings.ToLower(line), "error:") &&
+				!strings.Contains(strings.ToLower(line), "fatal:") {
 				return line
 			}
 		}
 	}
 
 	return ""
+}
+
+func (s *SystemScanner) getCommonInstallationPaths() []string {
+	switch runtime.GOOS {
+	case "windows":
+		return []string{
+			`C:\ProgramData\chocolatey\bin`,
+		}
+	case "darwin":
+		return []string{
+			"/usr/local/bin",
+			"/opt/homebrew/bin",
+		}
+	default:
+		return []string{
+			"/usr/bin",
+			"/usr/local/bin",
+			"/snap/bin",
+		}
+	}
 }
 
 func (s *SystemScanner) ClearCache() error {
