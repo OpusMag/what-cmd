@@ -51,6 +51,7 @@ type Config struct {
 	EmergencyMode   bool
 	RefreshCache    bool
 	ConfigPath      string
+	ShowHelp        bool
 }
 
 type App struct {
@@ -58,57 +59,61 @@ type App struct {
 	config  *Config
 }
 
-func main() {
-	cfg := parseFlags()
+type Scanner interface {
+	DiscoverItems(context.Context) ([]models.Item, error)
+}
 
-	appConfig, err := config.LoadConfig(cfg.ConfigPath)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Failed to load configuration: %v\n", err)
-		os.Exit(1)
-	}
-
-	operationMode := determineOperationMode(cfg)
-	logOperationMode(operationMode)
-
-	configureDiscovery(appConfig, operationMode)
-
-	items := loadBuiltinItems(cfg)
-
-	if appConfig.Discovery.Enabled {
-		if err := performSystemDiscovery(&items, appConfig, operationMode, cfg.RefreshCache); err != nil {
-			fmt.Fprintf(os.Stderr, "System discovery failed safely: %v\n", err)
-		}
-	}
-
-	app := NewApp(search.NewMatcher(items), cfg)
-	if err := app.Run(); err != nil {
-		fmt.Fprintf(os.Stderr, "Application error: %v\n", err)
-		os.Exit(1)
-	}
+type CacheClearer interface {
+	ClearCache() error
 }
 
 func parseFlags() *Config {
 	cfg := &Config{}
 
-	flag.BoolVar(&cfg.UseFlags, "flags", false, "search in flags instead of commands")
-	flag.BoolVar(&cfg.UseHotkeys, "hotkeys", false, "search in hotkeys instead of commands")
+	flag.BoolVar(&cfg.UseFlags, "flags", false, "Search in flags instead of commands")
+	flag.BoolVar(&cfg.UseHotkeys, "hotkeys", false, "Search in hotkeys instead of commands")
 
-	flag.BoolVar(&cfg.EnableDiscovery, "enable-discovery", false, "enable system discovery with safety controls")
-	flag.BoolVar(&cfg.UnsafeMode, "unsafe", false, "enable system discovery with minimal safety (NOT RECOMMENDED)")
+	flag.BoolVar(&cfg.EnableDiscovery, "enable-discovery", false,
+		"Enable system discovery with comprehensive safety controls")
+	flag.BoolVar(&cfg.UnsafeMode, "unsafe", false,
+		"Enable system discovery with minimal safety controls (NOT RECOMMENDED)")
 
-	flag.BoolVar(&cfg.SafeMode, "safe", true, "run in safe mode (disables system discovery)")
-	flag.BoolVar(&cfg.NoDiscovery, "no-discovery", false, "explicitly disable system discovery")
-	flag.BoolVar(&cfg.EmergencyMode, "emergency", false, "emergency mode - complete operational shutdown")
+	flag.BoolVar(&cfg.SafeMode, "safe", false,
+		"Explicitly run in safe mode - disables all system discovery")
+	flag.BoolVar(&cfg.NoDiscovery, "no-discovery", false,
+		"Explicitly disable system discovery")
+	flag.BoolVar(&cfg.EmergencyMode, "emergency", false,
+		"Emergency mode - complete operational shutdown")
 
-	flag.BoolVar(&cfg.RefreshCache, "refresh", false, "force refresh of system discovery cache")
-	flag.StringVar(&cfg.ConfigPath, "config", "", "path to configuration file")
+	flag.BoolVar(&cfg.RefreshCache, "refresh", false,
+		"Force refresh of system discovery cache")
+	flag.StringVar(&cfg.ConfigPath, "config", "",
+		"Path to JSON configuration file")
+
+	flag.BoolVar(&cfg.ShowHelp, "help", false, "Show this help message")
+
+	flag.Usage = func() {
+		fmt.Fprintf(os.Stderr, "Usage: %s [OPTIONS]\n\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "what-cmd is a command-line tool for discovering and searching terminal commands.\n\n")
+		fmt.Fprintf(os.Stderr, "OPTIONS:\n")
+		flag.PrintDefaults()
+		fmt.Fprintf(os.Stderr, "\nSECURITY MODES:\n")
+		fmt.Fprintf(os.Stderr, "  Default (safe):     Uses only built-in commands (RECOMMENDED)\n")
+		fmt.Fprintf(os.Stderr, "  --enable-discovery: Safe system discovery with comprehensive controls\n")
+		fmt.Fprintf(os.Stderr, "  --unsafe:           Minimal safety controls (NOT RECOMMENDED)\n")
+		fmt.Fprintf(os.Stderr, "  --emergency:        Complete operational shutdown\n")
+		fmt.Fprintf(os.Stderr, "\nEXAMPLES:\n")
+		fmt.Fprintf(os.Stderr, "  %s                              # Safe mode (default)\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "  %s --enable-discovery           # Safe system discovery\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "  %s --flags                      # Search flags instead of commands\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "  %s --config=./config.json       # Use custom configuration\n", os.Args[0])
+	}
 
 	flag.Parse()
 
-	if err := validateFlags(cfg); err != nil {
-		fmt.Fprintf(os.Stderr, "Invalid flag combination: %v\n", err)
+	if cfg.ShowHelp {
 		flag.Usage()
-		os.Exit(1)
+		os.Exit(0)
 	}
 
 	return cfg
@@ -123,7 +128,7 @@ func validateFlags(cfg *Config) error {
 		contentFlags++
 	}
 	if contentFlags > 1 {
-		return fmt.Errorf("cannot use -flags and -hotkeys together")
+		return fmt.Errorf("cannot use --flags and --hotkeys together")
 	}
 
 	discoveryFlags := 0
@@ -134,11 +139,11 @@ func validateFlags(cfg *Config) error {
 		discoveryFlags++
 	}
 	if discoveryFlags > 1 {
-		return fmt.Errorf("cannot use -enable-discovery and -unsafe together")
+		return fmt.Errorf("cannot use --enable-discovery and --unsafe together")
 	}
 
 	if cfg.EmergencyMode && (cfg.EnableDiscovery || cfg.UnsafeMode) {
-		fmt.Fprintf(os.Stderr, "WARNING: Emergency mode overrides discovery flags\n")
+		fmt.Fprintf(os.Stderr, "WARNING: Emergency mode overrides all discovery flags\n")
 	}
 
 	return nil
@@ -167,11 +172,11 @@ func determineOperationMode(cfg *Config) OperationMode {
 func logOperationMode(mode OperationMode) {
 	switch mode {
 	case SafeMode:
-		fmt.Fprintf(os.Stderr, "SAFE MODE: Using built-in commands only\n")
+		fmt.Fprintf(os.Stderr, "SAFE MODE: Using built-in commands only (maximum security)\n")
 	case DiscoveryMode:
 		fmt.Fprintf(os.Stderr, "DISCOVERY MODE: System discovery enabled with comprehensive safety controls\n")
 	case UnsafeMode:
-		fmt.Fprintf(os.Stderr, "WARNING: Unsafe mode enabled - minimal safety controls active\n")
+		fmt.Fprintf(os.Stderr, "UNSAFE MODE: Minimal safety controls active - use with caution\n")
 	case EmergencyMode:
 		fmt.Fprintf(os.Stderr, "EMERGENCY MODE: All system interaction disabled\n")
 	}
@@ -183,6 +188,13 @@ func configureDiscovery(appConfig *config.Config, mode OperationMode) {
 		appConfig.Discovery.Enabled = false
 	case DiscoveryMode, UnsafeMode:
 		appConfig.Discovery.Enabled = true
+		if mode == DiscoveryMode {
+			appConfig.Discovery.ScanPATH = true
+			appConfig.Discovery.ScanCommonPaths = true
+			appConfig.Discovery.ScanShellConfigs = true
+			appConfig.Discovery.MaxExecutables = 1000
+			appConfig.Discovery.RefreshIntervalHours = 24
+		}
 	}
 }
 
@@ -198,6 +210,10 @@ func loadBuiltinItems(cfg *Config) []models.Item {
 }
 
 func performSystemDiscovery(items *[]models.Item, cfg *config.Config, mode OperationMode, forceRefresh bool) error {
+	if mode == SafeMode || mode == EmergencyMode {
+		return nil
+	}
+
 	scanner, err := createScanner(cfg, mode)
 	if err != nil {
 		return fmt.Errorf("failed to create scanner: %w", err)
@@ -209,7 +225,12 @@ func performSystemDiscovery(items *[]models.Item, cfg *config.Config, mode Opera
 		}
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	timeout := 30 * time.Second
+	if mode == UnsafeMode {
+		timeout = 60 * time.Second
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 
 	discoveredItems, err := scanner.DiscoverItems(ctx)
@@ -223,28 +244,25 @@ func performSystemDiscovery(items *[]models.Item, cfg *config.Config, mode Opera
 	return nil
 }
 
-func createScanner(cfg *config.Config, mode OperationMode) (interface {
-	DiscoverItems(context.Context) ([]models.Item, error)
-}, error) {
+func createScanner(cfg *config.Config, mode OperationMode) (Scanner, error) {
 	switch mode {
 	case DiscoveryMode:
-		return discovery.NewEmergencyScanner(cfg)
+		return discovery.NewSystemScanner(cfg)
 	case UnsafeMode:
 		return discovery.NewSystemScanner(cfg)
+	case EmergencyMode:
+		return discovery.NewEmergencyScanner(cfg)
+	case SafeMode:
+		return nil, fmt.Errorf("safe mode does not support system discovery")
 	default:
 		return nil, fmt.Errorf("invalid operation mode for system discovery: %s", mode)
 	}
 }
 
-func clearCache(scanner interface{}) error {
-	type CacheClearer interface {
-		ClearCache() error
-	}
-
+func clearCache(scanner Scanner) error {
 	if clearer, ok := scanner.(CacheClearer); ok {
 		return clearer.ClearCache()
 	}
-
 	return nil
 }
 
@@ -262,4 +280,42 @@ func (a *App) Run() error {
 	}
 
 	return terminalUI.Run()
+}
+
+func main() {
+	cfg := parseFlags()
+
+	if err := validateFlags(cfg); err != nil {
+		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+		flag.Usage()
+		os.Exit(1)
+	}
+
+	mode := determineOperationMode(cfg)
+	logOperationMode(mode)
+
+	appConfig, err := config.LoadConfig(cfg.ConfigPath)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Failed to load configuration: %v\n", err)
+		os.Exit(1)
+	}
+
+	configureDiscovery(appConfig, mode)
+
+	items := loadBuiltinItems(cfg)
+	fmt.Fprintf(os.Stderr, "📚 Loaded %d built-in items\n", len(items))
+
+	if mode == DiscoveryMode || mode == UnsafeMode {
+		if err := performSystemDiscovery(&items, appConfig, mode, cfg.RefreshCache); err != nil {
+			fmt.Fprintf(os.Stderr, "Discovery failed: %v\n", err)
+		}
+	}
+
+	matcher := search.NewMatcher(items)
+
+	app := NewApp(matcher, cfg)
+	if err := app.Run(); err != nil {
+		fmt.Fprintf(os.Stderr, "Application error: %v\n", err)
+		os.Exit(1)
+	}
 }

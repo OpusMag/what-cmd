@@ -142,13 +142,13 @@ what-cmd -flags
 # Search for hotkeys
 what-cmd -hotkeys
 
-# Use custom configuration
+# Use your custom configuration file defined in the what-cmd directory
 what-cmd -config=/path/to/config.json
 ```
 
 ## Security & Safety
 
-When designing what-cmd, security was the top priority. However, it's crucial to understand that adding system discovery was complex and initially caused an infinite loop with cascading resource consumption on Windows. Therefore, it's **VERY IMPORTANT** that you are careful with system discovery for this tool. If you don't need system discovery, run what-cmd in safe mode.
+When designing what-cmd, security was the top priority. However, it's crucial to understand that adding system discovery was complex and initially caused an infinite loop with cascading resource consumption on Windows. Therefore, it's **VERY IMPORTANT** that you are careful with system discovery for this tool. If you don't need system discovery, run what-cmd in the default safe mode.
 
 **What-cmd offers four distinct security modes:**
 
