@@ -23,6 +23,10 @@ type DiscoveryConfig struct {
 	ExcludePatterns      []string `json:"exclude_patterns"`
 	MaxExecutables       int      `json:"max_executables"`
 	RefreshIntervalHours int      `json:"refresh_interval_hours"`
+
+	WindowsSafeMode     bool     `json:"windows_safe_mode"`
+	WindowsAllowedPaths []string `json:"windows_allowed_paths"`
+	WindowsBlockedPaths []string `json:"windows_blocked_paths"`
 }
 
 type UIConfig struct {
@@ -45,14 +49,17 @@ func DefaultConfig() *Config {
 	config := &Config{
 		Discovery: DiscoveryConfig{
 			Enabled:              true,
-			ScanPATH:             true,
-			ScanCommonPaths:      true,
+			ScanPATH:             getDefaultScanPATH(),
+			ScanCommonPaths:      getDefaultScanCommonPaths(),
 			ScanShellConfigs:     true,
 			CustomPaths:          getDefaultCustomPaths(),
 			CustomConfigFiles:    getDefaultConfigFiles(),
 			ExcludePatterns:      getDefaultExcludePatterns(),
-			MaxExecutables:       1000,
+			MaxExecutables:       getDefaultMaxExecutables(),
 			RefreshIntervalHours: 24,
+			WindowsSafeMode:      getDefaultWindowsSafeMode(),
+			WindowsAllowedPaths:  getDefaultWindowsAllowedPaths(),
+			WindowsBlockedPaths:  getDefaultWindowsBlockedPaths(),
 		},
 		UI: UIConfig{
 			ShowSystemCommands:  true,
@@ -71,13 +78,29 @@ func DefaultConfig() *Config {
 	return config
 }
 
+func getDefaultScanPATH() bool {
+	return runtime.GOOS != "windows"
+}
+
+func getDefaultScanCommonPaths() bool {
+	return runtime.GOOS != "windows"
+}
+
+func getDefaultMaxExecutables() int {
+	if runtime.GOOS == "windows" {
+		return 100
+	}
+	return 1000
+}
+
+func getDefaultWindowsSafeMode() bool {
+	return runtime.GOOS == "windows"
+}
+
 func getDefaultCustomPaths() []string {
 	switch runtime.GOOS {
 	case "windows":
 		return []string{
-			`C:\Program Files\Git\usr\bin`,
-			`C:\Program Files\PowerShell\7`,
-			`C:\Windows\System32`,
 			`C:\ProgramData\chocolatey\bin`,
 		}
 	case "darwin":
@@ -98,6 +121,42 @@ func getDefaultCustomPaths() []string {
 	}
 }
 
+func getDefaultWindowsAllowedPaths() []string {
+	if runtime.GOOS != "windows" {
+		return []string{}
+	}
+	return []string{
+		`C:\ProgramData\chocolatey\bin`,
+		// more can be added via config.json:
+	}
+}
+
+func getDefaultWindowsBlockedPaths() []string {
+	if runtime.GOOS != "windows" {
+		return []string{}
+	}
+	return []string{
+		`C:\Windows`,
+		`C:\Windows\System32`,
+		`C:\Windows\SysWOW64`,
+		`C:\Windows\WinSxS`,
+		`C:\Program Files\Windows`,
+		`C:\Program Files (x86)\Windows`,
+		`C:\ProgramData\Microsoft`,
+		`C:\Windows\Microsoft.NET`,
+		`C:\Windows\assembly`,
+		`C:\Windows\servicing`,
+		`C:\Windows\SoftwareUpdate`,
+		`C:\Windows\security`,
+		`C:\Windows\SystemApps`,
+		`C:\Program Files\WindowsApps`,
+		`C:\Windows\system32\wbem`,
+		`C:\Windows\system32\WindowsPowerShell`,
+		`C:\Windows\system32\OpenSSH`,
+		`C:\Windows\system32\config`,
+	}
+}
+
 func getDefaultConfigFiles() []string {
 	homeDir, _ := os.UserHomeDir()
 
@@ -107,7 +166,7 @@ func getDefaultConfigFiles() []string {
 			filepath.Join(homeDir, "Documents", "PowerShell", "profile.ps1"),
 			filepath.Join(homeDir, ".gitconfig"),
 		}
-	case "darwin", "linux":
+	default:
 		return []string{
 			filepath.Join(homeDir, ".bashrc"),
 			filepath.Join(homeDir, ".bash_profile"),
@@ -116,28 +175,32 @@ func getDefaultConfigFiles() []string {
 			filepath.Join(homeDir, ".bash_aliases"),
 			filepath.Join(homeDir, ".gitconfig"),
 			filepath.Join(homeDir, ".config", "fish", "config.fish"),
+			"/etc/bash.bashrc",
+			"/etc/bashrc",
+			"/etc/profile",
+			"/etc/zsh/zshrc",
 		}
-	default:
-		return []string{}
 	}
 }
 
 func getDefaultExcludePatterns() []string {
-	return []string{
-		"*.dll", "*.so", "*.dylib", // Libraries
-		"*.txt", "*.md", "*.log", // Documentation
-		"test*", "*test", // Test executables
-		".*", // Hidden files
+	patterns := []string{
+		"*.txt", "*.md", "*.log", "*.json", "*.xml", "*.yml", "*.yaml",
+		"test*", "*test", "*_test", ".*",
+		"README*", "LICENSE*", "CHANGELOG*",
 	}
+
+	if runtime.GOOS == "windows" {
+		patterns = append(patterns, "*.dll", "*.pdb", "*.lib", "*.obj")
+	} else {
+		patterns = append(patterns, "*.so", "*.so.*", "*.dylib", "*.a", "*.o")
+	}
+
+	return patterns
 }
 
 func LoadConfig(configPath string) (*Config, error) {
 	if configPath == "" {
-		homeDir, _ := os.UserHomeDir()
-		configPath = filepath.Join(homeDir, ".what-cmd", "config.json")
-	}
-
-	if _, err := os.Stat(configPath); os.IsNotExist(err) {
 		return DefaultConfig(), nil
 	}
 
@@ -151,23 +214,14 @@ func LoadConfig(configPath string) (*Config, error) {
 		return nil, err
 	}
 
+	if runtime.GOOS == "windows" {
+		if config.Discovery.WindowsBlockedPaths == nil {
+			config.Discovery.WindowsBlockedPaths = getDefaultWindowsBlockedPaths()
+		}
+		if config.Discovery.WindowsAllowedPaths == nil {
+			config.Discovery.WindowsAllowedPaths = getDefaultWindowsAllowedPaths()
+		}
+	}
+
 	return &config, nil
-}
-
-func (c *Config) SaveConfig(configPath string) error {
-	if configPath == "" {
-		homeDir, _ := os.UserHomeDir()
-		configPath = filepath.Join(homeDir, ".what-cmd", "config.json")
-	}
-
-	if err := os.MkdirAll(filepath.Dir(configPath), 0755); err != nil {
-		return err
-	}
-
-	data, err := json.MarshalIndent(c, "", "  ")
-	if err != nil {
-		return err
-	}
-
-	return os.WriteFile(configPath, data, 0644)
 }
