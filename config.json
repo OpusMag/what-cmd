@@ -1,0 +1,35 @@
+{
+  "discovery": {
+    "enabled": false,
+    "scan_path": true,
+    "scan_common_paths": true,
+    "scan_shell_configs": true,
+    "custom_paths": [
+      "/opt/my-tools/bin",
+      "~/personal-scripts"
+    ],
+    "custom_config_files": [
+      "~/.my_aliases",
+      "~/.custom_functions"
+    ],
+    "exclude_patterns": [
+      "test*",
+      "*.tmp",
+      "*debug*"
+    ],
+    "max_executables": 1000,
+    "refresh_interval_hours": 24
+  },
+  "ui": {
+    "show_system_commands": true,
+    "show_builtin_commands": true,
+    "show_user_aliases": true,
+    "group_by_source": false
+  },
+  "cache": {
+    "enabled": true,
+    "directory": "~/.what-cmd/cache",
+    "max_size_mb": 50,
+    "ttl_hours": 168
+  }
+}
