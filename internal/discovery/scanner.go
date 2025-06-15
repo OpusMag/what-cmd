@@ -39,7 +39,7 @@ func DefaultSafetyLimits() SafetyLimits {
 		MaxConcurrentScans:   3,
 		MaxHelpAttempts:      20,
 		HelpCommandTimeout:   500 * time.Millisecond,
-		MaxExecutablesPerDir: 500,
+		MaxExecutablesPerDir: 10000,
 		DangerousExecutables: []string{
 			"AppHostNameRegistrationVerifier.exe",
 			"SystemSettingsAdminFlows.exe",
