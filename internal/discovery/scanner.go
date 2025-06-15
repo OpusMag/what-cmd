@@ -761,6 +761,11 @@ func (s *SystemScanner) getCommonInstallationPaths() []string {
 			"/usr/bin",
 			"/usr/local/bin",
 			"/snap/bin",
+			"/etc/bin",
+			"/bin",
+			"/usr/local/sbin",
+			"/usr/sbin",
+			"/sbin",
 		}
 	}
 }
