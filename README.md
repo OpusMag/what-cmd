@@ -152,7 +152,7 @@ When designing what-cmd, security was the top priority. However, it's crucial to
 
 **What-cmd offers four distinct security modes:**
 
-### **Safe Mode** (`what-cmd` or `what-cmd -safe`) - **DEFAULT**
+### **Safe Mode** (`what-cmd` or `what-cmd --safe`) - **DEFAULT**
 - **System Discovery**: DISABLED for maximum security
 - **Security Level**: **Maximum** - Zero system interaction
 - **Use Cases**:
@@ -176,7 +176,7 @@ When designing what-cmd, security was the top priority. However, it's crucial to
   - Process isolation with empty environment
   - Whitelist-only approach for help text extraction
 
-### **No Discovery Mode** (`what-cmd -no-discovery`) - **EXPLICIT SAFE**
+### **No Discovery Mode** (`what-cmd --no-discovery`) - **EXPLICIT SAFE**
 - **System Discovery**: DISABLED with explicit messaging
 - **Security Level**: **Maximum** - Zero system interaction
 - **Use Cases**:
@@ -186,7 +186,7 @@ When designing what-cmd, security was the top priority. However, it's crucial to
   - Performance-critical scenarios where discovery overhead is unacceptable
 - **Identical to Safe Mode** but with explicit intent signaling
 
-### **Emergency Mode** (`what-cmd -emergency`) - **INCIDENT RESPONSE**
+### **Emergency Mode** (`what-cmd --emergency`) - **INCIDENT RESPONSE**
 - **System Discovery**: DISABLED with error signaling
 - **Security Level**: **Maximum** - Complete operational shutdown
 - **Use Cases**:
