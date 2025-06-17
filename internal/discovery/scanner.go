@@ -21,7 +21,6 @@ type SystemScanner struct {
 	config       *config.Config
 	cache        *Cache
 	mu           sync.RWMutex
-	lastScan     time.Time
 	safetyLimits SafetyLimits
 }
 
@@ -87,10 +86,12 @@ func (s *SystemScanner) DiscoverItems(ctx context.Context) ([]models.Item, error
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
-	if s.shouldUseCachedResults() {
-		if items, err := s.cache.GetItems(); err == nil && len(items) > 0 {
-			fmt.Fprintf(os.Stderr, "Using cached results: %d items\n", len(items))
-			return items, nil
+	if s.config.Cache.Enabled {
+		if cachedItems, err := s.cache.GetItems(); err == nil && len(cachedItems) > 0 {
+			fmt.Fprintf(os.Stderr, "Using cached results: %d items (cache hit)\n", len(cachedItems))
+			return cachedItems, nil
+		} else if err != nil {
+			fmt.Fprintf(os.Stderr, "Cache miss: %v - performing fresh discovery\n", err)
 		}
 	}
 
@@ -131,11 +132,12 @@ func (s *SystemScanner) DiscoverItems(ctx context.Context) ([]models.Item, error
 
 	if s.config.Cache.Enabled {
 		if err := s.cache.StoreItems(allItems); err != nil {
-			fmt.Fprintf(os.Stderr, "Cache warning: %v\n", err)
+			fmt.Fprintf(os.Stderr, "⚠️  Cache storage warning: %v\n", err)
+		} else {
+			fmt.Fprintf(os.Stderr, "💾 Results cached for future runs\n")
 		}
 	}
 
-	s.lastScan = time.Now()
 	fmt.Fprintf(os.Stderr, "Discovery completed: %d items\n", len(allItems))
 
 	return allItems, nil
@@ -451,10 +453,10 @@ func (s *SystemScanner) isValidDescriptionLine(line string) bool {
 }
 
 func (s *SystemScanner) scanLegacyPATH(ctx context.Context) ([]models.Item, error) {
-	fmt.Fprintf(os.Stderr, "⚠️  DEPRECATED: Legacy PATH scanning enabled\n")
+	fmt.Fprintf(os.Stderr, "DEPRECATED: Legacy PATH scanning enabled\n")
 
 	if runtime.GOOS == "windows" && s.config.Discovery.WindowsSafeMode {
-		fmt.Fprintf(os.Stderr, "🛡️  Windows Safe Mode: Skipping PATH scan\n")
+		fmt.Fprintf(os.Stderr, "Windows Safe Mode: Skipping PATH scan\n")
 		return []models.Item{}, nil
 	}
 
@@ -475,10 +477,10 @@ func (s *SystemScanner) scanLegacyPATH(ctx context.Context) ([]models.Item, erro
 }
 
 func (s *SystemScanner) scanLegacyCommonPaths(ctx context.Context) ([]models.Item, error) {
-	fmt.Fprintf(os.Stderr, "⚠️  DEPRECATED: Legacy common paths scanning enabled\n")
+	fmt.Fprintf(os.Stderr, "DEPRECATED: Legacy common paths scanning enabled\n")
 
 	if runtime.GOOS == "windows" && s.config.Discovery.WindowsSafeMode {
-		fmt.Fprintf(os.Stderr, "🛡️  Windows Safe Mode: Skipping common paths scan\n")
+		fmt.Fprintf(os.Stderr, "Windows Safe Mode: Skipping common paths scan\n")
 		return []models.Item{}, nil
 	}
 
@@ -851,20 +853,11 @@ func (s *SystemScanner) deduplicateItems(items []models.Item) []models.Item {
 	return unique
 }
 
-func (s *SystemScanner) shouldUseCachedResults() bool {
-	if !s.config.Cache.Enabled {
-		return false
-	}
-
-	refreshInterval := time.Duration(s.config.Discovery.RefreshIntervalHours) * time.Hour
-	return time.Since(s.lastScan) < refreshInterval
-}
-
 func (s *SystemScanner) ClearCache() error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
-	s.lastScan = time.Time{}
+	fmt.Fprintf(os.Stderr, "🗑️  Clearing discovery cache...\n")
 	return s.cache.ClearCache()
 }
 

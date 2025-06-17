@@ -141,6 +141,38 @@ func NewApp(matcher *search.Matcher, cfg *Config) *App {
 	}
 }
 
+func showCacheStatus(appConfig *config.Config) {
+	if !appConfig.Cache.Enabled {
+		return
+	}
+
+	cache, err := discovery.NewCache(appConfig.Cache)
+	if err != nil {
+		return
+	}
+
+	info, err := cache.GetCacheInfo()
+	if err != nil {
+		return
+	}
+
+	if exists, ok := info["exists"].(bool); ok && exists {
+		if itemCount, ok := info["item_count"].(int); ok {
+			if isExpired, ok := info["is_expired"].(bool); ok {
+				if isExpired {
+					fmt.Fprintf(os.Stderr, "📋 Cache: %d items (expired - will refresh)\n", itemCount)
+				} else {
+					if ageHours, ok := info["age_hours"].(float64); ok {
+						fmt.Fprintf(os.Stderr, "📋 Cache: %d items (%.1fh old)\n", itemCount, ageHours)
+					}
+				}
+			}
+		}
+	} else {
+		fmt.Fprintf(os.Stderr, "📋 Cache: empty (first run)\n")
+	}
+}
+
 func (a *App) Run() error {
 	terminalUI, err := ui.NewTerminalUI(a.matcher)
 	if err != nil {
@@ -153,16 +185,28 @@ func (a *App) Run() error {
 func main() {
 	cfg := parseFlags()
 
+	if err := validateFlags(cfg); err != nil {
+		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+		flag.Usage()
+		os.Exit(1)
+	}
+
 	appConfig, err := config.LoadConfig(cfg.ConfigPath)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Failed to load configuration: %v\n", err)
 		os.Exit(1)
 	}
 
+	if cfg.legacyEnableDiscovery {
+		fmt.Fprintf(os.Stderr, "WARNING: --enable-discovery is deprecated. Discovery is now enabled by default.\n")
+		fmt.Fprintf(os.Stderr, "Use --no-discovery to disable discovery.\n")
+	}
+
 	enableDiscovery := !cfg.NoDiscovery && len(appConfig.Discovery.GetEffectivePaths()) > 0
 
 	if enableDiscovery {
 		fmt.Fprintf(os.Stderr, "DISCOVERY MODE: Scanning configured installation paths\n")
+		showCacheStatus(appConfig)
 	} else if cfg.NoDiscovery {
 		fmt.Fprintf(os.Stderr, "SAFE MODE: Discovery disabled - using built-in commands only\n")
 	} else {
