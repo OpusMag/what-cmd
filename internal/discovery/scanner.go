@@ -36,10 +36,10 @@ type SafetyLimits struct {
 
 func DefaultSafetyLimits() SafetyLimits {
 	limits := SafetyLimits{
-		MaxConcurrentScans:   3,
-		MaxHelpAttempts:      20,
+		MaxConcurrentScans:   4,
+		MaxHelpAttempts:      25,
 		HelpCommandTimeout:   500 * time.Millisecond,
-		MaxExecutablesPerDir: 10000,
+		MaxExecutablesPerDir: 50,
 		DangerousExecutables: []string{
 			"AppHostNameRegistrationVerifier.exe",
 			"SystemSettingsAdminFlows.exe",
@@ -55,9 +55,9 @@ func DefaultSafetyLimits() SafetyLimits {
 	}
 
 	if runtime.GOOS == "windows" {
-		limits.MaxHelpAttempts = 5
-		limits.HelpCommandTimeout = 200 * time.Millisecond
-		limits.MaxExecutablesPerDir = 10
+		limits.MaxHelpAttempts = 10
+		limits.HelpCommandTimeout = 300 * time.Millisecond
+		limits.MaxExecutablesPerDir = 25
 	}
 
 	return limits
@@ -76,6 +76,281 @@ func NewSystemScanner(cfg *config.Config) (*SystemScanner, error) {
 	}
 
 	return scanner, nil
+}
+
+func (s *SystemScanner) getDiscoveryPaths() []string {
+	effectivePaths := s.config.Discovery.GetEffectivePaths()
+	return s.filterAndValidatePaths(effectivePaths)
+}
+
+func (s *SystemScanner) filterAndValidatePaths(paths []string) []string {
+	seen := make(map[string]bool)
+	var validPaths []string
+
+	for _, path := range paths {
+		expandedPath := s.expandPath(path)
+
+		normalizedPath := strings.ToLower(filepath.Clean(expandedPath))
+		if seen[normalizedPath] {
+			continue
+		}
+		seen[normalizedPath] = true
+
+		if !s.isPathAllowed(expandedPath) {
+			fmt.Fprintf(os.Stderr, "SECURITY: Blocked path: %s\n", expandedPath)
+			continue
+		}
+
+		if !s.isDirectoryAccessible(expandedPath) {
+			continue
+		}
+
+		validPaths = append(validPaths, expandedPath)
+	}
+
+	return validPaths
+}
+
+func (s *SystemScanner) expandPath(path string) string {
+	if strings.HasPrefix(path, "~/") {
+		if homeDir, err := os.UserHomeDir(); err == nil {
+			return filepath.Join(homeDir, path[2:])
+		}
+	}
+	return os.ExpandEnv(path)
+}
+
+func (s *SystemScanner) isDirectoryAccessible(dirPath string) bool {
+	info, err := os.Stat(dirPath)
+	if err != nil {
+		return false
+	}
+
+	if !info.IsDir() {
+		return false
+	}
+
+	_, err = os.ReadDir(dirPath)
+	return err == nil
+}
+
+func (s *SystemScanner) discoverExecutables(ctx context.Context) ([]models.Item, error) {
+	discoveryPaths := s.getDiscoveryPaths()
+
+	fmt.Fprintf(os.Stderr, "Scanning %d configured directories...\n", len(discoveryPaths))
+
+	var allItems []models.Item
+	var wg sync.WaitGroup
+	semaphore := make(chan struct{}, s.safetyLimits.MaxConcurrentScans)
+	itemsChan := make(chan []models.Item, len(discoveryPaths))
+	errorsChan := make(chan error, len(discoveryPaths))
+
+	for _, path := range discoveryPaths {
+		wg.Add(1)
+		go func(dirPath string) {
+			defer wg.Done()
+
+			select {
+			case semaphore <- struct{}{}:
+				defer func() { <-semaphore }()
+			case <-ctx.Done():
+				return
+			}
+
+			items, err := s.scanDirectory(dirPath, models.SystemCommand)
+			if err != nil {
+				errorsChan <- fmt.Errorf("failed to scan %s: %w", dirPath, err)
+				return
+			}
+
+			itemsChan <- items
+			if len(items) > 0 {
+				fmt.Fprintf(os.Stderr, "%s: %d executables\n", dirPath, len(items))
+			}
+		}(path)
+	}
+
+	go func() {
+		wg.Wait()
+		close(itemsChan)
+		close(errorsChan)
+	}()
+
+	for items := range itemsChan {
+		allItems = append(allItems, items...)
+	}
+
+	for err := range errorsChan {
+		fmt.Fprintf(os.Stderr, "⚠️  Warning: %v\n", err)
+	}
+
+	return allItems, nil
+}
+
+func (s *SystemScanner) DiscoverItems(ctx context.Context) ([]models.Item, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	if s.shouldUseCachedResults() {
+		if items, err := s.cache.GetItems(); err == nil && len(items) > 0 {
+			s.discoveredItems = items
+			fmt.Fprintf(os.Stderr, "📋 Using cached discovery results: %d items\n", len(items))
+			return items, nil
+		}
+	}
+
+	fmt.Fprintf(os.Stderr, "🔍 Starting enhanced system discovery...\n")
+	if runtime.GOOS == "windows" && s.config.Discovery.WindowsSafeMode {
+		fmt.Fprintf(os.Stderr, "🛡️  Windows Safe Mode: Using predefined installation paths only\n")
+	}
+
+	var allItems []models.Item
+	var wg sync.WaitGroup
+	semaphore := make(chan struct{}, s.safetyLimits.MaxConcurrentScans)
+	itemsChan := make(chan []models.Item, 4)
+	errorsChan := make(chan error, 4)
+
+	discoveryCtx, cancel := context.WithTimeout(ctx, 20*time.Second)
+	defer cancel()
+
+	discoveryTasks := []struct {
+		name     string
+		enabled  bool
+		taskFunc func(context.Context) ([]models.Item, error)
+	}{
+		{"PredefinedPaths", true, s.discoverExecutables},
+		{"ShellConfigs", s.config.Discovery.ScanShellConfigs, s.scanShellConfigs},
+		{"LegacyPATH", s.config.Discovery.ScanPATH, s.scanPATHExecutables},      // Legacy support
+		{"LegacyCommon", s.config.Discovery.ScanCommonPaths, s.scanCommonPaths}, // Legacy support
+	}
+
+	for _, task := range discoveryTasks {
+		if task.enabled {
+			wg.Add(1)
+			go s.safeExecuteDiscovery(&wg, semaphore, discoveryCtx, itemsChan, errorsChan, task.taskFunc)
+		}
+	}
+
+	go func() {
+		wg.Wait()
+		close(itemsChan)
+		close(errorsChan)
+	}()
+
+	for items := range itemsChan {
+		allItems = append(allItems, items...)
+
+		if len(allItems) > s.config.Discovery.MaxExecutables*3 {
+			fmt.Fprintf(os.Stderr, "Discovery safety limit reached, truncating results\n")
+			break
+		}
+	}
+
+	for err := range errorsChan {
+		fmt.Fprintf(os.Stderr, "Discovery warning: %v\n", err)
+	}
+
+	allItems = s.deduplicateItems(allItems)
+	if len(allItems) > s.config.Discovery.MaxExecutables {
+		fmt.Fprintf(os.Stderr, "Limiting results to %d executables (found %d)\n",
+			s.config.Discovery.MaxExecutables, len(allItems))
+		allItems = allItems[:s.config.Discovery.MaxExecutables]
+	}
+
+	if s.config.Cache.Enabled {
+		if err := s.cache.StoreItems(allItems); err != nil {
+			fmt.Fprintf(os.Stderr, "Cache storage warning: %v\n", err)
+		}
+	}
+
+	s.discoveredItems = allItems
+	s.lastScan = time.Now()
+
+	fmt.Fprintf(os.Stderr, "Enhanced discovery completed: %d items found\n", len(allItems))
+	return allItems, nil
+}
+
+// Legacy support methods (maintained for backward compatibility)
+func (s *SystemScanner) scanPATHExecutables(ctx context.Context) ([]models.Item, error) {
+	if runtime.GOOS == "windows" && s.config.Discovery.WindowsSafeMode {
+		fmt.Fprintf(os.Stderr, "Windows Safe Mode: Skipping legacy PATH scan for security\n")
+		return []models.Item{}, nil
+	}
+
+	fmt.Fprintf(os.Stderr, "DEPRECATED: Using legacy PATH scanning. Consider migrating to 'installation_paths' configuration.\n")
+
+	pathEnv := os.Getenv("PATH")
+	if pathEnv == "" {
+		return nil, nil
+	}
+
+	var items []models.Item
+	pathSeparator := ":"
+	if runtime.GOOS == "windows" {
+		pathSeparator = ";"
+	}
+
+	paths := strings.Split(pathEnv, pathSeparator)
+
+	for _, path := range paths {
+		select {
+		case <-ctx.Done():
+			return items, ctx.Err()
+		default:
+		}
+
+		if path == "" {
+			continue
+		}
+
+		if !s.isPathAllowed(path) {
+			fmt.Fprintf(os.Stderr, "SECURITY: Skipping disallowed PATH directory: %s\n", path)
+			continue
+		}
+
+		pathItems, err := s.scanDirectory(path, models.SystemCommand)
+		if err != nil {
+			continue
+		}
+
+		items = append(items, pathItems...)
+	}
+
+	return items, nil
+}
+
+func (s *SystemScanner) scanCommonPaths(ctx context.Context) ([]models.Item, error) {
+	if runtime.GOOS == "windows" && s.config.Discovery.WindowsSafeMode {
+		fmt.Fprintf(os.Stderr, "Windows Safe Mode: Skipping legacy common paths scan for security\n")
+		return []models.Item{}, nil
+	}
+
+	fmt.Fprintf(os.Stderr, "DEPRECATED: Using legacy common paths scanning. Consider migrating to 'installation_paths' configuration.\n")
+
+	var items []models.Item
+	commonPaths := s.getCommonInstallationPaths()
+
+	for _, path := range commonPaths {
+		select {
+		case <-ctx.Done():
+			return items, ctx.Err()
+		default:
+		}
+
+		if !s.isPathAllowed(path) {
+			fmt.Fprintf(os.Stderr, "SECURITY: Skipping disallowed common directory: %s\n", path)
+			continue
+		}
+
+		pathItems, err := s.scanDirectory(path, models.SystemCommand)
+		if err != nil {
+			continue
+		}
+
+		items = append(items, pathItems...)
+	}
+
+	return items, nil
 }
 
 func (s *SystemScanner) shouldUseCachedResults() bool {
@@ -291,99 +566,15 @@ func (s *SystemScanner) isPathAllowed(dirPath string) bool {
 		}
 	}
 
-	for _, allowedPath := range s.config.Discovery.WindowsAllowedPaths {
-		allowedLower := strings.ToLower(filepath.Clean(allowedPath))
+	effectivePaths := s.config.Discovery.GetEffectivePaths()
+	for _, allowedPath := range effectivePaths {
+		allowedLower := strings.ToLower(filepath.Clean(s.expandPath(allowedPath)))
 		if strings.HasPrefix(lowerPath, allowedLower) {
 			return true
 		}
 	}
 
-	for _, customPath := range s.config.Discovery.CustomPaths {
-		customLower := strings.ToLower(filepath.Clean(customPath))
-		if strings.HasPrefix(lowerPath, customLower) {
-			return true
-		}
-	}
-
 	return false
-}
-
-func (s *SystemScanner) scanPATHExecutables(ctx context.Context) ([]models.Item, error) {
-	if runtime.GOOS == "windows" && s.config.Discovery.WindowsSafeMode {
-		fmt.Fprintf(os.Stderr, "Windows Safe Mode: Skipping PATH scan for security\n")
-		return []models.Item{}, nil
-	}
-
-	pathEnv := os.Getenv("PATH")
-	if pathEnv == "" {
-		return nil, nil
-	}
-
-	var items []models.Item
-	pathSeparator := ":"
-	if runtime.GOOS == "windows" {
-		pathSeparator = ";"
-	}
-
-	paths := strings.Split(pathEnv, pathSeparator)
-
-	for _, path := range paths {
-		select {
-		case <-ctx.Done():
-			return items, ctx.Err()
-		default:
-		}
-
-		if path == "" {
-			continue
-		}
-
-		if !s.isPathAllowed(path) {
-			fmt.Fprintf(os.Stderr, "SECURITY: Skipping disallowed PATH directory: %s\n", path)
-			continue
-		}
-
-		pathItems, err := s.scanDirectory(path, models.SystemCommand)
-		if err != nil {
-			continue
-		}
-
-		items = append(items, pathItems...)
-	}
-
-	return items, nil
-}
-
-func (s *SystemScanner) scanCommonPaths(ctx context.Context) ([]models.Item, error) {
-	if runtime.GOOS == "windows" && s.config.Discovery.WindowsSafeMode {
-		fmt.Fprintf(os.Stderr, "Windows Safe Mode: Skipping common paths scan for security\n")
-		return []models.Item{}, nil
-	}
-
-	var items []models.Item
-	commonPaths := s.getCommonInstallationPaths()
-
-	for _, path := range commonPaths {
-		select {
-		case <-ctx.Done():
-			return items, ctx.Err()
-		default:
-		}
-
-		if !s.isPathAllowed(path) {
-			fmt.Fprintf(os.Stderr, "SECURITY: Skipping disallowed common directory: %s\n", path)
-			continue
-		}
-
-		pathItems, err := s.scanDirectory(path, models.SystemCommand)
-		if err != nil {
-			continue
-		}
-
-		items = append(items, pathItems...)
-	}
-
-	return items, nil
 }
 
 func (s *SystemScanner) scanShellConfigs(ctx context.Context) ([]models.Item, error) {
@@ -410,38 +601,12 @@ func (s *SystemScanner) scanShellConfigs(ctx context.Context) ([]models.Item, er
 	return items, nil
 }
 
-func (s *SystemScanner) scanCustomPaths(ctx context.Context) ([]models.Item, error) {
-	var items []models.Item
-
-	for _, path := range s.config.Discovery.CustomPaths {
-		select {
-		case <-ctx.Done():
-			return items, ctx.Err()
-		default:
-		}
-
-		if !s.isPathAllowed(path) {
-			fmt.Fprintf(os.Stderr, "SECURITY: Skipping disallowed custom directory: %s\n", path)
-			continue
-		}
-
-		pathItems, err := s.scanDirectory(path, models.CustomCommand)
-		if err != nil {
-			fmt.Fprintf(os.Stderr, "Warning: Failed to scan custom path %s: %v\n", path, err)
-			continue
-		}
-
-		items = append(items, pathItems...)
-	}
-
-	return items, nil
-}
-
 func (s *SystemScanner) scanDirectory(dirPath string, itemType models.ItemType) ([]models.Item, error) {
 	if !s.isPathAllowed(dirPath) {
 		fmt.Fprintf(os.Stderr, "SECURITY: Directory access denied: %s\n", dirPath)
 		return []models.Item{}, nil
 	}
+
 	if _, err := os.Stat(dirPath); os.IsNotExist(err) {
 		return []models.Item{}, nil
 	} else if err != nil {
@@ -506,92 +671,7 @@ func (s *SystemScanner) scanDirectory(dirPath string, itemType models.ItemType) 
 		processedCount++
 	}
 
-	if len(items) > 0 {
-		fmt.Fprintf(os.Stderr, "Scanned %s: found %d executables\n", dirPath, len(items))
-	}
-
 	return items, nil
-}
-
-func (s *SystemScanner) DiscoverItems(ctx context.Context) ([]models.Item, error) {
-	s.mu.Lock()
-	defer s.mu.Unlock()
-
-	if s.shouldUseCachedResults() {
-		if items, err := s.cache.GetItems(); err == nil && len(items) > 0 {
-			s.discoveredItems = items
-			fmt.Fprintf(os.Stderr, "Using cached discovery results: %d items\n", len(items))
-			return items, nil
-		}
-	}
-
-	fmt.Fprintf(os.Stderr, "Starting system discovery...\n")
-	if runtime.GOOS == "windows" && s.config.Discovery.WindowsSafeMode {
-		fmt.Fprintf(os.Stderr, "Windows Safe Mode: Only scanning user-configured paths\n")
-	}
-
-	var allItems []models.Item
-	var wg sync.WaitGroup
-	semaphore := make(chan struct{}, s.safetyLimits.MaxConcurrentScans)
-	itemsChan := make(chan []models.Item, 4)
-	errorsChan := make(chan error, 4)
-
-	discoveryCtx, cancel := context.WithTimeout(ctx, 15*time.Second)
-	defer cancel()
-
-	discoveryTasks := []struct {
-		name     string
-		enabled  bool
-		taskFunc func(context.Context) ([]models.Item, error)
-	}{
-		{"CustomPaths", len(s.config.Discovery.CustomPaths) > 0, s.scanCustomPaths},
-		{"PATH", s.config.Discovery.ScanPATH, s.scanPATHExecutables},
-		{"CommonPaths", s.config.Discovery.ScanCommonPaths, s.scanCommonPaths},
-		{"ShellConfigs", s.config.Discovery.ScanShellConfigs, s.scanShellConfigs},
-	}
-
-	for _, task := range discoveryTasks {
-		if task.enabled {
-			wg.Add(1)
-			go s.safeExecuteDiscovery(&wg, semaphore, discoveryCtx, itemsChan, errorsChan, task.taskFunc)
-		}
-	}
-
-	go func() {
-		wg.Wait()
-		close(itemsChan)
-		close(errorsChan)
-	}()
-
-	for items := range itemsChan {
-		allItems = append(allItems, items...)
-
-		if len(allItems) > s.config.Discovery.MaxExecutables*2 {
-			fmt.Fprintf(os.Stderr, "Discovery safety limit reached, truncating results\n")
-			break
-		}
-	}
-
-	for err := range errorsChan {
-		fmt.Fprintf(os.Stderr, "Discovery warning: %v\n", err)
-	}
-
-	allItems = s.deduplicateItems(allItems)
-	if len(allItems) > s.config.Discovery.MaxExecutables {
-		allItems = allItems[:s.config.Discovery.MaxExecutables]
-	}
-
-	if s.config.Cache.Enabled {
-		if err := s.cache.StoreItems(allItems); err != nil {
-			fmt.Fprintf(os.Stderr, "Cache storage warning: %v\n", err)
-		}
-	}
-
-	s.discoveredItems = allItems
-	s.lastScan = time.Now()
-
-	fmt.Fprintf(os.Stderr, "Discovery completed: %d items found\n", len(allItems))
-	return allItems, nil
 }
 
 func (s *SystemScanner) safeExecuteDiscovery(
@@ -745,6 +825,7 @@ func (s *SystemScanner) getSafeHelpFromCommand(cmdPath string) string {
 	return ""
 }
 
+// Legacy method (maintained for backward compatibility)
 func (s *SystemScanner) getCommonInstallationPaths() []string {
 	switch runtime.GOOS {
 	case "windows":
@@ -761,11 +842,6 @@ func (s *SystemScanner) getCommonInstallationPaths() []string {
 			"/usr/bin",
 			"/usr/local/bin",
 			"/snap/bin",
-			"/etc/bin",
-			"/bin",
-			"/usr/local/sbin",
-			"/usr/sbin",
-			"/sbin",
 		}
 	}
 }
