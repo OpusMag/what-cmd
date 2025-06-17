@@ -1,31 +1,51 @@
 {
   "discovery": {
-    "enabled": false,
-    "scan_path": true,
-    "scan_common_paths": true,
+    "enabled": true,
     "scan_shell_configs": true,
-    "custom_paths": [
-      "/opt/my-tools/bin",
-      "~/personal-scripts"
+    
+    "installation_paths": [
+      "C:\\ProgramData\\chocolatey\\bin",
+      "C:\\Program Files\\Git\\usr\\bin",
+      "C:\\Program Files\\PowerShell\\7", 
+      "C:\\Program Files\\Go\\bin",
+      "C:\\Program Files\\Python\\Python311\\Scripts"
     ],
-    "custom_config_files": [
-      "~/.my_aliases",
-      "~/.custom_functions"
+    
+    "user_paths": [
+      "~/bin",
+      "~/local/bin",
+      "~/sbin",
+      "~/scripts",
+      "~/tools"
     ],
+    
+    "scan_path": false,
+    "scan_common_paths": false,
+    "custom_paths": [],
+    "custom_config_files": [],
+    
     "exclude_patterns": [
-      "test*",
-      "*.tmp",
-      "*debug*"
+      "*.dll", "*.so", "*.dylib", "*.txt", "*.md", "*.log",
+      "test*", "*test", "*_test", ".*", "*debug*", "*.tmp"
     ],
-    "max_executables": 1000,
-    "refresh_interval_hours": 24
+    
+    "max_executables": 500,
+    "refresh_interval_hours": 24,
+    
+    "windows_safe_mode": true,
+    "windows_allowed_paths": [],
+    "windows_blocked_paths": [
+      "C:\\Windows", "C:\\Program Files\\Windows", "C:\\ProgramData\\Microsoft"
+    ]
   },
+  
   "ui": {
     "show_system_commands": true,
     "show_builtin_commands": true,
     "show_user_aliases": true,
     "group_by_source": false
   },
+  
   "cache": {
     "enabled": true,
     "directory": "~/.what-cmd/cache",

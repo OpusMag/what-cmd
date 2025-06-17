@@ -12,11 +12,14 @@ What-cmd is a cross-platform (Windows, Linux, and macOS) command-line tool writt
 - **Hotkeys**: Discover keyboard shortcuts for various applications
 
 ### **System Discovery**
-- **Automatic Detection**: Scans your system PATH for installed CLI tools
-- **Shell Integration**: Discovers your custom aliases and functions from shell configuration files
-- **Safe by Default**: Runs in safe mode with comprehensive security controls
-- **Windows Safe Mode**: Special security controls for Windows with whitelist-only directory scanning
-- **Configurable**: Customize scan locations and behavior through configuration files
+- **Multi-Source Architecture**: Parallel scanning of installation paths, shell configs, and user directories
+- **Intelligent Caching**: Configurable TTL with automatic deduplication and performance optimization
+- **Shell Integration**: Discovers aliases and functions from both user and system-wide shell configurations
+- **Safe by Default**: Comprehensive security controls with multiple validation layers
+- **Windows Safe Mode**: Automatic whitelist-only scanning with enhanced security on Windows
+- **Legacy Support**: Backward compatibility with older configuration formats
+- **Parallel Processing**: Concurrent discovery with configurable resource limits
+- **Graceful Degradation**: Continues operation even if some discovery sources fail
 
 ### **User Interface**
 - **Interactive Terminal UI**: Clean, organized display with real-time search
@@ -134,8 +137,11 @@ sudo mv what-cmd /usr/local/bin/
 ### Basic Commands
 
 ```bash
-# Default mode - search built-in commands (SAFE)
+# Default mode - discovers from configured paths + built-in commands
 what-cmd
+
+# Safe mode - built-in commands only (no system discovery)
+what-cmd --no-discovery
 
 # Search for flags
 what-cmd --flags
@@ -143,109 +149,47 @@ what-cmd --flags
 # Search for hotkeys
 what-cmd --hotkeys
 
-# Use your custom configuration file
+# Force refresh discovery cache
+what-cmd --refresh
+
+# Use custom configuration file
 what-cmd --config=/path/to/config.json
 ```
 
 ## Security & Safety
 
-Security is a high priority in what-cmd's design. When implementing system discovery, I have tried to make the implementation as safe as possible. This includes preventing it from accessing or manipulating files and directories it shouldn't. This is especially the case on windows, because during development, there were bugs where it did those things. If you encounter anything like that, on any platform, please raise an issue as this is a problem I do not want in what-cmd.
+Security is a high priority in what-cmd's design. Because of this, the tools design was altered to only scan predefined paths instead of scanning the entire system.
 
-**What-cmd offers four distinct security modes:**
+**What-cmd offers three distinct operational modes:**
 
-### **Safe Mode** (`what-cmd` or `what-cmd --safe`) - **DEFAULT**
-- **System Discovery**: DISABLED for maximum security
-- **Security Level**: **Maximum** - Zero system interaction
-- **Use Cases**:
-  - New users who need reliable, predictable behavior
-  - Development environments where safety is paramount
-  - Corporate environments with strict security requirements
-  - General daily usage where built-in commands are sufficient
-- **Best Practice**: This is the recommended mode for most users
+### **Default Mode** (`what-cmd`)
+- **System Discovery**: Enabled when installation paths are configured, DISABLED otherwise
+- **Behavior**:
+  - If you have `installation_paths` or `user_paths` configured → Discovery enabled
+  - If no paths configured → Built-in commands only
 
-### **Discovery Mode** (`what-cmd --enable-discovery`) - **EXPLICIT OPT-IN**
-- **System Discovery**: ENABLED with comprehensive safety controls
-- **Security Level**: **High** - Extensive safety controls with multiple protection layers
-- **Use Cases**:
-  - Advanced users who need system integration
-  - Development environments requiring custom tool discovery
-  - Users who want to discover their installed CLI tools safely
-- **Safety Features**:
-  - **Windows Safe Mode**: Automatic activation on Windows with whitelist-only scanning
-  - **Dangerous Executable Blacklist**: Blocks known problematic system executables
-  - **Strict Timeout Controls**: 200ms max per help attempt on Windows, 500ms on other platforms
-  - **Resource Limits**: Max 10 executables per directory on Windows, 25 on other platforms
-  - **Process Isolation**: Empty environment variables during help text extraction
-  - **Path Validation**: Multiple checkpoints before any directory access
-  - **Pattern-Based Blocking**: Prevents execution of installers, system tools, and configuration utilities
-
-### **No Discovery Mode** (`what-cmd --no-discovery`) - **EXPLICIT SAFE**
-- **System Discovery**: DISABLED with explicit messaging
-- **Security Level**: **Maximum** - Zero system interaction
-- **Use Cases**:
-  - Production environments where only known commands are needed
-  - CI/CD pipelines requiring deterministic behavior
-  - Restricted environments with security policies against system scanning
-  - Performance-critical scenarios where discovery overhead is unacceptable
-- **Identical to Safe Mode** but with explicit intent signaling
-
-### **Emergency Mode** (`what-cmd --emergency`) - **INCIDENT RESPONSE**
-- **System Discovery**: DISABLED with error signaling
-- **Security Level**: **Maximum** - Complete operational shutdown
-- **Use Cases**:
-  - Incident response when security breach is suspected
-  - Highly regulated environments (financial, healthcare, government)
-  - Forensic analysis where system state must remain unchanged
-  - Recovery situations where system stability is compromised
-- **Behavior**: Returns explicit error messages indicating emergency shutdown
+### **Safe Mode** (`what-cmd --no-discovery`) 
+- **System Discovery**: Does not interact with the system only uses built-in commands
 
 ### **Windows-Specific Security**
 
-Windows systems have additional security measures:
+Windows systems maintain enhanced security measures:
 
-- **Windows Safe Mode**: Automatically enabled during discovery on Windows
-- **Blocked Directories**: System directories are completely excluded from scanning:
-  - `C:\Windows\*` (all Windows system directories)
-  - `C:\Program Files\Windows*`
-  - `C:\ProgramData\Microsoft`
-  - All Windows system subdirectories
-- **Allowed Paths**: Only user-specified or safe directories are scanned:
-  - `C:\ProgramData\chocolatey\bin` (default safe path)
-  - User-configured paths in `custom_paths`
-- **Enhanced Executable Detection**: Comprehensive blocking of:
-  - System configuration tools (`regedit`, `powercfg`, `bcdedit`)
-  - File system utilities (`format`, `diskpart`, `sfc`)
-  - Windows-specific dangerous executables (`AppHostNameRegistrationVerifier`, etc.)
-  - Installers and setup programs
-- **Reduced Limits**: More conservative resource limits on Windows
+- **Windows Safe Mode**: Automatically enabled when discovery is active
+- **Restricted Scanning**: Only user-configured paths are scanned
+- **Enhanced Filtering**: Comprehensive blocking of system executables
+- **Conservative Limits**: Lower resource limits for safety
 
 ### **Command Reference**
 
 ```bash
 # Safe modes (DEFAULT - no system discovery)
 what-cmd                    # Safe mode (default)
-what-cmd --safe             # Explicit safe mode
 what-cmd --no-discovery     # Explicit no-discovery mode
-
-# Discovery mode (EXPLICIT OPT-IN - with safety controls)
-what-cmd --enable-discovery # Enable system discovery safely
-
-# Emergency mode (INCIDENT RESPONSE)
-what-cmd --emergency        # Complete shutdown with error signaling
 
 # Other options
 what-cmd --refresh          # Refresh cache (works with discovery modes)
-what-cmd --unsafe           # Minimal safety mode (NOT RECOMMENDED)
 ```
-
-### **Best Practices**
-
-1. **Always start with safe mode**: `what-cmd` (default)
-2. **Only enable discovery when needed**: `what-cmd --enable-discovery`
-3. **Configure allowed paths on Windows**: Use config file to specify safe directories
-4. **Test discovery in isolated environments first** before using on production systems
-5. **Review logs carefully** when using discovery mode - blocked items are logged for transparency
-6. **Use emergency mode in sensitive environments**: `what-cmd --emergency`
 
 ### Interactive Features
 
@@ -262,37 +206,42 @@ The interface shows:
 - **Flags Panel**: Relevant flags for the selected command
 - **Search Input**: Your current search query
 
-### System Discovery
+### Discovery
 
-When enabled, what-cmd can discover:
+The new implementation only scans predefined paths from the user config
 
-- **System Commands**: CLI tools installed in your PATH (Unix/Linux/macOS)
-- **Custom Tools**: Applications in user-specified directories
-- **Shell Aliases**: Your custom command aliases from `.bashrc`, `.zshrc`, etc.
-- **Shell Functions**: Custom functions defined in shell configuration files
-- **Package Manager Tools**: Commands installed via chocolatey (Windows), homebrew (macOS), or system packages (Linux)
-
-**Note**: On Windows, PATH scanning is disabled by default for security. Only user-configured directories are scanned.
+1. **Configuration-Driven Security**: If you configure paths, you want them scanned
+2. **Safe Defaults**: No configuration = no discovery, maximum safety
+3. **Explicit Override**: `--no-discovery` if you don't want discovery for some reason
 
 ### Configuration
 
 Create a configuration file at `~/.what-cmd/config.json`:
 
-#### Basic Configuration
+// Replace the configuration examples with modern format:
+
+#### Recommended config
 ```json
 {
   "discovery": {
     "enabled": false,
-    "scan_path": false,
-    "scan_common_paths": false,
     "scan_shell_configs": true,
-    "custom_paths": [],
-    "exclude_patterns": [
-      "test*",
-      "*.tmp",
-      "*debug*"
+    "installation_paths": [
+      "/usr/local/bin",
+      "/opt/homebrew/bin",
+      "~/.local/bin",
+      "~/bin",
+      "~/sbin"
     ],
-    "max_executables": 100,
+    "user_paths": [
+      "~/personal-scripts",
+      "~/dev-tools/bin"
+    ],
+    "exclude_patterns": [
+      "*.so", "*.so.*", "*.a", "*.o",
+      "test*", "*.tmp", "*debug*"
+    ],
+    "max_executables": 1000,
     "refresh_interval_hours": 24
   },
   "ui": {
@@ -304,8 +253,25 @@ Create a configuration file at `~/.what-cmd/config.json`:
   "cache": {
     "enabled": true,
     "directory": "~/.what-cmd/cache",
-    "max_size_mb": 50,
     "ttl_hours": 168
+  }
+}
+```
+
+#### Legacy Configuration (Backward Compatible)
+```json
+{
+  "discovery": {
+    "enabled": false,
+    // Legacy options (still supported but deprecated)
+    "scan_path": true,
+    "scan_common_paths": true, 
+    "custom_paths": ["/opt/my-tools"],
+    "custom_config_files": ["~/.my_aliases"],
+    
+    // Modern equivalents (recommended)
+    "installation_paths": ["/usr/local/bin", "/opt/homebrew/bin"],
+    "user_paths": ["~/personal-scripts"]
   }
 }
 ```
@@ -315,63 +281,26 @@ Create a configuration file at `~/.what-cmd/config.json`:
 {
   "discovery": {
     "enabled": false,
-    "scan_path": false,
-    "scan_common_paths": false,
     "scan_shell_configs": true,
-    "custom_paths": [
+    "installation_paths": [
       "C:\\ProgramData\\chocolatey\\bin",
-      "C:\\Program Files\\Git\\usr\\bin",
-      "C:\\Program Files\\PowerShell\\7"
+      "C:\\Program Files\\Git\\usr\\bin"
+    ],
+    "user_paths": [
+      "C:\\Users\\%USERNAME%\\bin",
+      "C:\\Tools"
     ],
     "windows_safe_mode": true,
-    "windows_allowed_paths": [
-      "C:\\ProgramData\\chocolatey\\bin",
-      "C:\\Program Files\\Git\\usr\\bin",
-      "C:\\Program Files\\PowerShell\\7",
-      "C:\\Users\\%USERNAME%\\bin"
-    ],
     "windows_blocked_paths": [
       "C:\\Windows",
-      "C:\\Program Files\\Windows",
+      "C:\\Program Files\\Windows*",
       "C:\\ProgramData\\Microsoft"
     ],
     "exclude_patterns": [
-      "*.dll",
-      "*.pdb",
-      "*.lib",
-      "test*",
-      "*.tmp",
-      "*debug*"
+      "*.dll", "*.pdb", "*.lib",
+      "test*", "*.tmp", "*debug*"
     ],
     "max_executables": 100,
-    "refresh_interval_hours": 24
-  }
-}
-```
-
-#### Linux/macOS Configuration
-```json
-{
-  "discovery": {
-    "enabled": false,
-    "scan_path": true,
-    "scan_common_paths": true,
-    "scan_shell_configs": true,
-    "custom_paths": [
-      "/opt/my-tools/bin",
-      "~/personal-scripts",
-      "~/.local/bin"
-    ],
-    "exclude_patterns": [
-      "*.so",
-      "*.so.*",
-      "*.a",
-      "*.o",
-      "test*",
-      "*.tmp",
-      "*debug*"
-    ],
-    "max_executables": 1000,
     "refresh_interval_hours": 24
   }
 }
@@ -381,16 +310,66 @@ Create a configuration file at `~/.what-cmd/config.json`:
 
 **Discovery Options:**
 - `enabled`: Enable/disable system discovery
-- `scan_path`: Scan directories in PATH environment variable (disabled on Windows by default)
-- `scan_common_paths`: Scan common installation directories (disabled on Windows by default)
-- `scan_shell_configs`: Parse shell configuration files for aliases and functions
-- `custom_paths`: User-specified directories to scan
-- `windows_safe_mode`: Enable Windows-specific safety controls (auto-enabled on Windows)
-- `windows_allowed_paths`: Whitelist of directories allowed on Windows
-- `windows_blocked_paths`: Blacklist of directories blocked on Windows
+- `scan_shell_configs`: Parse shell config files for aliases and functions
+- `installation_paths`: Directories where CLI tools are installed (replaces `scan_path`)
+- `user_paths`: User-specific directories to scan (replaces `custom_paths`)
 - `exclude_patterns`: File patterns to exclude from scanning
 - `max_executables`: Maximum number of executables to discover
 - `refresh_interval_hours`: Cache validity period
+
+**Legacy Options (Deprecated but Supported):**
+- `scan_path`: Scan PATH environment variable (use `installation_paths` instead)
+- `scan_common_paths`: Scan common installation directories (use `installation_paths`)
+- `custom_paths`: Custom directories to scan (use `user_paths`)
+- `custom_config_files`: Custom shell config files (automatically detected)
+
+**Windows-Specific Options:**
+- `windows_safe_mode`: Enable Windows-specific safety controls (auto-enabled)
+- `windows_blocked_paths`: Blacklist of directories blocked on Windows
+- `exclude_patterns`: File patterns to exclude (Windows-specific defaults)
+
+**Performance Options:**
+- `max_executables`: Limit total discovered executables
+- `refresh_interval_hours`: How often to refresh the discovery cache
+
+## Migration Guide
+
+### From Legacy Configuration
+
+If you're using an older configuration format, here's how to migrate:
+
+#### Configuration Format Changes
+
+**Legacy → Modern:**
+```json
+// OLD (still supported)
+{
+  "scan_path": true,
+  "scan_common_paths": true,
+  "custom_paths": ["/opt/tools", "~/scripts"],
+  "custom_config_files": ["~/.my_aliases"]
+}
+
+// NEW (recommended)
+{
+  "installation_paths": ["/usr/local/bin", "/opt/homebrew/bin"],
+  "user_paths": ["/opt/tools", "~/scripts"]
+  // custom_config_files automatically detected
+}
+```
+
+#### Benefits of Modern Configuration
+- **Explicit Control**: Specify exactly which directories to scan
+- **Better Performance**: Avoid scanning large PATH directories
+- **Enhanced Security**: More granular control over discovery sources
+- **Automatic Detection**: Shell config files found automatically
+- **Cross-Platform**: Consistent behavior across Windows, Linux, and macOS
+
+#### Migration Steps
+1. **Backup** your current `~/.what-cmd/config.json`
+2. **Update** configuration format using examples above
+3. **Test** with `what-cmd --enable-discovery --refresh`
+4. **Verify** that all your custom tools are still discovered
 
 ## What's Included
 
@@ -444,6 +423,35 @@ what-cmd/
     ├── search/                     # Search and ranking algorithms
     └── ui/                         # Terminal user interface
 ```
+### Discovery Engine Architecture
+
+```
+SystemScanner
+├── Multi-Source Discovery (Parallel)
+│   ├── Installation Paths Scanner
+│   ├── Shell Config Parser
+│   ├── User Paths Scanner
+│   └── Legacy PATH Scanner (deprecated)
+├── Security Layer
+│   ├── Path Validation
+│   ├── Executable Filtering  
+│   ├── Timeout Controls
+│   └── Resource Limits
+├── Caching System
+│   ├── Intelligent TTL
+│   ├── Deduplication
+│   └── Performance Optimization
+└── Emergency Controls
+    ├── Safe Mode Enforcement
+    ├── Windows-Specific Protections
+    └── Incident Response Mode
+```
+
+#### **Safety Features**
+- **Concurrency Control**: Semaphore-based limiting of concurrent directory scans
+- **Description Extraction**: Safe help text extraction with multiple fallback strategies
+- **Pattern Matching**: Intelligent command description inference for common tools
+- **Error Handling**: Graceful degradation when discovery sources fail
 
 ## Troubleshooting
 
@@ -491,6 +499,38 @@ go mod download
 go clean -cache
 go build -o what-cmd main.go
 ```
+**Discovery Configuration Issues:**
+```bash
+# Check if you're using legacy configuration
+what-cmd --config=./config.json --enable-discovery
+
+# Migrate to modern configuration format
+# Replace "custom_paths" with "user_paths"
+# Replace "scan_path: true" with specific "installation_paths"
+
+# Debug discovery sources
+what-cmd --enable-discovery --refresh  # Forces cache refresh
+```
+
+**Configuration Migration:**
+```bash
+# Old format (still works but deprecated)
+{
+  "scan_path": true,
+  "custom_paths": ["/opt/tools"]
+}
+
+# New format (recommended)
+{
+  "installation_paths": ["/usr/local/bin", "/opt/homebrew/bin"],
+  "user_paths": ["/opt/tools"]
+}
+```
+
+**Performance Issues:**
+- **Slow discovery**: Reduce `max_executables` or add more `exclude_patterns`
+- **High memory usage**: Enable caching and reduce discovery frequency
+- **Timeout errors**: Increase `refresh_interval_hours` to reduce discovery frequency
 
 ## Support
 
