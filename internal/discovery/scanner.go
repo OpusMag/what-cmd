@@ -44,7 +44,7 @@ func defaultSafetyLimits() SafetyLimits {
 		MaxConcurrentScans:   4,
 		MaxHelpAttempts:      30,
 		HelpCommandTimeout:   500 * time.Millisecond,
-		MaxExecutablesPerDir: 100,
+		MaxExecutablesPerDir: 10000,
 		DangerousExecutables: []string{
 			"shutdown.exe", "reboot.exe", "format.exe", "diskpart.exe",
 			"regedit.exe", "reg.exe", "powercfg.exe", "bcdedit.exe",
