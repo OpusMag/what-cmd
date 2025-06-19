@@ -125,7 +125,6 @@ func (c *Cache) GetCacheInfo() (map[string]interface{}, error) {
 		info["size_bytes"] = stat.Size()
 		info["modified"] = stat.ModTime()
 
-		// Try to read cache data
 		if data, err := os.ReadFile(c.cacheFile); err == nil {
 			var cacheData CacheData
 			if err := json.Unmarshal(data, &cacheData); err == nil {

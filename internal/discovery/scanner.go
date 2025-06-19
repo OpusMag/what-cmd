@@ -203,7 +203,6 @@ func (s *SystemScanner) executeTaskSafely(
 func (s *SystemScanner) collectResults(itemsChan <-chan []models.Item, errorsChan <-chan error) ([]models.Item, error) {
 	var allItems []models.Item
 
-	// Collect all items
 	for items := range itemsChan {
 		allItems = append(allItems, items...)
 
@@ -830,7 +829,7 @@ func (s *SystemScanner) postProcessItems(items []models.Item) []models.Item {
 	items = s.deduplicateItems(items)
 
 	if len(items) > s.config.Discovery.MaxExecutables {
-		fmt.Fprintf(os.Stderr, "📊 Limiting to %d executables (found %d)\n",
+		fmt.Fprintf(os.Stderr, "Limiting to %d executables (found %d)\n",
 			s.config.Discovery.MaxExecutables, len(items))
 		items = items[:s.config.Discovery.MaxExecutables]
 	}
@@ -857,7 +856,7 @@ func (s *SystemScanner) ClearCache() error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
-	fmt.Fprintf(os.Stderr, "🗑️  Clearing discovery cache...\n")
+	fmt.Fprintf(os.Stderr, "Clearing discovery cache...\n")
 	return s.cache.ClearCache()
 }
 
