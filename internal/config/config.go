@@ -72,7 +72,6 @@ func DefaultConfig() *Config {
 			RefreshIntervalHours: 24,
 
 			WindowsSafeMode:     getDefaultWindowsSafeMode(),
-			WindowsAllowedPaths: []string{},
 			WindowsBlockedPaths: getDefaultWindowsBlockedPaths(),
 		},
 		UI: UIConfig{

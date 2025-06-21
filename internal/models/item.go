@@ -4,9 +4,9 @@ type Item struct {
 	Name        string   `json:"name"`
 	Description string   `json:"description"`
 	Type        ItemType `json:"type"`
-	Source      string   `json:"source,omitempty"`   // File path or source location
-	Tags        []string `json:"tags,omitempty"`     // Additional metadata
-	Priority    int      `json:"priority,omitempty"` // Search ranking priority
+	Source      string   `json:"source,omitempty"`
+	Tags        []string `json:"tags,omitempty"`
+	Priority    int      `json:"priority,omitempty"`
 }
 
 type ItemType int
@@ -15,11 +15,11 @@ const (
 	Command ItemType = iota
 	Flag
 	Hotkey
-	SystemCommand  // Discovered from system PATH
-	CustomCommand  // From user-specified paths
-	UserAlias      // From shell configuration files
-	UserFunction   // Shell functions
-	PackageManager // Commands from package managers
+	SystemCommand
+	CustomCommand
+	UserAlias
+	UserFunction 
+	PackageManager
 )
 
 func (t ItemType) String() string {
