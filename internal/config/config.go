@@ -56,24 +56,24 @@ func DefaultConfig() *Config {
 	homeDir, _ := os.UserHomeDir()
 
 	config := &Config{
-		Discovery: DiscoveryConfig{
-			Enabled:           true,
-			ScanShellConfigs:  true,
-			InstallationPaths: getPlatformInstallationPaths(),
-			UserPaths:         getUserDefaultPaths(),
+        Discovery: DiscoveryConfig{
+            Enabled:           true,
+            ScanShellConfigs:  true,
+            InstallationPaths: getPlatformInstallationPaths(),
+            UserPaths:         getUserDefaultPaths(),
 
-			ScanPATH:          false,
-			ScanCommonPaths:   false,
-			CustomPaths:       []string{},
-			CustomConfigFiles: getDefaultConfigFiles(),
+            ScanPATH:          false,
+            ScanCommonPaths:   false,
+            CustomPaths:       []string{},
+            CustomConfigFiles: getDefaultConfigFiles(),
 
-			ExcludePatterns:      getDefaultExcludePatterns(),
-			MaxExecutables:       getDefaultMaxExecutables(),
-			RefreshIntervalHours: 24,
+            ExcludePatterns:      getDefaultExcludePatterns(),
+            MaxExecutables:       getDefaultMaxExecutables(),
+            RefreshIntervalHours: 24,
 
-			WindowsSafeMode:     getDefaultWindowsSafeMode(),
-			WindowsBlockedPaths: getDefaultWindowsBlockedPaths(),
-		},
+            WindowsSafeMode:     getDefaultWindowsSafeMode(),
+            WindowsBlockedPaths: getDefaultWindowsBlockedPaths(),
+        },
 		UI: UIConfig{
 			ShowSystemCommands:  true,
 			ShowBuiltinCommands: true,
