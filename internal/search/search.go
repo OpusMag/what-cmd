@@ -1,6 +1,7 @@
 package search
 
 import (
+	"sort"
 	"strings"
 	"what-cmd/internal/models"
 )
@@ -42,22 +43,14 @@ func (m *Matcher) rankResults(items []models.Item, query string) []models.Item {
 	if len(items) == 0 {
 		return items
 	}
-
-	bestIdx := 0
-	bestScore := m.scoreItem(items[0], query)
-
-	for i := 1; i < len(items); i++ {
-		score := m.scoreItem(items[i], query)
-		if score > bestScore {
-			bestScore = score
-			bestIdx = i
+	sort.Slice(items, func(i, j int) bool {
+		si := m.scoreItem(items[i], query)
+		sj := m.scoreItem(items[j], query)
+		if si != sj {
+			return si > sj
 		}
-	}
-
-	if bestIdx > 0 {
-		items[0], items[bestIdx] = items[bestIdx], items[0]
-	}
-
+		return items[i].Name < items[j].Name
+	})
 	return items
 }
 
@@ -67,7 +60,6 @@ func (m *Matcher) scoreItem(item models.Item, query string) int {
 	lowerName := strings.ToLower(item.Name)
 	lowerDesc := strings.ToLower(item.Description)
 
-	// Exact match gets highest score so the user gets what they want
 	if strings.EqualFold(item.Name, query) {
 		score += 100
 	} else {
