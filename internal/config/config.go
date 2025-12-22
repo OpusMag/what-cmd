@@ -115,14 +115,12 @@ func getPlatformInstallationPaths() []string {
 			"/usr/local/bin",
 			"/usr/bin",
 			"/bin",
+			"/usr/local/sbin",
+			"/usr/sbin",
+			"/sbin",
 			"/snap/bin",
 			"/var/lib/flatpak/exports/bin",
 			"/opt/bin",
-			"usr/local/sbin",
-			"/usr/sbin",
-			"/sbin",
-			"etc/bin",
-			"etc/sbin",
 		}
 	}
 }
