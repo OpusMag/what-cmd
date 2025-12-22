@@ -96,11 +96,16 @@ func (ui *TerminalUI) handleKeyEvent(ev *tcell.EventKey) EventAction {
 	case tcell.KeyEscape, tcell.KeyCtrlC:
 		return ActionExit
 	case tcell.KeyEnter:
+		if strings.EqualFold(strings.TrimSpace(string(ui.state.userInput)), "exit") {
+			return ActionExit
+		}
 		return ActionSelect
 	case tcell.KeyUp, tcell.KeyDown:
 		ui.handleScrollInput(ev)
 	case tcell.KeyBackspace, tcell.KeyBackspace2:
 		ui.handleBackspace()
+	case tcell.KeyCtrlU:
+		ui.clearInput()
 	default:
 		if ev.Rune() != 0 {
 			ui.handleTextInput(ev.Rune())
@@ -199,6 +204,8 @@ func (ui *TerminalUI) render() error {
 	ui.drawFilteredItems(cmdWindowWidth, descWindowWidth, cmdWindowHeight, styles)
 
 	ui.drawFlags(width, cmdWindowWidth, cmdWindowHeight, styles)
+
+	ui.drawStatusBar(width, height, styles)
 
 	ui.screen.Show()
 	return nil
@@ -382,23 +389,61 @@ func (ui *TerminalUI) getFlagsForCommand(commandName string) []flags.Flag {
 	return nil
 }
 
-// wrapText wraps text to fit within specified width so it doesn't go out of bounds
 func (ui *TerminalUI) wrapText(text string, maxWidth int) []string {
+	if maxWidth <= 0 {
+		return []string{""}
+	}
 	var lines []string
 	words := strings.Fields(text)
 	if len(words) == 0 {
 		return lines
 	}
 
-	currentLine := words[0]
-	for _, word := range words[1:] {
-		if len(currentLine)+len(word)+1 > maxWidth {
+	currentLine := ""
+	flush := func() {
+		if currentLine != "" {
 			lines = append(lines, currentLine)
-			currentLine = word
-		} else {
-			currentLine += " " + word
+			currentLine = ""
 		}
 	}
-	lines = append(lines, currentLine)
+
+	for _, w := range words {
+		if len(w) > maxWidth {
+			flush()
+			for start := 0; start < len(w); start += maxWidth {
+				end := start + maxWidth
+				if end > len(w) {
+					end = len(w)
+				}
+				lines = append(lines, w[start:end])
+			}
+			continue
+		}
+		if currentLine == "" {
+			currentLine = w
+		} else if len(currentLine)+1+len(w) > maxWidth {
+			flush()
+			currentLine = w
+		} else {
+			currentLine += " " + w
+		}
+	}
+	flush()
 	return lines
+}
+
+func (ui *TerminalUI) clearInput() {
+	ui.state.userInput = ui.state.userInput[:0]
+	ui.state.inputChanged = true
+}
+
+func (ui *TerminalUI) drawStatusBar(width, height int, styles UIStyles) {
+	msg := "↑/↓ to navigate • Enter to select • Esc to quit • Ctrl+U to clear"
+	y := height - 1
+	for i, r := range msg {
+		if i+1 >= width {
+			break
+		}
+		ui.screen.SetContent(1+i, y, r, nil, styles.header)
+	}
 }
