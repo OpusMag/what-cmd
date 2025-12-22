@@ -548,8 +548,11 @@ func (s *SystemScanner) isPathSafe(dirPath string) bool {
 }
 
 func (s *SystemScanner) expandPath(path string) string {
-	if strings.HasPrefix(path, "~/") {
+	if path == "~" || strings.HasPrefix(path, "~/") {
 		if homeDir, err := os.UserHomeDir(); err == nil {
+			if path == "~" {
+				return homeDir
+			}
 			return filepath.Join(homeDir, path[2:])
 		}
 	}
