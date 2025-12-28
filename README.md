@@ -154,42 +154,27 @@ what-cmd --refresh
 
 # Use custom configuration file
 what-cmd --config=/path/to/config.json
+
+# Help
+what-cmd --help
 ```
-
-## Security & Safety
-
-Security is a high priority in what-cmd's design. Because of this, the tools design was altered to only scan predefined paths instead of scanning the entire system.
-
-**What-cmd offers three distinct operational modes:**
-
-### **Default Mode** (`what-cmd`)
-- **System Discovery**: Enabled when installation paths are configured, DISABLED otherwise
-- **Behavior**:
-  - If you have `installation_paths` or `user_paths` configured → Discovery enabled
-  - If no paths configured → Built-in commands only
-
-### **Safe Mode** (`what-cmd --no-discovery`) 
-- **System Discovery**: Does not interact with the system only uses built-in commands
-
-### **Windows-Specific Security**
-
-Windows systems maintain enhanced security measures:
-
-- **Windows Safe Mode**: Automatically enabled when discovery is active
-- **Restricted Scanning**: Only user-configured paths are scanned
-- **Enhanced Filtering**: Comprehensive blocking of system executables
-- **Conservative Limits**: Lower resource limits for safety
 
 ### **Command Reference**
 
 ```bash
-# Safe modes (DEFAULT - no system discovery)
-what-cmd                    # Safe mode (default)
-what-cmd --no-discovery     # Explicit no-discovery mode
+# Default behavior
+what-cmd                    # Uses discovery if installation/user paths are configured; otherwise built-in only
 
-# Other options
-what-cmd --refresh          # Refresh cache (works with discovery modes)
+# Discovery controls
+what-cmd --no-discovery     # Disable discovery; built-in only
+what-cmd --refresh          # Refresh discovery cache (no effect if discovery is disabled)
+
+# Configuration
+what-cmd --config=./config.json
+what-cmd --help
 ```
+
+Note: --enable-discovery is deprecated; discovery is automatically enabled when installation_paths or user_paths are configured.
 
 ### Interactive Features
 
@@ -368,7 +353,7 @@ If you're using an older configuration format, here's how to migrate:
 #### Migration Steps
 1. **Backup** your current `~/.what-cmd/config.json`
 2. **Update** configuration format using examples above
-3. **Test** with `what-cmd --enable-discovery --refresh`
+3. **Test** with `what-cmd --refresh` (discovery runs automatically if paths are configured)
 4. **Verify** that all your custom tools are still discovered
 
 ## What's Included
@@ -409,20 +394,20 @@ If you're using an older configuration format, here's how to migrate:
 
 ```
 what-cmd/
-├── main.go                          # Application entry point
-├── commands/                        # Built-in command definitions
+├── main.go                         # Application entry point
+├── commands/                       # Built-in command definitions
 ├── flags/                          # Built-in flag definitions  
 ├── hotkeys/                        # Built-in hotkey definitions
 └── internal/
     ├── config/                     # Configuration management
     ├── discovery/                  # System discovery engine
-    │   ├── scanner.go             # Core discovery logic with security
-    │   ├── cache.go               # Caching system
-    │   └── emergency_scanner.go   # Emergency mode wrapper
+    │   ├── scanner.go              # Core discovery logic with security
+    │   ├── cache.go                # Caching system
     ├── models/                     # Data structures
     ├── search/                     # Search and ranking algorithms
     └── ui/                         # Terminal user interface
 ```
+
 ### Discovery Engine Architecture
 
 ```
@@ -472,22 +457,19 @@ sudo mv what-cmd /usr/local/bin/
 **System Discovery Problems:**
 ```bash
 # Run in safe mode first
-what-cmd --safe
+what-cmd --no-discovery
 
-# Clear cache and retry
-what-cmd --refresh --enable-discovery
+# Clear cache and retry (discovery will run if paths are configured)
+what-cmd --refresh
 
 # Check configuration file
-what-cmd --config=./config.json --enable-discovery
-
-# Use emergency mode if issues persist
-what-cmd --emergency
+what-cmd --config=./config.json --refresh
 ```
 
 **Windows-Specific Issues:**
 - **"SECURITY: Directory access denied"**: This is normal - Windows safe mode blocks system directories
 - **Limited results on Windows**: By design - only user-configured paths are scanned
-- **Configuration needed**: Add safe directories to `custom_paths` in config file
+- **Configuration needed**: Add safe directories to user_paths in the config file (custom_paths is legacy)
 
 **Build Issues:**
 ```bash
@@ -502,40 +484,12 @@ go build -o what-cmd main.go
 **Discovery Configuration Issues:**
 ```bash
 # Check if you're using legacy configuration
-what-cmd --config=./config.json --enable-discovery
+what-cmd --config=./config.json
 
 # Migrate to modern configuration format
 # Replace "custom_paths" with "user_paths"
 # Replace "scan_path: true" with specific "installation_paths"
 
-# Debug discovery sources
-what-cmd --enable-discovery --refresh  # Forces cache refresh
+# Debug discovery sources (forces cache refresh)
+what-cmd --refresh
 ```
-
-**Configuration Migration:**
-```bash
-# Old format (still works but deprecated)
-{
-  "scan_path": true,
-  "custom_paths": ["/opt/tools"]
-}
-
-# New format (recommended)
-{
-  "installation_paths": ["/usr/local/bin", "/opt/homebrew/bin"],
-  "user_paths": ["/opt/tools"]
-}
-```
-
-**Performance Issues:**
-- **Slow discovery**: Reduce `max_executables` or add more `exclude_patterns`
-- **High memory usage**: Enable caching and reduce discovery frequency
-- **Timeout errors**: Increase `refresh_interval_hours` to reduce discovery frequency
-
-## Support
-
-- **Issues**: Report bugs on [GitHub Issues](https://github.com/OpusMag/what-cmd/issues)
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
