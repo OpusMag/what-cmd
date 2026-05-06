@@ -83,11 +83,13 @@ func NewSystemScanner(cfg *config.Config) (*SystemScanner, error) {
 }
 
 func (s *SystemScanner) DiscoverItems(ctx context.Context) ([]models.Item, error) {
-	s.mu.Lock()
-	defer s.mu.Unlock()
+	hash := configHash(s.config.Discovery)
 
 	if s.config.Cache.Enabled {
-		if cachedItems, err := s.cache.GetItems(); err == nil && len(cachedItems) > 0 {
+		s.mu.RLock()
+		cachedItems, err := s.cache.GetItems(hash)
+		s.mu.RUnlock()
+		if err == nil && len(cachedItems) > 0 {
 			fmt.Fprintf(os.Stderr, "Using cached results: %d items (cache hit)\n", len(cachedItems))
 			return cachedItems, nil
 		} else if err != nil {
@@ -131,8 +133,11 @@ func (s *SystemScanner) DiscoverItems(ctx context.Context) ([]models.Item, error
 	allItems = s.postProcessItems(allItems)
 
 	if s.config.Cache.Enabled {
-		if err := s.cache.StoreItems(allItems); err != nil {
-			fmt.Fprintf(os.Stderr, "⚠️  Cache storage warning: %v\n", err)
+		s.mu.Lock()
+		storeErr := s.cache.StoreItems(allItems, hash)
+		s.mu.Unlock()
+		if storeErr != nil {
+			fmt.Fprintf(os.Stderr, "⚠️  Cache storage warning: %v\n", storeErr)
 		} else {
 			fmt.Fprintf(os.Stderr, "💾 Results cached for future runs\n")
 		}
@@ -250,7 +255,7 @@ func (s *SystemScanner) scanPathsConcurrently(ctx context.Context, paths []strin
 				return
 			}
 
-			items, err := s.scanDirectory(dirPath, itemType)
+			items, err := s.scanDirectory(ctx, dirPath, itemType)
 			if err != nil {
 				errorsChan <- err
 				return
@@ -303,7 +308,7 @@ func (s *SystemScanner) scanShellConfigs(ctx context.Context) ([]models.Item, er
 	return allItems, nil
 }
 
-func (s *SystemScanner) scanDirectory(dirPath string, itemType models.ItemType) ([]models.Item, error) {
+func (s *SystemScanner) scanDirectory(ctx context.Context, dirPath string, itemType models.ItemType) ([]models.Item, error) {
 	if !s.isPathSafe(dirPath) {
 		return []models.Item{}, fmt.Errorf("path access denied: %s", dirPath)
 	}
@@ -317,10 +322,10 @@ func (s *SystemScanner) scanDirectory(dirPath string, itemType models.ItemType) 
 		return nil, fmt.Errorf("failed to read directory %s: %w", dirPath, err)
 	}
 
-	return s.processDirectoryEntries(dirPath, entries, itemType)
+	return s.processDirectoryEntries(ctx, dirPath, entries, itemType)
 }
 
-func (s *SystemScanner) processDirectoryEntries(dirPath string, entries []os.DirEntry, itemType models.ItemType) ([]models.Item, error) {
+func (s *SystemScanner) processDirectoryEntries(ctx context.Context, dirPath string, entries []os.DirEntry, itemType models.ItemType) ([]models.Item, error) {
 	var items []models.Item
 	helpAttemptCount := 0
 	processedCount := 0
@@ -350,7 +355,7 @@ func (s *SystemScanner) processDirectoryEntries(dirPath string, entries []os.Dir
 			continue
 		}
 
-		description := s.generateDescription(filename, fullPath, &helpAttemptCount)
+		description := s.generateDescription(ctx, filename, fullPath, &helpAttemptCount)
 
 		items = append(items, models.Item{
 			Name:        filename,
@@ -365,12 +370,12 @@ func (s *SystemScanner) processDirectoryEntries(dirPath string, entries []os.Dir
 	return items, nil
 }
 
-func (s *SystemScanner) generateDescription(cmdName, cmdPath string, helpAttemptCount *int) string {
+func (s *SystemScanner) generateDescription(ctx context.Context, cmdName, cmdPath string, helpAttemptCount *int) string {
 	if s.shouldSkipHelpAttempt(cmdName) || *helpAttemptCount >= s.safetyLimits.MaxHelpAttempts {
 		return s.inferDescriptionFromName(cmdName)
 	}
 
-	if desc := s.extractHelpDescription(cmdPath); desc != "" {
+	if desc := s.extractHelpDescription(ctx, cmdPath); desc != "" {
 		*helpAttemptCount++
 		return desc
 	}
@@ -382,13 +387,13 @@ func (s *SystemScanner) generateDescription(cmdName, cmdPath string, helpAttempt
 	return s.inferDescriptionFromName(cmdName)
 }
 
-func (s *SystemScanner) extractHelpDescription(cmdPath string) string {
+func (s *SystemScanner) extractHelpDescription(ctx context.Context, cmdPath string) string {
 	filename := filepath.Base(cmdPath)
 	if s.isDangerousExecutable(filename) || s.shouldSkipHelpAttempt(filename) {
 		return ""
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), s.safetyLimits.HelpCommandTimeout)
+	ctx, cancel := context.WithTimeout(ctx, s.safetyLimits.HelpCommandTimeout)
 	defer cancel()
 
 	for _, flag := range []string{"--help", "-h"} {
