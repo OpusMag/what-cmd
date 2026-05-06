@@ -21,6 +21,7 @@ type UIState struct {
 	selectedIndex  int
 	scrollPosition int
 	inputChanged   bool
+	filteredItems  []models.Item
 }
 
 func NewTerminalUI(matcher *search.Matcher) (*TerminalUI, error) {
@@ -77,6 +78,8 @@ const (
 	ActionSelect
 )
 
+const maxItemsForFlagsPanel = 10000
+
 func (ui *TerminalUI) handleEvent(event tcell.Event) (EventAction, error) {
 	switch ev := event.(type) {
 	case *tcell.EventKey:
@@ -85,7 +88,7 @@ func (ui *TerminalUI) handleEvent(event tcell.Event) (EventAction, error) {
 		ui.screen.Sync()
 		return ActionContinue, nil
 	case *tcell.EventError:
-		return ActionExit, fmt.Errorf("terminal error: %w", fmt.Errorf("%s", ev.Error()))
+		return ActionExit, fmt.Errorf("terminal error: %w", ev)
 	default:
 		return ActionContinue, nil
 	}
@@ -150,8 +153,12 @@ func (ui *TerminalUI) handleTextInput(r rune) {
 }
 
 func (ui *TerminalUI) getFilteredItems() []models.Item {
+	if !ui.state.inputChanged && ui.state.filteredItems != nil {
+		return ui.state.filteredItems
+	}
 	query := string(ui.state.userInput)
-	return ui.matcher.Search(query)
+	ui.state.filteredItems = ui.matcher.Search(query)
+	return ui.state.filteredItems
 }
 
 func (ui *TerminalUI) handleSelection() error {
@@ -182,6 +189,7 @@ func (ui *TerminalUI) render() error {
 	if ui.state.inputChanged {
 		ui.state.selectedIndex = 0
 		ui.state.scrollPosition = 0
+		ui.state.filteredItems = nil
 		ui.state.inputChanged = false
 	}
 
@@ -220,7 +228,7 @@ func (ui *TerminalUI) drawSearchArea(cmdWindowWidth, cmdWindowHeight int, styles
 	ui.drawBorder(0, promptBoxYStart, promptBoxXEnd, promptBoxYEnd, styles.border)
 	ui.drawText("Search", 1, promptBoxYStart, styles.header)
 
-	prompt := "Enter a command to search for (type 'exit' to quit): "
+	prompt := "Enter a command to search for (Esc or Ctrl+C to quit): "
 	wrappedPrompt := ui.wrapText(prompt, cmdWindowWidth-2)
 	for i, line := range wrappedPrompt {
 		for j, r := range line {
@@ -304,7 +312,7 @@ func (ui *TerminalUI) drawFlags(width, cmdWindowWidth, cmdWindowHeight int, styl
 	filteredItems := ui.getFilteredItems()
 
 	// Only draw flags box if filtered results are reasonable
-	if len(filteredItems) < 10000 {
+	if len(filteredItems) < maxItemsForFlagsPanel {
 		flagsBoxHeight := 8
 		flagsBoxXStart := cmdWindowWidth + 1
 		flagsBoxXEnd := width - 1
