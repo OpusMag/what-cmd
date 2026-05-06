@@ -2,7 +2,6 @@ package config
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -11,7 +10,6 @@ import (
 
 type Config struct {
 	Discovery DiscoveryConfig `json:"discovery"`
-	UI        UIConfig        `json:"ui"`
 	Cache     CacheConfig     `json:"cache"`
 }
 
@@ -36,13 +34,6 @@ type DiscoveryConfig struct {
 	WindowsSafeMode     bool     `json:"windows_safe_mode"`
 	WindowsAllowedPaths []string `json:"windows_allowed_paths"`
 	WindowsBlockedPaths []string `json:"windows_blocked_paths"`
-}
-
-type UIConfig struct {
-	ShowSystemCommands  bool `json:"show_system_commands"`
-	ShowBuiltinCommands bool `json:"show_builtin_commands"`
-	ShowUserAliases     bool `json:"show_user_aliases"`
-	GroupBySource       bool `json:"group_by_source"`
 }
 
 type CacheConfig struct {
@@ -74,12 +65,6 @@ func DefaultConfig() *Config {
             WindowsSafeMode:     getDefaultWindowsSafeMode(),
             WindowsBlockedPaths: getDefaultWindowsBlockedPaths(),
         },
-		UI: UIConfig{
-			ShowSystemCommands:  true,
-			ShowBuiltinCommands: true,
-			ShowUserAliases:     true,
-			GroupBySource:       false,
-		},
 		Cache: CacheConfig{
 			Enabled:   true,
 			Directory: filepath.Join(homeDir, ".what-cmd", "cache"),
@@ -261,6 +246,22 @@ func applyConfigDefaults(config *Config) {
 		config.Discovery.UserPaths = getUserDefaultPaths()
 	}
 
+	if config.Discovery.MaxExecutables <= 0 {
+		config.Discovery.MaxExecutables = getDefaultMaxExecutables()
+	}
+
+	if config.Discovery.RefreshIntervalHours <= 0 {
+		config.Discovery.RefreshIntervalHours = 24
+	}
+
+	if config.Cache.MaxSizeMB <= 0 {
+		config.Cache.MaxSizeMB = 50
+	}
+
+	if config.Cache.TTLHours <= 0 {
+		config.Cache.TTLHours = 168
+	}
+
 	if runtime.GOOS == "windows" {
 		if config.Discovery.WindowsBlockedPaths == nil {
 			config.Discovery.WindowsBlockedPaths = getDefaultWindowsBlockedPaths()
@@ -290,26 +291,6 @@ func migrateConfigToNewFormat(config *Config) {
 			}
 		}
 	}
-}
-
-func ValidateConfig(config *Config) error {
-	if config.Discovery.MaxExecutables <= 0 {
-		return fmt.Errorf("max_executables must be positive, got %d", config.Discovery.MaxExecutables)
-	}
-
-	if config.Discovery.RefreshIntervalHours <= 0 {
-		return fmt.Errorf("refresh_interval_hours must be positive, got %d", config.Discovery.RefreshIntervalHours)
-	}
-
-	if config.Cache.MaxSizeMB <= 0 {
-		return fmt.Errorf("cache max_size_mb must be positive, got %d", config.Cache.MaxSizeMB)
-	}
-
-	if config.Cache.TTLHours <= 0 {
-		return fmt.Errorf("cache ttl_hours must be positive, got %d", config.Cache.TTLHours)
-	}
-
-	return nil
 }
 
 func (d *DiscoveryConfig) GetEffectivePaths() []string {
