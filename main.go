@@ -22,7 +22,6 @@ type Config struct {
 	UseHotkeys            bool
 	NoDiscovery           bool
 	legacyEnableDiscovery bool
-	EnableDiscovery       bool
 	RefreshCache          bool
 	ConfigPath            string
 	ShowHelp              bool
@@ -30,7 +29,6 @@ type Config struct {
 
 type App struct {
 	matcher *search.Matcher
-	config  *Config
 }
 
 func parseFlags() *Config {
@@ -46,7 +44,7 @@ func parseFlags() *Config {
 		"Path to JSON configuration file")
 	flag.BoolVar(&cfg.ShowHelp, "help", false, "Show this help message")
 	flag.BoolVar(&cfg.legacyEnableDiscovery, "enable-discovery", false,
-		"DEPRECATED: Discovery is now enabled by default when paths are configured")
+		"DEPRECATED: no-op. Discovery is enabled by default. Use --no-discovery to disable.")
 
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "Usage: %s [OPTIONS]\n\n", os.Args[0])
@@ -134,42 +132,9 @@ func performSystemDiscovery(items *[]models.Item, appConfig *config.Config, enab
 	return nil
 }
 
-func NewApp(matcher *search.Matcher, cfg *Config) *App {
+func NewApp(matcher *search.Matcher) *App {
 	return &App{
 		matcher: matcher,
-		config:  cfg,
-	}
-}
-
-func showCacheStatus(appConfig *config.Config) {
-	if !appConfig.Cache.Enabled {
-		return
-	}
-
-	cache, err := discovery.NewCache(appConfig.Cache)
-	if err != nil {
-		return
-	}
-
-	info, err := cache.GetCacheInfo()
-	if err != nil {
-		return
-	}
-
-	if exists, ok := info["exists"].(bool); ok && exists {
-		if itemCount, ok := info["item_count"].(int); ok {
-			if isExpired, ok := info["is_expired"].(bool); ok {
-				if isExpired {
-					fmt.Fprintf(os.Stderr, "📋 Cache: %d items (expired - will refresh)\n", itemCount)
-				} else {
-					if ageHours, ok := info["age_hours"].(float64); ok {
-						fmt.Fprintf(os.Stderr, "📋 Cache: %d items (%.1fh old)\n", itemCount, ageHours)
-					}
-				}
-			}
-		}
-	} else {
-		fmt.Fprintf(os.Stderr, "📋 Cache: empty (first run)\n")
 	}
 }
 
@@ -198,15 +163,13 @@ func main() {
 	}
 
 	if cfg.legacyEnableDiscovery {
-		fmt.Fprintf(os.Stderr, "WARNING: --enable-discovery is deprecated. Discovery is now enabled by default.\n")
-		fmt.Fprintf(os.Stderr, "Use --no-discovery to disable discovery.\n")
+		fmt.Fprintf(os.Stderr, "WARNING: --enable-discovery is a no-op. Discovery is enabled by default. Use --no-discovery to disable.\n")
 	}
 
 	enableDiscovery := !cfg.NoDiscovery && len(appConfig.Discovery.GetEffectivePaths()) > 0
 
 	if enableDiscovery {
 		fmt.Fprintf(os.Stderr, "DISCOVERY MODE: Scanning configured installation paths\n")
-		showCacheStatus(appConfig)
 	} else if cfg.NoDiscovery {
 		fmt.Fprintf(os.Stderr, "SAFE MODE: Discovery disabled - using built-in commands only\n")
 	} else {
@@ -225,7 +188,7 @@ func main() {
 
 	matcher := search.NewMatcher(items)
 
-	app := NewApp(matcher, cfg)
+	app := NewApp(matcher)
 	if err := app.Run(); err != nil {
 		fmt.Fprintf(os.Stderr, "Application error: %v\n", err)
 		os.Exit(1)
