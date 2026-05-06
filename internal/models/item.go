@@ -45,10 +45,3 @@ func (t ItemType) String() string {
 	}
 }
 
-func (i *Item) IsUserDefined() bool {
-	return i.Type == UserAlias || i.Type == UserFunction
-}
-
-func (i *Item) IsSystemDiscovered() bool {
-	return i.Type == SystemCommand || i.Type == CustomCommand
-}
