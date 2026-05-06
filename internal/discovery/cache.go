@@ -1,6 +1,7 @@
 package discovery
 
 import (
+	"crypto/sha256"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -40,15 +41,22 @@ func NewCache(config config.CacheConfig) (*Cache, error) {
 	}, nil
 }
 
-func (c *Cache) StoreItems(items []models.Item) error {
+func configHash(cfg config.DiscoveryConfig) string {
+	data, _ := json.Marshal(cfg)
+	sum := sha256.Sum256(data)
+	return fmt.Sprintf("%x", sum)
+}
+
+func (c *Cache) StoreItems(items []models.Item, hash string) error {
 	if !c.config.Enabled {
 		return nil
 	}
 
 	data := CacheData{
-		Items:     items,
-		Timestamp: time.Now(),
-		Version:   "1.1",
+		Items:      items,
+		Timestamp:  time.Now(),
+		ConfigHash: hash,
+		Version:    "1.1",
 	}
 
 	jsonData, err := json.MarshalIndent(data, "", "  ")
@@ -63,7 +71,7 @@ func (c *Cache) StoreItems(items []models.Item) error {
 	return nil
 }
 
-func (c *Cache) GetItems() ([]models.Item, error) {
+func (c *Cache) GetItems(currentHash string) ([]models.Item, error) {
 	if !c.config.Enabled {
 		return nil, fmt.Errorf("cache is disabled")
 	}
@@ -80,6 +88,10 @@ func (c *Cache) GetItems() ([]models.Item, error) {
 	var cacheData CacheData
 	if err := json.Unmarshal(data, &cacheData); err != nil {
 		return nil, fmt.Errorf("failed to unmarshal cache data: %w", err)
+	}
+
+	if cacheData.ConfigHash != currentHash {
+		return nil, fmt.Errorf("cache config hash mismatch - configuration has changed")
 	}
 
 	ttl := time.Duration(c.config.TTLHours) * time.Hour
@@ -107,38 +119,3 @@ func (c *Cache) ClearCache() error {
 	return nil
 }
 
-func (c *Cache) GetCacheInfo() (map[string]interface{}, error) {
-	if !c.config.Enabled {
-		return map[string]interface{}{
-			"enabled": false,
-		}, nil
-	}
-
-	info := map[string]interface{}{
-		"enabled":   true,
-		"file_path": c.cacheFile,
-		"exists":    false,
-	}
-
-	if stat, err := os.Stat(c.cacheFile); err == nil {
-		info["exists"] = true
-		info["size_bytes"] = stat.Size()
-		info["modified"] = stat.ModTime()
-
-		if data, err := os.ReadFile(c.cacheFile); err == nil {
-			var cacheData CacheData
-			if err := json.Unmarshal(data, &cacheData); err == nil {
-				info["item_count"] = len(cacheData.Items)
-				info["timestamp"] = cacheData.Timestamp
-				info["version"] = cacheData.Version
-
-				ttl := time.Duration(c.config.TTLHours) * time.Hour
-				info["expires_at"] = cacheData.Timestamp.Add(ttl)
-				info["is_expired"] = time.Since(cacheData.Timestamp) > ttl
-				info["age_hours"] = time.Since(cacheData.Timestamp).Hours()
-			}
-		}
-	}
-
-	return info, nil
-}
