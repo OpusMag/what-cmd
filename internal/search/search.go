@@ -43,9 +43,10 @@ func (m *Matcher) rankResults(items []models.Item, query string) []models.Item {
 	if len(items) == 0 {
 		return items
 	}
+	lowerQuery := strings.ToLower(query)
 	sort.Slice(items, func(i, j int) bool {
-		si := m.scoreItem(items[i], query)
-		sj := m.scoreItem(items[j], query)
+		si := m.scoreItem(items[i], lowerQuery)
+		sj := m.scoreItem(items[j], lowerQuery)
 		if si != sj {
 			return si > sj
 		}
@@ -54,13 +55,12 @@ func (m *Matcher) rankResults(items []models.Item, query string) []models.Item {
 	return items
 }
 
-func (m *Matcher) scoreItem(item models.Item, query string) int {
+func (m *Matcher) scoreItem(item models.Item, lowerQuery string) int {
 	score := 0
-	lowerQuery := strings.ToLower(query)
 	lowerName := strings.ToLower(item.Name)
 	lowerDesc := strings.ToLower(item.Description)
 
-	if strings.EqualFold(item.Name, query) {
+	if strings.EqualFold(item.Name, lowerQuery) {
 		score += 100
 	} else {
 
@@ -72,9 +72,7 @@ func (m *Matcher) scoreItem(item models.Item, query string) int {
 		}
 
 		nameDistance := levenshteinDistance(lowerName, lowerQuery)
-		descDistance := levenshteinDistance(lowerDesc, lowerQuery)
 		score += max(0, 10-nameDistance)
-		score += max(0, 5-descDistance)
 	}
 
 	return score
@@ -118,19 +116,4 @@ func levenshteinDistance(s1, s2 string) int {
 	return matrix[len1][len2]
 }
 
-func min(a, b, c int) int {
-	if a <= b && a <= c {
-		return a
-	}
-	if b <= c {
-		return b
-	}
-	return c
-}
 
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}
